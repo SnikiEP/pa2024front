@@ -6,7 +6,7 @@ if (!isset($_SESSION['accessToken'])) {
     exit;
 }
 
-$baseUrl = "http://ddns.callidos-mtf.fr:8080/warehouse";
+$baseUrl = "http://ddns.callidos-mtf.fr:8085/warehouse";
 $authHeader = "Authorization: Bearer " . $_SESSION['accessToken'];
 
 function makeHttpRequest($url, $method, $data = null) {

@@ -6,7 +6,7 @@ if(!in_array('ROLE_ADMIN', $_SESSION['role'])){
   exit;
 }
 
-$baseUrl = "http://ddns.callidos-mtf.fr:8080";
+$baseUrl = "http://ddns.callidos-mtf.fr:8085";
 $authHeader = "Authorization: Bearer " . $_SESSION['accessToken'];
 
 function makeHttpRequest($url, $method, $data = null)

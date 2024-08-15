@@ -1,11 +1,11 @@
 <?php 
 session_start();
-if(!in_array('ROLE_ADMIN', $_SESSION['role'])){
-  header("Location: login.php");
-  exit;
+if (!in_array('ROLE_ADMIN', $_SESSION['role'])) {
+    header("Location: login.php");
+    exit;
 }
 
-$baseUrl = "http://ddns.callidos-mtf.fr:8080";
+$baseUrl = "http://ddns.callidos-mtf.fr:8085";
 $authHeader = "Authorization: Bearer " . $_SESSION['accessToken'];
 
 function makeHttpRequest($url, $method, $data = null) {
@@ -60,84 +60,116 @@ $allAccounts = makeHttpRequest($baseUrl . "/account/all", "GET");
 
 <head>
     <?php
-        $title = "Home - HELIX";
-        include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php');
-    ?>    
+    $title = "Manage Accounts - HELIX";
+    include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php');
+    ?>
+    <link rel="stylesheet" href="/assets/css/panel.css">
+    <style>
+        .admin-title {
+            margin-top: 20px;
+        }
+
+        .table-container {
+            margin-top: 30px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* Limit the width of certain columns */
+        th:nth-child(5), td:nth-child(5), /* Email */
+        th:nth-child(6), td:nth-child(6), /* Phone */
+        th:nth-child(7), td:nth-child(7), /* Location */
+        th:nth-child(8), td:nth-child(8), /* Role */
+        th:nth-child(9), td:nth-child(9)  /* Sex */
+        {
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .button {
+            white-space: nowrap;
+        }
+    </style>
 </head>
-<style>
-  
-  .table-container table {
-      margin-top: 20px;
-      border: 1px solid #ccc;
-      width: 100%;
-      border-collapse: collapse;
-  }
-  .table-container th, .table-container td {
-      padding: 8px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-  }
-  .table-container th {
-      background-color: #f2f2f2;
-  }
-</style>
+
 <body>
     <div class="wrapper">
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php') ?>
+        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php') ?>
         <main>
             <div class="content">
-                <img src="<?= '/assets/img/helix_white.png' ?>" alt="Helix_logo" width="600px" style="display: block; margin-left: auto; margin-right: auto; margin-top: 30px;">
-                <div style="text-align: center;">
-                    <h3 class="title is-3" style="margin-top: 10px;">Admin Panel</h3>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Username</th>
-                                <th>Name</th>
-                                <th>Last Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Location</th>
-                                <th>Role</th>
-                                <th>Sex</th>
-                                <th>Last Login</th>
-                                <th>Registered Date</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($allAccounts as $account): ?>
-                            <tr>
-                                <td><?= escape($account['id']) ?></td>
-                                <td><?= escape($account['username']) ?></td>
-                                <td><?= escape($account['name']) ?></td>
-                                <td><?= escape($account['lastName']) ?></td>
-                                <td><?= escape($account['email']) ?></td>
-                                <td><?= escape($account['phone']) ?></td>
-                                <td><?= escape($account['location']) ?></td>
-                                <td><?= escape($account['role']) ?></td>
-                                <td><?= escape($account['sex']) ?></td>
-                                <td><?= escape($account['last_login']) ?></td>
-                                <td><?= escape($account['register_date']) ?></td>
-                                <td>
-                                    <button onclick="redirectToEditProfile(<?= $account['id'] ?>)">Edit</button>
-                                </td>
-                                <td>
-                                    <button onclick="confirmDeleteProfile(<?= $account['id'] ?>)">Delete</button>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
+                <h1 class="title has-text-centered admin-title">Manage Accounts</h1>
+                <section class="section">
+                    <div class="container">
+                        <div class="table-container">
+                            <table class="table is-striped is-fullwidth">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Username</th>
+                                        <th>Name</th>
+                                        <th>Last Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Location</th>
+                                        <th>Role</th>
+                                        <th>Sex</th>
+                                        <th>Last Login</th>
+                                        <th>Registered Date</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($allAccounts as $account): ?>
+                                    <tr>
+                                        <td><?= escape($account['id']) ?></td>
+                                        <td><?= escape($account['username']) ?></td>
+                                        <td><?= escape($account['name']) ?></td>
+                                        <td><?= escape($account['lastName']) ?></td>
+                                        <td><?= escape($account['email']) ?></td>
+                                        <td><?= escape($account['phone']) ?></td>
+                                        <td><?= escape($account['location']) ?></td>
+                                        <td><?= escape($account['role']) ?></td>
+                                        <td><?= escape($account['sex']) ?></td>
+                                        <td><?= escape($account['last_login']) ?></td>
+                                        <td><?= escape($account['register_date']) ?></td>
+                                        <td>
+                                            <button class="button is-info is-small" onclick="redirectToEditProfile(<?= $account['id'] ?>)">Edit</button>
+                                        </td>
+                                        <td>
+                                            <button class="button is-danger is-small" onclick="confirmDeleteProfile(<?= $account['id'] ?>)">Delete</button>
+                                        </td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
             </div>
         </main>
-        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/footer.php')?>
+        <footer class="footer">
+            &copy; <?= date('Y'); ?> HELIX. All Rights Reserved.
+        </footer>
     </div>
+
     <script>
         function redirectToEditProfile(profileId) {
             window.location.href = 'edit_profile.php?id=' + profileId;
@@ -150,7 +182,7 @@ $allAccounts = makeHttpRequest($baseUrl . "/account/all", "GET");
         }
 
         function deleteProfile(profileId) {
-            const url = `http://ddns.callidos-mtf.fr:8080`;
+            const url = `http://ddns.callidos-mtf.fr:8085`;
 
             fetch('<?= $baseUrl ?>/account/' + profileId, {
                 method: 'DELETE',
@@ -171,7 +203,5 @@ $allAccounts = makeHttpRequest($baseUrl . "/account/all", "GET");
         }
     </script>
 </body>
-
-
 
 </html>

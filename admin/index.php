@@ -1,54 +1,28 @@
-<?php 
+<?php
 session_start();
 
-if (!isset($_SESSION['role']) || !in_array('ROLE_ADMIN', $_SESSION['role'])) {
-    header("Location: login.php");
-    exit;
+$dsn = 'mysql:host=db;dbname=helix_db;charset=utf8';
+$username = 'root';
+$password = 'root_password';
+
+try {
+    $pdo = new PDO($dsn, $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
 }
 
-$baseUrl = "http://ddns.callidos-mtf.fr:8080";
-$authHeader = "Authorization: Bearer " . $_SESSION['accessToken'];
+$totalUsersStmt = $pdo->query("SELECT COUNT(*) FROM users");
+$totalUsers = $totalUsersStmt->fetchColumn();
 
-function makeHttpRequest($url, $method, $data = null) {
-    global $authHeader;
-    $options = [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => false,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_ENCODING => "",
-        CURLOPT_AUTOREFERER => true,
-        CURLOPT_CONNECTTIMEOUT => 120,
-        CURLOPT_TIMEOUT => 120,
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_HTTPHEADER => [
-            "Content-Type: application/json",
-            $authHeader
-        ]
-    ];
+$totalLogsStmt = $pdo->query("SELECT COUNT(*) FROM log");
+$totalLogs = $totalLogsStmt->fetchColumn();
 
-    if ($method === "POST") {
-        $options[CURLOPT_POST] = true;
-        $options[CURLOPT_POSTFIELDS] = json_encode($data);
-    }
+$totalEventsStmt = $pdo->query("SELECT COUNT(*) FROM events");
+$totalEvents = $totalEventsStmt->fetchColumn();
 
-    $curl = curl_init($url);
-    curl_setopt_array($curl, $options);
-    $result = curl_exec($curl);
-
-    if ($result === false) {
-        throw new Exception(curl_error($curl), curl_errno($curl));
-    }
-
-    curl_close($curl);
-
-    return json_decode($result, true);
-}
-
-$maintenance_mode = isset($_SESSION['maintenance_mode']) ? $_SESSION['maintenance_mode'] : false;
-
-$title = "Home - HELIX";
-
-include_once $_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php';
+$totalVehiclesStmt = $pdo->query("SELECT COUNT(*) FROM vehicles");
+$totalVehicles = $totalVehiclesStmt->fetchColumn();
 
 ?>
 
@@ -56,81 +30,115 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php';
 <html lang="en">
 
 <head>
-    <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php'; ?>    
+    <?php
+    $title = "Admin Panel - HELIX";
+    include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php');
+    ?>
+    <link rel="stylesheet" href="/assets/css/panel.css">
+    <style>
+        .admin-title {
+            margin-top: 20px;
+        }
+    </style>
 </head>
-<style>
-  .chart-container{
-      height: 300px;
-      width: 300px;
-  }
-</style>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
 <body>
     <div class="wrapper">
-    <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php'; ?>
+        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php') ?>
         <main>
             <div class="content">
-                <img src="<?= '/assets/img/helix_white.png' ?>" alt="Helix_logo" width="600px" style="display: block; margin-left: auto; margin-right: auto; margin-top: 30px;">
-                <div style="text-align: center;">
-                    <h3 class="title is-3" style="margin-top: 10px;">Admin Panel</h3>
-                    <form method="post" action="../public/maintenance_check.php">
-                        <label for="maintenance_mode_toggle">Maintenance Mode:</label>
-                        <label class="switch">
-                        <input type="checkbox" id="maintenance_mode_toggle" name="maintenance_mode_toggle" value="on" <?php if($maintenance_mode) echo 'checked'; ?>>
-                            <span class="slider round"></span>
-                        </label>                        
-                        <input type="submit" value="Submit">
-                    </form>
+                <h1 class="title has-text-centered admin-title">Admin Panel - HELIX</h1>
+                <section class="section">
+                    <div class="container">
+                        <div class="columns is-multiline">
+                            <div class="column is-3">
+                                <div class="box has-text-centered">
+                                    <p class="title"><?= $totalUsers ?></p>
+                                    <p class="subtitle">Total Users</p>
+                                </div>
+                            </div>
+                            <div class="column is-3">
+                                <div class="box has-text-centered">
+                                    <p class="title"><?= $totalLogs ?></p>
+                                    <p class="subtitle">Total Logs</p>
+                                </div>
+                            </div>
+                            <div class="column is-3">
+                                <div class="box has-text-centered">
+                                    <p class="title"><?= $totalEvents ?></p>
+                                    <p class="subtitle">Total Events</p>
+                                </div>
+                            </div>
+                            <div class="column is-3">
+                                <div class="box has-text-centered">
+                                    <p class="title"><?= $totalVehicles ?></p>
+                                    <p class="subtitle">Total Vehicles</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-                </div>
+                <section class="section">
+                    <div class="container">
+                        <h2 class="title is-4">Recent Activity</h2>
+                        <div class="logs-list">
+                            <table class="table is-striped is-fullwidth">
+                                <thead>
+                                    <tr>
+                                        <th>User ID</th>
+                                        <th>Action</th>
+                                        <th>Description</th>
+                                        <th>Method</th>
+                                        <th>Response Code</th>
+                                        <th>Timestamp</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $recentLogsStmt = $pdo->query("SELECT * FROM log ORDER BY timestamp DESC LIMIT 5");
+                                    $recentLogs = $recentLogsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+                                    function escape($value)
+                                    {
+                                        return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
+                                    }
+
+                                    function describeAction($action)
+                                    {
+                                        switch ($action) {
+                                            case 'login_attempt':
+                                                return "Tentative de connexion à l'application.";
+                                            case 'login_success':
+                                                return "Connexion réussie à l'application.";
+                                            case 'update_profile':
+                                                return "Mise à jour des informations du profil.";
+                                            default:
+                                                return "Action non spécifiée.";
+                                        }
+                                    }
+
+                                    foreach ($recentLogs as $log) : ?>
+                                        <tr>
+                                            <td><?= escape($log['user_id']) ?></td>
+                                            <td><?= escape($log['action']) ?></td>
+                                            <td><?= escape(describeAction($log['action'])) ?></td>
+                                            <td><?= escape($log['request_method']) ?></td>
+                                            <td><?= escape($log['response_code']) ?></td>
+                                            <td><?= escape($log['timestamp']) ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
             </div>
-            <div class="chart-container">
-                <canvas id="myChart2" class="chart"></canvas>
-            </div>
-            
         </main>
-        <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/includes/footer.php'; ?>
+        <footer class="footer">
+            &copy; <?= date('Y'); ?> HELIX. All Rights Reserved.
+        </footer>
     </div>
-    <script>
-    const data2 = {
-        labels: ['Men', 'Women'],
-        datasets: [{
-            label: 'Parity',
-            data: [<?= $parityData['M'] ?? 0 ?>, <?= $parityData['F'] ?? 0 ?>],
-            backgroundColor: ['rgb(205, 7, 7)', 'rgb(54, 162, 235)']
-        }]
-    };
-
-    const config2 = {
-        type: 'pie',
-        data: data2,
-        options: {
-            plugins: {
-                legend: {
-                    labels: {
-                        color: 'white'
-                    }
-                }
-            }
-        }
-    };
-
-    const myChart2 = new Chart(
-        document.getElementById('myChart2'),
-        config2
-    );
-
-    document.getElementById('maintenance_mode_toggle').addEventListener('change', function() {
-        const maintenance_mode_toggle = document.getElementById('maintenance_mode_toggle');
-        if (maintenance_mode_toggle.checked) {
-            maintenance_mode_toggle.value = 'on';
-        } else {
-            maintenance_mode_toggle.value = 'off';
-        }
-        this.form.submit();
-    });
-</script>
-
 </body>
 
 </html>

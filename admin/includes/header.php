@@ -1,3 +1,7 @@
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/auth_admin.php');
+?>
+
 <header>
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
@@ -27,10 +31,10 @@
             <a class="navbar-item" href="<?= '/admin/account.php' ?>">
               Accounts
             </a>
-            <a class="navbar-item" href="<?= '/public/validate.php' ?>">
+            <a class="navbar-item" href="<?= '/admin/validate.php' ?>">
               Account not validate
             </a>
-            <a class="navbar-item" href="<?= '/public/vehicles.php' ?>">
+            <a class="navbar-item" href="<?= '/admin/vehicles.php' ?>">
               Vehicles
             </a>
           </div>
