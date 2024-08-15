@@ -18,11 +18,11 @@
             <a class="navbar-item" href="<?= '/admin/index.php' ?>">
               Home
             </a>
-            <a class="navbar-item" href="<?= '/public/events.php' ?>">
+            <a class="navbar-item" href="<?= '/admin/events.php' ?>">
               Events
             </a>
-            <a class="navbar-item" href="<?= '/public/warehouses.php' ?>">
-              Warehouses
+            <a class="navbar-item" href="<?= '/admin/logs.php' ?>">
+              logs
             </a>
             <a class="navbar-item" href="<?= '/admin/account.php' ?>">
               Accounts

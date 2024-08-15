@@ -14,7 +14,7 @@ $options = [
     ]
 ];
 $context = stream_context_create($options);
-$url = "http://ddns.callidos-mtf.fr:8080/account/me";
+$url = "http://ddns.callidos-mtf.fr:8085/account/me";
 
 $response = file_get_contents($url, false, $context);
 if ($response === FALSE) {
@@ -23,6 +23,70 @@ if ($response === FALSE) {
 }
 
 $profileData = json_decode($response, true);
+
+function logAction($pdo, $user_id, $action, $method, $url, $response_code, $request_data = null, $response_body = null) {
+    // Insérer directement l'ID de l'utilisateur sans vérifier son existence dans une autre table
+    $stmt = $pdo->prepare("
+        INSERT INTO log (user_id, action, request_method, request_url, request_data, response_code, response_body)
+        VALUES (:user_id, :action, :request_method, :request_url, :request_data, :response_code, :response_body)
+    ");
+    $stmt->execute([
+        ':user_id' => $user_id,
+        ':action' => $action,
+        ':request_method' => $method,
+        ':request_url' => $url,
+        ':request_data' => $request_data,
+        ':response_code' => $response_code,
+        ':response_body' => $response_body
+    ]);
+}
+
+// Database connection
+$dsn = 'mysql:host=db;dbname=helix_db;charset=utf8';
+$username = 'root';
+$password = 'root_password';
+
+try {
+    $pdo = new PDO($dsn, $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
+}
+
+// Logic to handle the form submission and update profile
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $updatedData = [
+        "username" => $_POST['username'],
+        "phone" => $_POST['phone'],
+        "name" => $_POST['name'],
+        "lastName" => $_POST['lastName'],
+        "location" => $_POST['location'],
+        "password" => $_POST['password']
+    ];
+
+    $putOptions = [
+        "http" => [
+            "method" => "PUT",
+            "header" => $authHeader . "\r\n" . "Content-Type: application/json",
+            "content" => json_encode($updatedData)
+        ]
+    ];
+    $putContext = stream_context_create($putOptions);
+    $putUrl = "http://ddns.callidos-mtf.fr:8085/account/" . $profileData['id'];
+
+    $putResponse = file_get_contents($putUrl, false, $putContext);
+    
+    if ($putResponse === FALSE) {
+        logAction($pdo, $profileData['id'], 'update_profile', 'PUT', $putUrl, 500, json_encode($updatedData), 'Failed to update profile information.');
+        echo "Failed to update profile information.";
+    } else {
+        // Reload the updated profile data
+        $response = file_get_contents($url, false, $context);
+        $profileData = json_decode($response, true);
+        logAction($pdo, $profileData['id'], 'update_profile', 'PUT', $putUrl, 200, json_encode($updatedData), $putResponse);
+        echo "Profile updated successfully!";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -38,18 +102,87 @@ $profileData = json_decode($response, true);
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/header.php'); ?>
         <main>
             <div class="content">
-                <div class="container">
-                    <h1>Welcome, <?= htmlspecialchars($profileData['username']); ?>!</h1>
-                    <p><strong>Name:</strong> <?= htmlspecialchars($profileData['name'] . " " . $profileData['lastName']); ?></p>
-                    <p><strong>Email:</strong> <?= htmlspecialchars($profileData['email']); ?></p>
-                    <p><strong>Location:</strong> <?= htmlspecialchars($profileData['location']); ?></p>
-                    <p><strong>Role:</strong> <?= htmlspecialchars($profileData['role']); ?></p>
-                    <p><strong>Last Login:</strong> <?= htmlspecialchars($profileData['last_login']); ?></p>
-                    <p><strong>Phone:</strong> <?= htmlspecialchars($profileData['phone']); ?></p>
+                <div class="container is-max-desktop">
+                    <h1 class="title has-text-centered">Welcome, <?= htmlspecialchars($profileData['username']); ?>!</h1>
+                    <form id="profileForm" method="POST">
+                        <div class="field">
+                            <label class="label" for="username">Username</label>
+                            <div class="control">
+                                <input class="input" type="text" id="username" name="username" value="<?= htmlspecialchars($profileData['username']); ?>" disabled>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="name">First Name</label>
+                            <div class="control">
+                                <input class="input" type="text" id="name" name="name" value="<?= htmlspecialchars($profileData['name']); ?>" disabled>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="lastName">Last Name</label>
+                            <div class="control">
+                                <input class="input" type="text" id="lastName" name="lastName" value="<?= htmlspecialchars($profileData['lastName']); ?>" disabled>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="email">Email</label>
+                            <div class="control">
+                                <input class="input" type="email" id="email" name="email" value="<?= htmlspecialchars($profileData['email']); ?>" disabled>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="location">Location</label>
+                            <div class="control">
+                                <input class="input" type="text" id="location" name="location" value="<?= htmlspecialchars($profileData['location']); ?>" disabled>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="phone">Phone</label>
+                            <div class="control">
+                                <input class="input" type="text" id="phone" name="phone" value="<?= htmlspecialchars($profileData['phone']); ?>" disabled>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="password">New Password (leave blank to keep current password)</label>
+                            <div class="control">
+                                <input class="input" type="password" id="password" name="password" disabled>
+                            </div>
+                        </div>
+                        <div class="control">
+                            <button type="button" class="button is-info" id="editBtn">Edit</button>
+                            <button type="submit" class="button is-success is-hidden" id="saveBtn" name="save">Save</button>
+                            <button type="button" class="button is-danger is-hidden" id="cancelBtn">Cancel</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </main>
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/footer.php'); ?>
     </div>
+
+    <script>
+        document.getElementById('editBtn').addEventListener('click', function () {
+            document.getElementById('username').disabled = false;
+            document.getElementById('name').disabled = false;
+            document.getElementById('lastName').disabled = false;
+            document.getElementById('location').disabled = false;
+            document.getElementById('phone').disabled = false;
+            document.getElementById('password').disabled = false;
+            document.getElementById('editBtn').classList.add('is-hidden');
+            document.getElementById('saveBtn').classList.remove('is-hidden');
+            document.getElementById('cancelBtn').classList.remove('is-hidden');
+        });
+
+        document.getElementById('cancelBtn').addEventListener('click', function () {
+            document.getElementById('username').disabled = true;
+            document.getElementById('name').disabled = true;
+            document.getElementById('lastName').disabled = true;
+            document.getElementById('location').disabled = true;
+            document.getElementById('phone').disabled = true;
+            document.getElementById('password').disabled = true;
+            document.getElementById('editBtn').classList.remove('is-hidden');
+            document.getElementById('saveBtn').classList.add('is-hidden');
+            document.getElementById('cancelBtn').classList.add('is-hidden');
+        });
+    </script>
 </body>
 </html>

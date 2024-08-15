@@ -14,7 +14,7 @@
 
         <div id="navbar" class="navbar-menu">
             <div class="navbar-start">
-                <a class="navbar-item" data-translate="home" href="/index.php">Home</a>
+                <a class="navbar-item" data-translate="home" href="../public/index.php">Home</a>
                 <a class="navbar-item" data-translate="about_us" href="/public/about.php">About us</a>
                 <a class="navbar-item" data-translate="our_missions" href="/public/missions.php">Our missions</a>
                 <a class="navbar-item" data-translate="donation" href="/public/donation.php">Donation</a>
@@ -34,9 +34,8 @@
                         <a class="navbar-item" data-translate="my_profile" href="/public/myprofil.php">My profile</a>
                         <a class="navbar-item" data-translate="tickets" href="/public/tickets.php">Tickets</a>
                         <a class="navbar-item" data-translate="warehouses" href="/public/warehouses.php">Warehouses</a>
-                        <a class="navbar-item" data-translate="events_add" href="/public/create_event.php">Add Event</a>
+                        <a class="navbar-item" data-translate="events" href="/public/events.php">Events</a>
                         <?php if(in_array('ROLE_ADMIN', $_SESSION['role'])): ?>
-                            <a class="navbar-item" data-translate="events" href="/public/events.php">Events</a>
                             <a class="navbar-item" data-translate="admin_panel" href="/admin/index.php">Admin panel</a>
                         <?php endif; ?>
                         <a class="button is-info" data-translate="logout" href="/public/logout.php">Logout</a>

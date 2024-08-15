@@ -22,7 +22,7 @@
             "sex" => $gender
         );
 
-        $url = "http://ddns.callidos-mtf.fr:8080/account/register";
+        $url = "http://ddns.callidos-mtf.fr:8085/account/register";
         $options = array(
             "http" => array(
                 "header" => "Content-type: application/json",

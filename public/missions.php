@@ -1,10 +1,10 @@
-<?include_once('maintenance_check.php');?>
+<?php include_once('maintenance_check.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <?php
-        $title = "Our missions - ATD";
+        $title = "Our missions - No More Waste";
         include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
     ?>
     <script src="/assets/js/translation.js"></script>
@@ -14,47 +14,47 @@
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/header.php') ?>
         <main>
             <div class="content">
-                <h1 data-translate="mission_title">Nos Missions - Au Temps Donné</h1>
+                <h1 data-translate="mission_title">Our Missions - No More Waste</h1>
                 
                 <section>
                     <h2 data-translate="introduction">Introduction</h2>
-                    <p data-translate="intro_desc">Au Temps Donné est une association engagée à améliorer la qualité de vie des personnes en difficulté à travers divers services et initiatives. Nos missions sont au cœur de notre action, guidant chaque projet et chaque geste de solidarité. Découvrez ci-dessous les principales missions qui animent notre association.</p>
+                    <p data-translate="intro_desc">No More Waste is an organization committed to improving the quality of life for people in difficulty through various services and initiatives. Our missions are at the heart of our action, guiding each project and every act of solidarity. Discover below the main missions that drive our association.</p>
                 </section>
 
                 <section>
-                    <h2 data-translate="food_aid">Aide Alimentaire</h2>
-                    <p data-translate="food_aid_desc">Nous croyons que tout le monde a le droit à une alimentation saine et équilibrée. Chaque semaine, nous organisons des distributions alimentaires pour les familles et les individus en situation de précarité. Grâce à nos partenariats avec des commerces locaux et des producteurs, nous sommes capables de fournir des repas nutritifs et variés.</p>
-                    <p data-translate="volunteer_efforts">Nos bénévoles dévoués travaillent sans relâche pour collecter, préparer et distribuer ces repas, garantissant que personne ne reste sans nourriture. Cette mission est essentielle pour lutter contre la faim et la malnutrition dans notre communauté.</p>
+                    <h2 data-translate="food_aid">Food Aid</h2>
+                    <p data-translate="food_aid_desc">We believe everyone has the right to healthy, balanced nutrition. Each week, we organize food distributions for families and individuals in precarious situations. Thanks to our partnerships with local businesses and producers, we are able to provide nutritious and varied meals.</p>
+                    <p data-translate="volunteer_efforts">Our dedicated volunteers work tirelessly to collect, prepare, and distribute these meals, ensuring that no one goes without food. This mission is essential to combat hunger and malnutrition in our community.</p>
                 </section>
 
                 <section>
-                    <h2 data-translate="educational_support">Soutien Scolaire</h2>
-                    <p data-translate="education_key">L'éducation est une clé pour un avenir meilleur, c'est pourquoi nous offrons un soutien scolaire aux enfants et aux adolescents. Nos bénévoles qualifiés aident les élèves à surmonter leurs difficultés scolaires, les guidant dans leurs études et les aidant à développer des compétences essentielles.</p>
-                    <p data-translate="tutoring_sessions">Que ce soit par des séances de tutorat individuelles ou des ateliers collectifs, nous travaillons à assurer que chaque enfant a les mêmes chances de réussite académique. Cette mission vise à réduire les inégalités éducatives et à encourager la persévérance scolaire.</p>
+                    <h2 data-translate="educational_support">Educational Support</h2>
+                    <p data-translate="education_key">Education is a key to a better future, which is why we provide educational support to children and teenagers. Our qualified volunteers help students overcome their academic difficulties, guiding them in their studies and helping them develop essential skills.</p>
+                    <p data-translate="tutoring_sessions">Whether through individual tutoring sessions or collective workshops, we work to ensure that every child has the same chances of academic success. This mission aims to reduce educational inequalities and encourage school perseverance.</p>
                 </section>
 
                 <section>
-                    <h2 data-translate="personal_assistance">Aide à la Personne</h2>
-                    <p data-translate="beyond_food_edu">Au-delà de l'alimentation et de l'éducation, nous nous efforçons de soutenir les personnes âgées et les individus en situation de vulnérabilité. Nos services incluent des visites à domicile, l'accompagnement pour les courses, et l'assistance administrative.</p>
-                    <p data-translate="maintaining_autonomy">Ces initiatives sont conçues pour briser l'isolement social et apporter une aide pratique dans la vie quotidienne. Nous croyons en l'importance de maintenir l'autonomie et la dignité de chaque individu, quelle que soit sa situation.</p>
+                    <h2 data-translate="personal_assistance">Personal Assistance</h2>
+                    <p data-translate="beyond_food_edu">Beyond food and education, we strive to support the elderly and individuals in vulnerable situations. Our services include home visits, shopping assistance, and administrative support.</p>
+                    <p data-translate="maintaining_autonomy">These initiatives are designed to break social isolation and provide practical help in daily life. We believe in the importance of maintaining the autonomy and dignity of each individual, regardless of their situation.</p>
                 </section>
 
                 <section>
-                    <h2 data-translate="community_workshops">Ateliers et Programmes Communautaires</h2>
-                    <p data-translate="workshops_description">Nous organisons régulièrement des ateliers et des programmes communautaires pour sensibiliser et éduquer sur des sujets importants comme la nutrition, la santé, et le bien-être. Ces événements sont ouverts à tous et visent à renforcer les liens sociaux et à créer un sentiment de communauté.</p>
-                    <p data-translate="learning_opportunities">Nos ateliers offrent des opportunités d'apprentissage et de partage, permettant à chacun de développer de nouvelles compétences et de s'engager activement dans la vie communautaire. Cette mission est essentielle pour construire une communauté plus forte et plus résiliente.</p>
+                    <h2 data-translate="community_workshops">Community Workshops and Programs</h2>
+                    <p data-translate="workshops_description">We regularly organize workshops and community programs to raise awareness and educate on important topics such as nutrition, health, and well-being. These events are open to all and aim to strengthen social bonds and create a sense of community.</p>
+                    <p data-translate="learning_opportunities">Our workshops offer learning and sharing opportunities, allowing everyone to develop new skills and actively engage in community life. This mission is essential for building a stronger and more resilient community.</p>
                 </section>
 
                 <section>
-                    <h2 data-translate="eco_engagement">Engagement Écologique</h2>
-                    <p data-translate="eco_practices">Nous sommes également engagés dans la promotion de pratiques écologiques et durables. Que ce soit par le biais de notre approvisionnement en nourriture ou de nos ateliers de sensibilisation, nous encourageons des comportements respectueux de l'environnement.</p>
-                    <p data-translate="eco_goals">Notre objectif est de réduire notre empreinte carbone et d'éduquer notre communauté sur l'importance de la préservation de notre planète. Cette mission écologique est intégrée à toutes nos actions pour garantir un impact positif à long terme.</p>
+                    <h2 data-translate="eco_engagement">Ecological Engagement</h2>
+                    <p data-translate="eco_practices">We are also committed to promoting ecological and sustainable practices. Whether through our food supply or our awareness workshops, we encourage environmentally friendly behaviors.</p>
+                    <p data-translate="eco_goals">Our goal is to reduce our carbon footprint and educate our community about the importance of preserving our planet. This ecological mission is integrated into all our actions to ensure a long-term positive impact.</p>
                 </section>
 
                 <section>
-                    <h2 data-translate="join_us">Rejoignez-Nous</h2>
-                    <p data-translate="join_our_cause">Si vous partagez notre vision et souhaitez contribuer à nos missions, nous vous invitons à rejoindre notre communauté de bénévoles. Chaque geste compte et ensemble, nous pouvons accomplir de grandes choses.</p>
-                    <p data-translate="get_involved">Pour en savoir plus sur nos missions ou pour vous impliquer, n'hésitez pas à nous contacter. Nous serions ravis de vous accueillir au sein de notre famille Au Temps Donné.</p>
+                    <h2 data-translate="join_us">Join Us</h2>
+                    <p data-translate="join_our_cause">If you share our vision and wish to contribute to our missions, we invite you to join our community of volunteers. Every gesture counts and together, we can achieve great things.</p>
+                    <p data-translate="get_involved">For more information about our missions or to get involved, please do not hesitate to contact us. We would be delighted to welcome you to our No More Waste family.</p>
                 </section>
 
             </div>
