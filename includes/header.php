@@ -14,7 +14,7 @@
 
         <div id="navbar" class="navbar-menu">
             <div class="navbar-start">
-                <a class="navbar-item" data-translate="home" href="../public/index.php">Home</a>
+                <a class="navbar-item" data-translate="home" href="../index.php">Home</a>
                 <a class="navbar-item" data-translate="about_us" href="/public/about.php">About us</a>
                 <a class="navbar-item" data-translate="our_missions" href="/public/missions.php">Our missions</a>
                 <a class="navbar-item" data-translate="donation" href="/public/donation.php">Donation</a>
@@ -32,6 +32,7 @@
                     <?php if(isset($_SESSION['username'])): ?>
                         <p class="navbar-item" style="margin-right: 15px;" data-translate="welcome"><?= 'Welcome, ' . $_SESSION['username']; ?></p>
                         <a class="navbar-item" data-translate="my_profile" href="/public/myprofil.php">My profile</a>
+                        <a class="navbar-item" href="../public/calendar.php">Calendar</a>
                         <a class="navbar-item" data-translate="tickets" href="/public/tickets.php">Tickets</a>
                         <a class="navbar-item" data-translate="warehouses" href="/public/warehouses.php">Warehouses</a>
                         <a class="navbar-item" data-translate="events" href="/public/events.php">Events</a>

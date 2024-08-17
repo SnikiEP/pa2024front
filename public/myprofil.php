@@ -25,7 +25,6 @@ if ($response === FALSE) {
 $profileData = json_decode($response, true);
 
 function logAction($pdo, $user_id, $action, $method, $url, $response_code, $request_data = null, $response_body = null) {
-    // Insérer directement l'ID de l'utilisateur sans vérifier son existence dans une autre table
     $stmt = $pdo->prepare("
         INSERT INTO log (user_id, action, request_method, request_url, request_data, response_code, response_body)
         VALUES (:user_id, :action, :request_method, :request_url, :request_data, :response_code, :response_body)
@@ -41,7 +40,6 @@ function logAction($pdo, $user_id, $action, $method, $url, $response_code, $requ
     ]);
 }
 
-// Database connection
 $dsn = 'mysql:host=db;dbname=helix_db;charset=utf8';
 $username = 'root';
 $password = 'root_password';
@@ -53,7 +51,6 @@ try {
     die("Database connection failed: " . $e->getMessage());
 }
 
-// Logic to handle the form submission and update profile
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $updatedData = [
         "username" => $_POST['username'],
@@ -80,7 +77,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         logAction($pdo, $profileData['id'], 'update_profile', 'PUT', $putUrl, 500, json_encode($updatedData), 'Failed to update profile information.');
         echo "Failed to update profile information.";
     } else {
-        // Reload the updated profile data
         $response = file_get_contents($url, false, $context);
         $profileData = json_decode($response, true);
         logAction($pdo, $profileData['id'], 'update_profile', 'PUT', $putUrl, 200, json_encode($updatedData), $putResponse);
@@ -153,6 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <button type="button" class="button is-danger is-hidden" id="cancelBtn">Cancel</button>
                         </div>
                     </form>
+                    <a href="calendar.php" class="button is-link" style="margin-top: 20px;">View Event Calendar</a>
                 </div>
             </div>
         </main>

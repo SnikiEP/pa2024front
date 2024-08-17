@@ -36,6 +36,14 @@ CREATE TABLE event_vehicle (
     FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+CREATE TABLE event_participants (
+    user_id INT,
+    event_id INT,
+    PRIMARY KEY (user_id, event_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 CREATE TABLE log (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
