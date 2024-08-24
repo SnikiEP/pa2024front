@@ -72,7 +72,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         "name" => $_POST['name'],
         "lastName" => $_POST['lastName'],
         "location" => $_POST['location']
-
     ];
 
     $existingUsernameProfile = makeHttpRequest($baseUrl . "/account/username/{$_POST['username']}", "GET");
@@ -80,9 +79,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($existingUsernameProfile ) {
         echo "Le nom d'utilisateur existe déjà. Veuillez choisir un autre nom.";
-    }elseif($existingemailProfile) {
+    } elseif ($existingemailProfile) {
         echo "L'email existe déjà. Veuillez choisir un autre email.";
-    }else {
+    } else {
         $jsonData = json_encode($updatedProfile);
 
         $curl = curl_init($baseUrl . "/account/{$profileId}");
@@ -99,14 +98,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if ($result !== false) {
             $responseData = json_decode($result, true);
-            if ($result && isset($result['success']) && $result['success']) {
+            if ($responseData && isset($responseData['success']) && $responseData['success']) {
                 header("Location: account.php");
                 exit;
-            }else{
-                echo "Une erreur s'est produite lors de la mise à jour de l'événement.";
+            } else {
+                echo "Une erreur s'est produite lors de la mise à jour du profil.";
             }
         }
-
 
         curl_close($curl);
     }
@@ -121,40 +119,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <?php
         $title = "Modifier le profil - HELIX";
         include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php');
-    ?>    
-     <style>
-        .content {
-            text-align: center;
-            margin: auto;
-            width: 60%;
-        }
-
-        #updateProfileForm {
-            margin-top: 20px;
-        }
-
-        #updateProfileForm table {
-            margin: auto;
-        }
-
-        #updateProfileForm button {
-            background-color: white;
-            color: black;
-            border: 2px solid #555555;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin-top: 20px;
-            cursor: pointer;
-        }
-
-        #updateProfileForm button:hover {
-            background-color: #555555;
-            color: white;
-        }
-    </style>
+    ?>
+    <link rel="stylesheet" href="/assets/css/admin.css">
 </head>
 
 <body>
@@ -164,33 +130,31 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <div class="content">
                 <h2>Modifier le profil de <?= escape($profileDetails['username'] ?? '') ?></h2>
                 <form id="updateProfileForm" method="POST">
-                    <table>
-                        <tr>
-                            <td><label for="username">Nom d'utilisateur:</label></td>
-                            <td><input type="text" id="username" name="username" value="<?= escape($profileDetails['username'] ?? '') ?>" required></td>
-                        </tr>
-                        <tr>
-                            <td><label for="email">Email:</label></td>
-                            <td><input type="email" id="email" name="email" value="<?= escape($profileDetails['email'] ?? '') ?>" required></td>
-                        </tr>
-                        <tr>
-                            <td><label for="phone">Téléphone:</label></td>
-                            <td><input type="tel" id="phone" name="phone" value="<?= escape($profileDetails['phone'] ?? '') ?>" required></td>
-                        </tr>
-                        <tr>
-                            <td><label for="name">Nom:</label></td>
-                            <td><input type="text" id="name" name="name" value="<?= escape($profileDetails['name'] ?? '') ?>" required></td>
-                        </tr>
-                        <tr>
-                            <td><label for="lastName">Nom de famille:</label></td>
-                            <td><input type="text" id="lastName" name="lastName" value="<?= escape($profileDetails['lastName'] ?? '') ?>" required></td>
-                        </tr>
-                        <tr>
-                            <td><label for="location">Location:</label></td>
-                            <td><input type="text" id="location" name="location" value="<?= escape($profileDetails['location'] ?? '') ?>" required></td>
-                        </tr>
-                    </table>
-                    <button type="submit">Enregistrer les modifications</button>
+                    <div class="form-group">
+                        <label for="username">Nom d'utilisateur:</label>
+                        <input type="text" id="username" name="username" value="<?= escape($profileDetails['username'] ?? '') ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" value="<?= escape($profileDetails['email'] ?? '') ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Téléphone:</label>
+                        <input type="tel" id="phone" name="phone" value="<?= escape($profileDetails['phone'] ?? '') ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Nom:</label>
+                        <input type="text" id="name" name="name" value="<?= escape($profileDetails['name'] ?? '') ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Nom de famille:</label>
+                        <input type="text" id="lastName" name="lastName" value="<?= escape($profileDetails['lastName'] ?? '') ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location:</label>
+                        <input type="text" id="location" name="location" value="<?= escape($profileDetails['location'] ?? '') ?>" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Enregistrer les modifications</button>
                 </form>
             </div>
         </main>

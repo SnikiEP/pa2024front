@@ -34,7 +34,7 @@
                         <a class="navbar-item" data-translate="my_profile" href="/public/myprofil.php">My profile</a>
                         <a class="navbar-item" href="../public/calendar.php">Calendar</a>
                         <a class="navbar-item" data-translate="tickets" href="/public/tickets.php">Tickets</a>
-                        <a class="navbar-item" data-translate="warehouses" href="/public/warehouses.php">Warehouses</a>
+                        <a class="navbar-item" href="/public/collecte.php">Collecte</a>
                         <a class="navbar-item" data-translate="events" href="/public/events.php">Events</a>
                         <?php if(in_array('ROLE_ADMIN', $_SESSION['role'])): ?>
                             <a class="navbar-item" data-translate="admin_panel" href="/admin/index.php">Admin panel</a>

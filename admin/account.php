@@ -63,50 +63,7 @@ $allAccounts = makeHttpRequest($baseUrl . "/account/all", "GET");
     $title = "Manage Accounts - HELIX";
     include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php');
     ?>
-    <link rel="stylesheet" href="/assets/css/panel.css">
-    <style>
-        .admin-title {
-            margin-top: 20px;
-        }
-
-        .table-container {
-            margin-top: 30px;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 0 auto;
-        }
-
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-            white-space: nowrap; /* Prevent text wrapping */
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        /* Limit the width of certain columns */
-        th:nth-child(5), td:nth-child(5), /* Email */
-        th:nth-child(6), td:nth-child(6), /* Phone */
-        th:nth-child(7), td:nth-child(7), /* Location */
-        th:nth-child(8), td:nth-child(8), /* Role */
-        th:nth-child(9), td:nth-child(9)  /* Sex */
-        {
-            max-width: 150px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .button {
-            white-space: nowrap;
-        }
-    </style>
+    <link rel="stylesheet" href="/assets/css/admin.css">
 </head>
 
 <body>
@@ -151,7 +108,7 @@ $allAccounts = makeHttpRequest($baseUrl . "/account/all", "GET");
                                         <td><?= escape($account['last_login']) ?></td>
                                         <td><?= escape($account['register_date']) ?></td>
                                         <td>
-                                            <button class="button is-info is-small" onclick="redirectToEditProfile(<?= $account['id'] ?>)">Edit</button>
+                                            <button class="button is-info is-small" onclick="openEditModal(<?= $account['id'] ?>)">Edit</button>
                                         </td>
                                         <td>
                                             <button class="button is-danger is-small" onclick="confirmDeleteProfile(<?= $account['id'] ?>)">Delete</button>
@@ -165,14 +122,60 @@ $allAccounts = makeHttpRequest($baseUrl . "/account/all", "GET");
                 </section>
             </div>
         </main>
-        <footer class="footer">
-            &copy; <?= date('Y'); ?> HELIX. All Rights Reserved.
-        </footer>
+        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/footer.php')?>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <h2>Edit Account</h2>
+            <form id="editProfileForm">
+                <input type="hidden" id="editProfileId" name="profileId">
+                <div class="form-group">
+                    <label for="editUsername">Username:</label>
+                    <input type="text" id="editUsername" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="editEmail">Email:</label>
+                    <input type="email" id="editEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPhone">Phone:</label>
+                    <input type="tel" id="editPhone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="editName">Name:</label>
+                    <input type="text" id="editName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="editLastName">Last Name:</label>
+                    <input type="text" id="editLastName" name="lastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editLocation">Location:</label>
+                    <input type="text" id="editLocation" name="location" required>
+                </div>
+                <button type="submit" class="btn-submit">Save Changes</button>
+            </form>
+        </div>
     </div>
 
     <script>
-        function redirectToEditProfile(profileId) {
-            window.location.href = 'edit_profile.php?id=' + profileId;
+        function openEditModal(profileId) {
+            const profile = <?= json_encode($allAccounts) ?>.find(p => p.id == profileId);
+            document.getElementById('editProfileId').value = profileId;
+            document.getElementById('editUsername').value = profile.username;
+            document.getElementById('editEmail').value = profile.email;
+            document.getElementById('editPhone').value = profile.phone;
+            document.getElementById('editName').value = profile.name;
+            document.getElementById('editLastName').value = profile.lastName;
+            document.getElementById('editLocation').value = profile.location;
+
+            document.getElementById('editModal').style.display = "block";
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = "none";
         }
 
         function confirmDeleteProfile(profileId) {
@@ -182,8 +185,6 @@ $allAccounts = makeHttpRequest($baseUrl . "/account/all", "GET");
         }
 
         function deleteProfile(profileId) {
-            const url = `http://ddns.callidos-mtf.fr:8085`;
-
             fetch('<?= $baseUrl ?>/account/' + profileId, {
                 method: 'DELETE',
                 headers: {
@@ -201,6 +202,38 @@ $allAccounts = makeHttpRequest($baseUrl . "/account/all", "GET");
             })
             .catch(error => console.error('Error deleting profile:', error));
         }
+
+        document.getElementById('editProfileForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const profileId = document.getElementById('editProfileId').value;
+            const updatedProfile = {
+                username: document.getElementById('editUsername').value,
+                email: document.getElementById('editEmail').value,
+                phone: document.getElementById('editPhone').value,
+                name: document.getElementById('editName').value,
+                lastName: document.getElementById('editLastName').value,
+                location: document.getElementById('editLocation').value,
+            };
+
+            fetch('<?= $baseUrl ?>/account/' + profileId, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer <?= $_SESSION["accessToken"]; ?>'
+                },
+                body: JSON.stringify(updatedProfile),
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Profile updated successfully.');
+                    window.location.reload();
+                } else {
+                    console.error('Error updating profile:', response.statusText);
+                }
+            })
+            .catch(error => console.error('Error updating profile:', error));
+        });
     </script>
 </body>
 

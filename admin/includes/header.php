@@ -1,7 +1,3 @@
-<?php
-include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/auth_admin.php');
-?>
-
 <header>
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">

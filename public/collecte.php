@@ -7,6 +7,11 @@ if (!isset($_SESSION['accessToken'])) {
 }
 ?>
 
+<?php
+$title = "Collecte - NMW";
+include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
+?>    
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -15,34 +20,40 @@ if (!isset($_SESSION['accessToken'])) {
     <title>Calculateur d'Itinéraire avec plusieurs arrêts et PDF</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
-    <link rel="stylesheet" href="../css/main.css" />
     <script src="https://unpkg.com/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .wrapper {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        main {
-            flex: 1;
-        }
-        .content {
-            padding: 20px;
-        }
         #map {
             height: 500px;
             width: 100%;
+            margin-top: 20px;
+            border-radius: 8px;
         }
         form {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 8px;
         }
         .stop {
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .button {
+            margin-top: 15px;
+        }
+        .field {
+            margin-bottom: 20px;
+        }
+        .remove-stop {
+            background-color: #ff3860;
+            color: white;
+            border: none;
+            padding: 0 10px;
+            margin-left: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .remove-stop:hover {
+            background-color: #ff1744;
         }
     </style>
 </head>
@@ -52,30 +63,39 @@ if (!isset($_SESSION['accessToken'])) {
         <main>
             <div class="content">
                 <div class="container">
-                    <h1 class="title">Calculateur d'Itinéraire avec plusieurs arrêts</h1>
-                    <form id="route-form">
-                        <div class="stop">
-                            <label for="start">Adresse de départ :</label>
-                            <input type="text" id="start" placeholder="Ex: 2 rue Gervex, Paris" required>
-                        </div>
-                        <div id="stops-container">
-                            <div class="stop">
-                                <label for="stop-1">Arrêt :</label>
-                                <input type="text" id="stop-1" placeholder="Ex: Arrêt intermédiaire">
+                    <h1 class="title has-text-centered">Calculateur d'Itinéraire avec plusieurs arrêts</h1>
+                    <form id="route-form" class="box">
+                        <div class="field">
+                            <label class="label" for="start">Adresse de départ :</label>
+                            <div class="control">
+                                <input class="input" type="text" id="start" placeholder="Ex: 2 rue Gervex, Paris" required>
                             </div>
                         </div>
-                        <button type="button" id="add-stop">Ajouter un arrêt</button>
-                        <div class="stop">
-                            <label for="end">Adresse d'arrivée :</label>
-                            <input type="text" id="end" placeholder="Ex: 34 rue de Clichy, Paris" required>
+                        <div id="stops-container">
+                            <div class="field stop">
+                                <label class="label" for="stop-1">Arrêt :</label>
+                                <div class="control">
+                                    <input class="input" type="text" id="stop-1" placeholder="Ex: Arrêt intermédiaire">
+                                    <button type="button" class="remove-stop">Supprimer</button>
+                                </div>
+                            </div>
                         </div>
-                        <button type="submit">Calculer l'itinéraire</button>
+                        <button class="button is-link" type="button" id="add-stop">Ajouter un arrêt</button>
+                        <div class="field" style="margin-top: 20px;">
+                            <label class="label" for="end">Adresse d'arrivée :</label>
+                            <div class="control">
+                                <input class="input" type="text" id="end" placeholder="Ex: 34 rue de Clichy, Paris" required>
+                            </div>
+                        </div>
+                        <button class="button is-primary" type="submit">Calculer l'itinéraire</button>
                         <input type="hidden" id="mapScreenshot" name="mapScreenshot">
                         <input type="hidden" id="routeInstructions" name="routeInstructions">
+                        <input type="hidden" id="distance" name="distance">
+                        <input type="hidden" id="duration" name="duration">
                     </form>
 
                     <div id="map"></div>
-                    <button id="generate-pdf" style="display:none;">Générer le PDF</button>
+                    <button class="button is-success" id="generate-pdf" style="display:none; margin-top: 20px;">Générer le PDF</button>
                 </div>
             </div>
         </main>
@@ -97,10 +117,26 @@ if (!isset($_SESSION['accessToken'])) {
         var routeInfo = null;
 
         document.getElementById('add-stop').addEventListener('click', function() {
-            var stopCount = document.querySelectorAll('#stops-container .stop').length;
-            var stopInput = `<div class="stop"><label for="stop-${stopCount + 1}">Arrêt :</label><input type="text" id="stop-${stopCount + 1}" placeholder="Ex: Arrêt intermédiaire"></div>`;
+            var stopCount = document.querySelectorAll('#stops-container .field').length;
+            var stopInput = `<div class="field stop"><label class="label" for="stop-${stopCount + 1}">Arrêt :</label><div class="control"><input class="input" type="text" id="stop-${stopCount + 1}" placeholder="Ex: Arrêt intermédiaire"><button type="button" class="remove-stop">Supprimer</button></div></div>`;
             document.getElementById('stops-container').insertAdjacentHTML('beforeend', stopInput);
+            attachRemoveStopListeners(); 
         });
+
+        function attachRemoveStopListeners() {
+            var removeButtons = document.querySelectorAll('.remove-stop');
+            removeButtons.forEach(function(button) {
+                button.removeEventListener('click', removeStop);
+                button.addEventListener('click', removeStop);
+            });
+        }
+
+        function removeStop(event) {
+            var stopField = event.target.closest('.stop');
+            stopField.remove();
+        }
+
+        attachRemoveStopListeners();
 
         document.getElementById('route-form').addEventListener('submit', function(event) {
             event.preventDefault();
@@ -157,6 +193,8 @@ if (!isset($_SESSION['accessToken'])) {
                         routeInfo = e.routes[0];
                         document.getElementById('generate-pdf').style.display = 'block';
                         document.getElementById('routeInstructions').value = JSON.stringify(routeInfo.instructions.map(i => i.text));
+                        document.getElementById('distance').value = routeInfo.summary.totalDistance;
+                        document.getElementById('duration').value = routeInfo.summary.totalTime;
                         captureMap(); 
                     }).addTo(map);
                 } else {
@@ -169,7 +207,7 @@ if (!isset($_SESSION['accessToken'])) {
             var mapElement = document.getElementById('map');
             html2canvas(mapElement).then(canvas => {
                 var imageData = canvas.toDataURL('image/png');
-                document.getElementById('mapScreenshot').value = imageData; // Envoyer l'image au serveur
+                document.getElementById('mapScreenshot').value = imageData; 
             });
         }
 
