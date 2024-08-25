@@ -56,10 +56,6 @@ if (!$allVehicles) {
 }
 ?>
 
-<?php
-include_once('includes/auth_admin.php');
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -68,82 +64,102 @@ include_once('includes/auth_admin.php');
     $title = "Vehicles - HELIX";
     include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php');
     ?>
-    <link rel="stylesheet" href="/assets/css/panel.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
 </head>
 
 <body>
     <div class="wrapper">
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php') ?>
-        <main>
-            <div class="content">
-                <h1 class="title has-text-centered admin-title">Vehicle Management</h1>
-                <section class="section">
-                    <div class="container">
-                        <div class="table-container">
-                            <table class="table is-striped is-fullwidth">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>ID Plate</th>
-                                        <th>Fret Capacity</th>
-                                        <th>Human Capacity</th>
-                                        <th>Model</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (empty($allVehicles)): ?>
-                                        <tr>
-                                            <td colspan="6" class="has-text-centered">No vehicles found.</td>
-                                        </tr>
-                                    <?php else: ?>
-                                        <?php foreach ($allVehicles as $vehicle): ?>
-                                            <tr>
-                                                <td><?= escape($vehicle['id']) ?></td>
-                                                <td><?= escape($vehicle['id_plate']) ?></td>
-                                                <td><?= escape($vehicle['fret_capacity']) ?></td>
-                                                <td><?= escape($vehicle['human_capacity']) ?></td>
-                                                <td><?= escape($vehicle['model']) ?></td>
-                                                <td>
-                                                    <form action="edit_vehicle.php" method="GET" style="display:inline;">
-                                                        <input type="hidden" name="id" value="<?= escape($vehicle['id']) ?>">
-                                                        <button class="button is-info is-small" type="submit">Edit</button>
-                                                    </form>
-                                                    <form action="" method="POST" style="display:inline;">
-                                                        <input type="hidden" name="delete_vehicle_id" value="<?= escape($vehicle['id']) ?>">
-                                                        <button class="button is-danger is-small" type="submit" onclick="return confirm('Are you sure you want to delete this vehicle?');">Delete</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
+        <main class="section">
+            <div class="container">
+                <h1 class="title has-text-centered">Vehicle Management</h1>
 
-                <section class="section">
-                    <div class="container">
-                        <div class="box">
-                            <h2 class="title is-4">Add New Vehicle</h2>
-                            <form action="" method="POST">
-                                <input class="input" type="text" name="id_plate" placeholder="ID Plate" required>
-                                <input class="input" type="number" name="fret_capacity" placeholder="Fret Capacity" required>
-                                <input class="input" type="number" name="human_capacity" placeholder="Human Capacity" required>
-                                <input class="input" type="text" name="model" placeholder="Model" required>
-                                <button class="button is-success" type="submit">Add Vehicle</button>
-                            </form>
-                            <?php if (isset($error)): ?>
-                                <p style="color: red;"><?= escape($error) ?></p>
-                            <?php endif; ?>
-                        </div>
+                <div class="box">
+                    <h2 class="subtitle">Vehicles List</h2>
+                    <div class="table-container">
+                        <table class="table is-striped is-fullwidth">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>ID Plate</th>
+                                    <th>Fret Capacity</th>
+                                    <th>Human Capacity</th>
+                                    <th>Model</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (empty($allVehicles)): ?>
+                                    <tr>
+                                        <td colspan="6" class="has-text-centered">No vehicles found.</td>
+                                    </tr>
+                                <?php else: ?>
+                                    <?php foreach ($allVehicles as $vehicle): ?>
+                                        <tr>
+                                            <td><?= escape($vehicle['id']) ?></td>
+                                            <td><?= escape($vehicle['id_plate']) ?></td>
+                                            <td><?= escape($vehicle['fret_capacity']) ?></td>
+                                            <td><?= escape($vehicle['human_capacity']) ?></td>
+                                            <td><?= escape($vehicle['model']) ?></td>
+                                            <td>
+                                                <form action="edit_vehicle.php" method="GET" style="display:inline;">
+                                                    <input type="hidden" name="id" value="<?= escape($vehicle['id']) ?>">
+                                                    <button class="button is-info is-small" type="submit">Edit</button>
+                                                </form>
+                                                <form action="" method="POST" style="display:inline;">
+                                                    <input type="hidden" name="delete_vehicle_id" value="<?= escape($vehicle['id']) ?>">
+                                                    <button class="button is-danger is-small" type="submit" onclick="return confirm('Are you sure you want to delete this vehicle?');">Delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
                     </div>
-                </section>
+                </div>
+
+                <div class="box">
+                    <h2 class="subtitle">Add New Vehicle</h2>
+                    <form action="" method="POST">
+                        <div class="field">
+                            <label class="label" for="id_plate">ID Plate</label>
+                            <div class="control">
+                                <input class="input" type="text" name="id_plate" id="id_plate" placeholder="ID Plate" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="fret_capacity">Fret Capacity</label>
+                            <div class="control">
+                                <input class="input" type="number" name="fret_capacity" id="fret_capacity" placeholder="Fret Capacity" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="human_capacity">Human Capacity</label>
+                            <div class="control">
+                                <input class="input" type="number" name="human_capacity" id="human_capacity" placeholder="Human Capacity" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="model">Model</label>
+                            <div class="control">
+                                <input class="input" type="text" name="model" id="model" placeholder="Model" required>
+                            </div>
+                        </div>
+                        <div class="control">
+                            <button class="button is-success" type="submit">Add Vehicle</button>
+                        </div>
+                    </form>
+                    <?php if (isset($error)): ?>
+                        <p class="has-text-danger"><?= escape($error) ?></p>
+                    <?php endif; ?>
+                </div>
             </div>
         </main>
         <footer class="footer">
-            &copy; <?= date('Y'); ?> HELIX. All Rights Reserved.
+            <div class="content has-text-centered">
+                &copy; <?= date('Y'); ?> HELIX. All Rights Reserved.
+            </div>
         </footer>
     </div>
 </body>

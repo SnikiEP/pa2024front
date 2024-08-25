@@ -12,58 +12,109 @@ try {
     die("Database connection failed: " . $e->getMessage());
 }
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (isset($_POST['delete'])) {
-        $stmt = $pdo->prepare("DELETE FROM events WHERE id = :eventId");
-        $stmt->execute([':eventId' => $_POST['eventId']]);
-    } elseif (isset($_POST['edit'])) {
-        $stmt = $pdo->prepare("
-            UPDATE events SET 
-                event_name = :eventName,
-                event_type = :eventType,
-                event_start = :eventStart,
-                event_end = :eventEnd,
-                location = :location,
-                description = :description
-            WHERE id = :eventId
-        ");
-        $stmt->execute([
-            ':eventName' => $_POST['eventName'],
-            ':eventType' => $_POST['eventType'],
-            ':eventStart' => $_POST['eventStart'],
-            ':eventEnd' => $_POST['eventEnd'],
-            ':location' => $_POST['location'],
-            ':description' => $_POST['description'],
-            ':eventId' => $_POST['eventId']
-        ]);
-    } else {
-        $stmt = $pdo->prepare("
-            INSERT INTO events (event_name, event_type, event_start, event_end, location, description)
-            VALUES (:eventName, :eventType, :eventStart, :eventEnd, :location, :description)
-        ");
-        $stmt->execute([
-            ':eventName' => $_POST['eventName'],
-            ':eventType' => $_POST['eventType'],
-            ':eventStart' => $_POST['eventStart'],
-            ':eventEnd' => $_POST['eventEnd'],
-            ':location' => $_POST['location'],
-            ':description' => $_POST['description']
-        ]);
+$errorMessage = null;
 
-        $eventId = $pdo->lastInsertId();
-        if (!empty($_POST['vehicleIds'])) {
-            $stmt = $pdo->prepare("INSERT INTO event_vehicle (event_id, vehicle_id) VALUES (:eventId, :vehicleId)");
-            foreach ($_POST['vehicleIds'] as $vehicleId) {
-                $stmt->execute([
-                    ':eventId' => $eventId,
-                    ':vehicleId' => $vehicleId
-                ]);
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $eventStart = $_POST['eventStart'];
+    $eventEnd = $_POST['eventEnd'];
+    
+    if (strtotime($eventStart) >= strtotime($eventEnd)) {
+        $errorMessage = "La date de début doit être antérieure à la date de fin.";
+    }
+
+    if (!$errorMessage && !empty($_POST['vehicleIds'])) {
+        foreach ($_POST['vehicleIds'] as $vehicleId) {
+            $stmt = $pdo->prepare("
+                SELECT COUNT(*) FROM event_vehicle ev
+                JOIN events e ON ev.event_id = e.id
+                WHERE ev.vehicle_id = :vehicleId
+                AND (
+                    (:eventStart BETWEEN e.event_start AND e.event_end)
+                    OR (:eventEnd BETWEEN e.event_start AND e.event_end)
+                    OR (e.event_start BETWEEN :eventStart AND :eventEnd)
+                    OR (e.event_end BETWEEN :eventStart AND :eventEnd)
+                )
+            ");
+            $stmt->execute([
+                ':vehicleId' => $vehicleId,
+                ':eventStart' => $eventStart,
+                ':eventEnd' => $eventEnd
+            ]);
+
+            if ($stmt->fetchColumn() > 0) {
+                $errorMessage = "Le véhicule avec l'ID $vehicleId est déjà pris durant cette période.";
+                break;
             }
         }
     }
 
-    header("Location: events.php");
-    exit;
+    if (!$errorMessage) {
+        try {
+            if (isset($_POST['eventId']) && !empty($_POST['eventId'])) {
+                $stmt = $pdo->prepare("
+                    UPDATE events SET 
+                        event_name = :eventName,
+                        event_type = :eventType,
+                        event_start = :eventStart,
+                        event_end = :eventEnd,
+                        location = :location,
+                        description = :description
+                    WHERE id = :eventId
+                ");
+                $stmt->execute([
+                    ':eventName' => $_POST['eventName'],
+                    ':eventType' => $_POST['eventType'],
+                    ':eventStart' => $eventStart,
+                    ':eventEnd' => $eventEnd,
+                    ':location' => $_POST['location'],
+                    ':description' => $_POST['description'],
+                    ':eventId' => $_POST['eventId']
+                ]);
+
+                $stmt = $pdo->prepare("DELETE FROM event_vehicle WHERE event_id = :eventId");
+                $stmt->execute([':eventId' => $_POST['eventId']]);
+
+                if (!empty($_POST['vehicleIds'])) {
+                    $stmt = $pdo->prepare("INSERT INTO event_vehicle (event_id, vehicle_id) VALUES (:eventId, :vehicleId)");
+                    foreach ($_POST['vehicleIds'] as $vehicleId) {
+                        $stmt->execute([
+                            ':eventId' => $_POST['eventId'],
+                            ':vehicleId' => $vehicleId
+                        ]);
+                    }
+                }
+            } else {
+                $stmt = $pdo->prepare("
+                    INSERT INTO events (event_name, event_type, event_start, event_end, location, description)
+                    VALUES (:eventName, :eventType, :eventStart, :eventEnd, :location, :description)
+                ");
+                $stmt->execute([
+                    ':eventName' => $_POST['eventName'],
+                    ':eventType' => $_POST['eventType'],
+                    ':eventStart' => $eventStart,
+                    ':eventEnd' => $eventEnd,
+                    ':location' => $_POST['location'],
+                    ':description' => $_POST['description']
+                ]);
+
+                $eventId = $pdo->lastInsertId();
+                if (!empty($_POST['vehicleIds'])) {
+                    $stmt = $pdo->prepare("INSERT INTO event_vehicle (event_id, vehicle_id) VALUES (:eventId, :vehicleId)");
+                    foreach ($_POST['vehicleIds'] as $vehicleId) {
+                        $stmt->execute([
+                            ':eventId' => $eventId,
+                            ':vehicleId' => $vehicleId
+                        ]);
+                    }
+                }
+            }
+
+            header("Location: events.php");
+            exit;
+        } catch (PDOException $e) {
+            $errorMessage = "Une erreur est survenue : " . $e->getMessage();
+        }
+    }
 }
 
 function escape($value)
@@ -97,119 +148,176 @@ $allVehicles = $allVehiclesStmt->fetchAll(PDO::FETCH_ASSOC);
     $title = "Manage Events - HELIX";
     include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php');
     ?>
-    <link rel="stylesheet" href="/assets/css/panel.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 
 <body>
     <div class="wrapper">
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php') ?>
-        <main>
-            <div class="content">
-                <div class="filter-container">
-                    <h2>Filter Events</h2>
+        <main class="section">
+            <div class="container">
+                <h1 class="title has-text-centered">Manage Events</h1>
+
+                <?php if (isset($errorMessage)) : ?>
+                    <div class="notification is-danger">
+                        <?= $errorMessage ?>
+                    </div>
+                <?php endif; ?>
+
+                <div class="box">
+                    <h2 class="subtitle">Filter Events</h2>
                     <form method="GET">
-                        <label for="eventTypeFilter">Event Type:</label>
-                        <select id="eventTypeFilter" name="eventType">
-                            <option value="">All Types</option>
-                            <?php
-                            $types = $pdo->query("SELECT DISTINCT event_type FROM events")->fetchAll(PDO::FETCH_ASSOC);
-                            foreach ($types as $type) : ?>
-                                <option value="<?= escape($type['event_type']) ?>" <?= isset($_GET['eventType']) && $_GET['eventType'] == $type['event_type'] ? 'selected' : '' ?>>
-                                    <?= escape($type['event_type']) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
+                        <div class="field">
+                            <label class="label" for="eventTypeFilter">Event Type</label>
+                            <div class="control">
+                                <div class="select">
+                                    <select id="eventTypeFilter" name="eventType">
+                                        <option value="">All Types</option>
+                                        <?php
+                                        $types = $pdo->query("SELECT DISTINCT event_type FROM events")->fetchAll(PDO::FETCH_ASSOC);
+                                        foreach ($types as $type) : ?>
+                                            <option value="<?= escape($type['event_type']) ?>" <?= isset($_GET['eventType']) && $_GET['eventType'] == $type['event_type'] ? 'selected' : '' ?>>
+                                                <?= escape($type['event_type']) ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
-                        <label for="locationFilter">Location:</label>
-                        <select id="locationFilter" name="location">
-                            <option value="">All Locations</option>
-                            <?php
-                            $locations = $pdo->query("SELECT DISTINCT location FROM events")->fetchAll(PDO::FETCH_ASSOC);
-                            foreach ($locations as $location) : ?>
-                                <option value="<?= escape($location['location']) ?>" <?= isset($_GET['location']) && $_GET['location'] == $location['location'] ? 'selected' : '' ?>>
-                                    <?= escape($location['location']) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
+                        <div class="field">
+                            <label class="label" for="locationFilter">Location</label>
+                            <div class="control">
+                                <div class="select">
+                                    <select id="locationFilter" name="location">
+                                        <option value="">All Locations</option>
+                                        <?php
+                                        $locations = $pdo->query("SELECT DISTINCT location FROM events")->fetchAll(PDO::FETCH_ASSOC);
+                                        foreach ($locations as $location) : ?>
+                                            <option value="<?= escape($location['location']) ?>" <?= isset($_GET['location']) && $_GET['location'] == $location['location'] ? 'selected' : '' ?>>
+                                                <?= escape($location['location']) ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
-                        <button type="submit">Filter</button>
+                        <div class="control">
+                            <button class="button is-primary" type="submit">Filter</button>
+                        </div>
                     </form>
                 </div>
 
-                <div class="events-list">
-                    <h2>Events List</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Type</th>
-                                <th>Start</th>
-                                <th>End</th>
-                                <th>Location</th>
-                                <th>Description</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($allEvents as $event) : ?>
+                <div class="box">
+                    <h2 class="subtitle">Events List</h2>
+                    <div class="table-container">
+                        <table class="table is-striped is-fullwidth">
+                            <thead>
                                 <tr>
-                                    <td><?= escape($event['event_name']) ?></td>
-                                    <td><?= escape($event['event_type']) ?></td>
-                                    <td><?= escape($event['event_start']) ?></td>
-                                    <td><?= escape($event['event_end']) ?></td>
-                                    <td><?= escape($event['location']) ?></td>
-                                    <td><?= escape($event['description']) ?></td>
-                                    <td class="event-actions">
-                                        <button type="button" class="edit" onclick="editEvent(<?= escape($event['id']) ?>)">Edit</button>
-                                        <form method="POST" style="display:inline;">
-                                            <input type="hidden" name="eventId" value="<?= escape($event['id']) ?>">
-                                            <button type="submit" name="delete" class="delete">Delete</button>
-                                        </form>
-                                    </td>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                    <th>Location</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($allEvents as $event) : ?>
+                                    <tr>
+                                        <td><?= escape($event['event_name']) ?></td>
+                                        <td><?= escape($event['event_type']) ?></td>
+                                        <td><?= escape($event['event_start']) ?></td>
+                                        <td><?= escape($event['event_end']) ?></td>
+                                        <td><?= escape($event['location']) ?></td>
+                                        <td><?= escape($event['description']) ?></td>
+                                        <td class="event-actions">
+                                            <button class="button is-info is-small" type="button" onclick="editEvent(<?= escape($event['id']) ?>)">Edit</button>
+                                            <form method="POST" style="display:inline;">
+                                                <input type="hidden" name="eventId" value="<?= escape($event['id']) ?>">
+                                                <button class="button is-danger is-small" type="submit" name="delete">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
-                <h2>Create or Edit Event</h2>
-                <form method="POST">
-                    <input type="hidden" name="eventId" id="eventId">
+                <div class="box">
+                    <h2 class="subtitle">Create or Edit Event</h2>
+                    <form method="POST">
+                        <input type="hidden" name="eventId" id="eventId">
 
-                    <label for="eventName">Event Name:</label>
-                    <input type="text" id="eventName" name="eventName" required>
+                        <div class="field">
+                            <label class="label" for="eventName">Event Name</label>
+                            <div class="control">
+                                <input class="input" type="text" id="eventName" name="eventName" required>
+                            </div>
+                        </div>
 
-                    <label for="eventType">Event Type:</label>
-                    <input type="text" id="eventType" name="eventType" required>
+                        <div class="field">
+                            <label class="label" for="eventType">Event Type</label>
+                            <div class="control">
+                                <input class="input" type="text" id="eventType" name="eventType" required>
+                            </div>
+                        </div>
 
-                    <label for="eventStart">Event Start:</label>
-                    <input type="datetime-local" id="eventStart" name="eventStart" required>
+                        <div class="field">
+                            <label class="label" for="eventStart">Event Start</label>
+                            <div class="control">
+                                <input class="input" type="datetime-local" id="eventStart" name="eventStart" required>
+                            </div>
+                        </div>
 
-                    <label for="eventEnd">Event End:</label>
-                    <input type="datetime-local" id="eventEnd" name="eventEnd" required>
+                        <div class="field">
+                            <label class="label" for="eventEnd">Event End</label>
+                            <div class="control">
+                                <input class="input" type="datetime-local" id="eventEnd" name="eventEnd" required>
+                            </div>
+                        </div>
 
-                    <label for="location">Location:</label>
-                    <input type="text" id="location" name="location" required>
+                        <div class="field">
+                            <label class="label" for="location">Location</label>
+                            <div class="control">
+                                <input class="input" type="text" id="location" name="location" required>
+                            </div>
+                        </div>
 
-                    <label for="description">Description:</label>
-                    <textarea id="description" name="description" required></textarea>
+                        <div class="field">
+                            <label class="label" for="description">Description</label>
+                            <div class="control">
+                                <textarea class="textarea" id="description" name="description" required></textarea>
+                            </div>
+                        </div>
 
-                    <label for="vehicleIds">Select Vehicles:</label>
-                    <select id="vehicleIds" name="vehicleIds[]" multiple>
-                        <?php foreach ($allVehicles as $vehicle) : ?>
-                            <option value="<?= escape($vehicle['id']) ?>">
-                                <?= escape($vehicle['id_plate']) ?> - <?= escape($vehicle['model']) ?> (Fret Capacity: <?= escape($vehicle['fret_capacity']) ?>, Human Capacity: <?= escape($vehicle['human_capacity']) ?>)
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+                        <div class="field">
+                            <label class="label" for="vehicleIds">Select Vehicles</label>
+                            <div class="control">
+                                <?php foreach ($allVehicles as $vehicle) : ?>
+                                    <label class="checkbox">
+                                        <input type="checkbox" name="vehicleIds[]" value="<?= escape($vehicle['id']) ?>">
+                                        <?= escape($vehicle['id_plate']) ?> - <?= escape($vehicle['model']) ?> (Fret Capacity: <?= escape($vehicle['fret_capacity']) ?>, Human Capacity: <?= escape($vehicle['human_capacity']) ?>)
+                                    </label><br>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
 
-                    <input type="submit" value="Save Event">
-                </form>
+                        <div class="control">
+                            <button class="button is-success" type="submit">Save Event</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </main>
         <footer class="footer">
-            &copy; <?= date('Y'); ?> HELIX. All Rights Reserved.
+            <div class="content has-text-centered">
+                &copy; <?= date('Y'); ?> HELIX. All Rights Reserved.
+            </div>
         </footer>
     </div>
 
@@ -239,6 +347,11 @@ $allVehicles = $allVehiclesStmt->fetchAll(PDO::FETCH_ASSOC);
             document.getElementById('eventEnd').value = event.event_end.replace(' ', 'T');
             document.getElementById('location').value = event.location;
             document.getElementById('description').value = event.description;
+
+            var vehicleCheckboxes = document.querySelectorAll('input[name="vehicleIds[]"]');
+            vehicleCheckboxes.forEach(function(checkbox) {
+                checkbox.checked = <?= json_encode($eventVehicles) ?>.includes(checkbox.value);
+            });
         }
     </script>
 </body>

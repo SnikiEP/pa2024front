@@ -1,0 +1,99 @@
+        /* STICKY FOOTER */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #1c1c1e;
+            color: #fff;
+        }
+
+        .wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        .footer {
+            flex-shrink: 0;
+        }
+
+        .box, .card {
+            background-color: #2c2c2e !important;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header-title, .subtitle {
+            color: #fff;
+        }
+
+        .card-content, .card-footer {
+            color: #ddd;
+        }
+
+        .table {
+            background-color: #2c2c2e;
+            color: #fff;
+            border: 1px solid #444;
+        }
+
+        .table th, .table td {
+            border: 1px solid #444;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .table th {
+            background-color: #333;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .table td {
+            background-color: #2c2c2e;
+            color: #ddd;
+            transition: background-color 0.3s ease;
+        }
+
+        .table td:hover {
+            background-color: #444;
+        }
+
+        .dashboard-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .dashboard-card {
+            flex: 1 1 calc(33.333% - 1.5rem);
+            min-width: 250px;
+            max-width: 300px;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 400px;
+        }
+
+        .button.is-success, .button.is-info, .button.is-danger {
+            background-color: #00d1b2 !important;
+            color: #fff !important;
+            border-color: transparent !important;
+        }
+
+        .button.is-success:hover, .button.is-info:hover, .button.is-danger:hover {
+            background-color: #00b89c !important;
+            color: #fff !important;
+            border-color: transparent !important;
+        }
+
+        .notification.is-success {
+            background-color: #2d572c !important;
+            color: #fff !important;
+        }

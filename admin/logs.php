@@ -71,7 +71,7 @@ function getUsername($user_id) {
 
 function formatTimestamp($timestamp) {
     $date = new DateTime($timestamp);
-    return $date->format('Y-m-d H:i:s');
+    return $date->format('d/m/Y H:i');
 }
 
 function describeAction($action) {
@@ -96,68 +96,88 @@ function describeAction($action) {
     $title = "Manage Logs - HELIX";
     include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php');
     ?>
-    <link rel="stylesheet" href="/assets/css/panel.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
 </head>
 
 <body>
     <div class="wrapper">
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php') ?>
-        <main>
-            <div class="content">
-                <div class="filter-container">
-                    <h2>Filter Logs</h2>
+        <main class="section">
+            <div class="container">
+                <h1 class="title has-text-centered">Manage Logs</h1>
+
+                <div class="box">
+                    <h2 class="subtitle">Filter Logs</h2>
                     <form method="GET">
-                        <label for="userIdFilter">User ID:</label>
-                        <input type="number" id="userIdFilter" name="user_id" value="<?= escape($_GET['user_id'] ?? '') ?>">
+                        <div class="field">
+                            <label class="label" for="userIdFilter">User ID</label>
+                            <div class="control">
+                                <input class="input" type="number" id="userIdFilter" name="user_id" value="<?= escape($_GET['user_id'] ?? '') ?>">
+                            </div>
+                        </div>
 
-                        <label for="actionFilter">Action:</label>
-                        <input type="text" id="actionFilter" name="action" value="<?= escape($_GET['action'] ?? '') ?>">
+                        <div class="field">
+                            <label class="label" for="actionFilter">Action</label>
+                            <div class="control">
+                                <input class="input" type="text" id="actionFilter" name="action" value="<?= escape($_GET['action'] ?? '') ?>">
+                            </div>
+                        </div>
 
-                        <label for="methodFilter">HTTP Method:</label>
-                        <select id="methodFilter" name="request_method">
-                            <option value="">All Methods</option>
-                            <option value="GET" <?= (isset($_GET['request_method']) && $_GET['request_method'] == 'GET') ? 'selected' : '' ?>>GET</option>
-                            <option value="POST" <?= (isset($_GET['request_method']) && $_GET['request_method'] == 'POST') ? 'selected' : '' ?>>POST</option>
-                            <option value="PUT" <?= (isset($_GET['request_method']) && $_GET['request_method'] == 'PUT') ? 'selected' : '' ?>>PUT</option>
-                            <option value="DELETE" <?= (isset($_GET['request_method']) && $_GET['request_method'] == 'DELETE') ? 'selected' : '' ?>>DELETE</option>
-                        </select>
+                        <div class="field">
+                            <label class="label" for="methodFilter">HTTP Method</label>
+                            <div class="control">
+                                <div class="select">
+                                    <select id="methodFilter" name="request_method">
+                                        <option value="">All Methods</option>
+                                        <option value="GET" <?= (isset($_GET['request_method']) && $_GET['request_method'] == 'GET') ? 'selected' : '' ?>>GET</option>
+                                        <option value="POST" <?= (isset($_GET['request_method']) && $_GET['request_method'] == 'POST') ? 'selected' : '' ?>>POST</option>
+                                        <option value="PUT" <?= (isset($_GET['request_method']) && $_GET['request_method'] == 'PUT') ? 'selected' : '' ?>>PUT</option>
+                                        <option value="DELETE" <?= (isset($_GET['request_method']) && $_GET['request_method'] == 'DELETE') ? 'selected' : '' ?>>DELETE</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
-                        <button type="submit">Filter</button>
+                        <div class="control">
+                            <button class="button is-primary" type="submit">Filter</button>
+                        </div>
                     </form>
                 </div>
 
-                <div class="logs-list">
-                    <h2>Logs List</h2>
-                    <table class="table is-striped is-fullwidth">
-                        <thead>
-                            <tr>
-                                <th>User ID</th>
-                                <th>Username</th>
-                                <th>Action</th>
-                                <th>Description</th>
-                                <th>Method</th>
-                                <th>Response Code</th>
-                                <th>Timestamp</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($logs as $log) : 
-                                $username = getUsername($log['user_id']);
-                                $formattedTimestamp = formatTimestamp($log['timestamp']);
-                                $actionDescription = describeAction($log['action']);
-                            ?>
+                <div class="box">
+                    <h2 class="subtitle">Logs List</h2>
+                    <div class="table-container">
+                        <table class="table is-striped is-fullwidth">
+                            <thead>
                                 <tr>
-                                    <td><?= escape($log['user_id']) ?></td>
-                                    <td><?= escape($username) ?></td>
-                                    <td><?= escape($log['action']) ?></td>
-                                    <td><?= escape($actionDescription) ?></td>
-                                    <td><?= escape($log['request_method']) ?></td>
-                                    <td><?= escape($log['response_code']) ?></td>
-                                    <td><?= escape($formattedTimestamp) ?></td>
+                                    <th>User ID</th>
+                                    <th>Username</th>
+                                    <th>Action</th>
+                                    <th>Description</th>
+                                    <th>Method</th>
+                                    <th>Response Code</th>
+                                    <th>Timestamp</th>
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($logs as $log) : 
+                                    $username = getUsername($log['user_id']);
+                                    $formattedTimestamp = formatTimestamp($log['timestamp']);
+                                    $actionDescription = describeAction($log['action']);
+                                ?>
+                                    <tr>
+                                        <td><?= escape($log['user_id']) ?></td>
+                                        <td><?= escape($username) ?></td>
+                                        <td><?= escape($log['action']) ?></td>
+                                        <td><?= escape($actionDescription) ?></td>
+                                        <td><?= escape($log['request_method']) ?></td>
+                                        <td><?= escape($log['response_code']) ?></td>
+                                        <td><?= escape($formattedTimestamp) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <nav class="pagination is-centered" role="navigation" aria-label="pagination">
@@ -176,7 +196,9 @@ function describeAction($action) {
             </div>
         </main>
         <footer class="footer">
-            &copy; <?= date('Y'); ?> HELIX. All Rights Reserved.
+            <div class="content has-text-centered">
+                &copy; <?= date('Y'); ?> HELIX. All Rights Reserved.
+            </div>
         </footer>
     </div>
 </body>

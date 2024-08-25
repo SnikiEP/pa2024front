@@ -52,7 +52,19 @@ function escape($value) {
     return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
 }
 
-$allAccounts = makeHttpRequest($baseUrl . "/account/all", "GET");
+function formatDate($timestamp) {
+    if ($timestamp) {
+        $date = new DateTime($timestamp);
+        return $date->format('d/m/Y H:i');
+    }
+    return '';
+}
+
+try {
+    $allAccounts = makeHttpRequest($baseUrl . "/account/all", "GET");
+} catch (Exception $e) {
+    $allAccounts = []; // En cas d'erreur, définir un tableau vide pour éviter que la page ne plante
+}
 ?>
 
 <!DOCTYPE html>
@@ -63,100 +75,155 @@ $allAccounts = makeHttpRequest($baseUrl . "/account/all", "GET");
     $title = "Manage Accounts - HELIX";
     include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php');
     ?>
-    <link rel="stylesheet" href="/assets/css/admin.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
 </head>
 
 <body>
     <div class="wrapper">
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php') ?>
-        <main>
-            <div class="content">
-                <h1 class="title has-text-centered admin-title">Manage Accounts</h1>
-                <section class="section">
-                    <div class="container">
-                        <div class="table-container">
-                            <table class="table is-striped is-fullwidth">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Username</th>
-                                        <th>Name</th>
-                                        <th>Last Name</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>Location</th>
-                                        <th>Role</th>
-                                        <th>Sex</th>
-                                        <th>Last Login</th>
-                                        <th>Registered Date</th>
-                                        <th>Edit</th>
-                                        <th>Delete</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($allAccounts as $account): ?>
-                                    <tr>
-                                        <td><?= escape($account['id']) ?></td>
-                                        <td><?= escape($account['username']) ?></td>
-                                        <td><?= escape($account['name']) ?></td>
-                                        <td><?= escape($account['lastName']) ?></td>
-                                        <td><?= escape($account['email']) ?></td>
-                                        <td><?= escape($account['phone']) ?></td>
-                                        <td><?= escape($account['location']) ?></td>
-                                        <td><?= escape($account['role']) ?></td>
-                                        <td><?= escape($account['sex']) ?></td>
-                                        <td><?= escape($account['last_login']) ?></td>
-                                        <td><?= escape($account['register_date']) ?></td>
-                                        <td>
-                                            <button class="button is-info is-small" onclick="openEditModal(<?= $account['id'] ?>)">Edit</button>
-                                        </td>
-                                        <td>
-                                            <button class="button is-danger is-small" onclick="confirmDeleteProfile(<?= $account['id'] ?>)">Delete</button>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
+        <main class="section">
+            <div class="container">
+                <h1 class="title has-text-centered">Manage Accounts</h1>
+
+                <div class="box">
+                    <h2 class="subtitle">Search Accounts</h2>
+                    <form method="GET">
+                        <div class="field">
+                            <label class="label" for="userIdFilter">User ID:</label>
+                            <div class="control">
+                                <input class="input" type="number" id="userIdFilter" name="user_id" value="<?= escape($_GET['user_id'] ?? '') ?>">
+                            </div>
                         </div>
-                    </div>
-                </section>
+
+                        <div class="field">
+                            <label class="label" for="usernameFilter">Username:</label>
+                            <div class="control">
+                                <input class="input" type="text" id="usernameFilter" name="username" value="<?= escape($_GET['username'] ?? '') ?>">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label" for="emailFilter">Email:</label>
+                            <div class="control">
+                                <input class="input" type="text" id="emailFilter" name="email" value="<?= escape($_GET['email'] ?? '') ?>">
+                            </div>
+                        </div>
+
+                        <div class="control">
+                            <button class="button is-primary" type="submit">Search</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="box">
+                    <h2 class="subtitle">Accounts List</h2>
+                    <?php if (!empty($allAccounts)) : ?>
+                        <table class="table is-striped is-fullwidth">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Location</th>
+                                    <th>Role</th>
+                                    <th>Sex</th>
+                                    <th>Last Login</th>
+                                    <th>Registered Date</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($allAccounts as $account): ?>
+                                <tr>
+                                    <td><?= escape($account['id']) ?></td>
+                                    <td><?= escape($account['username']) ?></td>
+                                    <td><?= escape($account['name']) ?></td>
+                                    <td><?= escape($account['lastName']) ?></td>
+                                    <td><?= escape($account['email']) ?></td>
+                                    <td><?= escape($account['phone']) ?></td>
+                                    <td><?= escape($account['location']) ?></td>
+                                    <td><?= escape($account['role']) ?></td>
+                                    <td><?= escape($account['sex']) ?></td>
+                                    <td><?= formatDate($account['last_login']) ?></td>
+                                    <td><?= formatDate($account['register_date']) ?></td>
+                                    <td>
+                                        <button class="button is-info is-small" onclick="openEditModal(<?= $account['id'] ?>)">Edit</button>
+                                    </td>
+                                    <td>
+                                        <button class="button is-danger is-small" onclick="confirmDeleteProfile(<?= $account['id'] ?>)">Delete</button>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php else : ?>
+                        <p>No accounts found or error fetching accounts.</p>
+                    <?php endif; ?>
+                </div>
             </div>
         </main>
-        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/footer.php')?>
+        <footer class="footer">
+            <div class="content has-text-centered">
+                &copy; <?= date('Y'); ?> HELIX. All Rights Reserved.
+            </div>
+        </footer>
     </div>
 
     <div id="editModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeEditModal()">&times;</span>
-            <h2>Edit Account</h2>
-            <form id="editProfileForm">
-                <input type="hidden" id="editProfileId" name="profileId">
-                <div class="form-group">
-                    <label for="editUsername">Username:</label>
-                    <input type="text" id="editUsername" name="username" required>
-                </div>
-                <div class="form-group">
-                    <label for="editEmail">Email:</label>
-                    <input type="email" id="editEmail" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="editPhone">Phone:</label>
-                    <input type="tel" id="editPhone" name="phone" required>
-                </div>
-                <div class="form-group">
-                    <label for="editName">Name:</label>
-                    <input type="text" id="editName" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="editLastName">Last Name:</label>
-                    <input type="text" id="editLastName" name="lastName" required>
-                </div>
-                <div class="form-group">
-                    <label for="editLocation">Location:</label>
-                    <input type="text" id="editLocation" name="location" required>
-                </div>
-                <button type="submit" class="btn-submit">Save Changes</button>
-            </form>
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Edit Account</p>
+                <button class="delete" aria-label="close" onclick="closeEditModal()"></button>
+            </header>
+            <section class="modal-card-body">
+                <form id="editProfileForm">
+                    <input type="hidden" id="editProfileId" name="profileId">
+                    <div class="field">
+                        <label class="label" for="editUsername">Username:</label>
+                        <div class="control">
+                            <input class="input" type="text" id="editUsername" name="username" required>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="editEmail">Email:</label>
+                        <div class="control">
+                            <input class="input" type="email" id="editEmail" name="email" required>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="editPhone">Phone:</label>
+                        <div class="control">
+                            <input class="input" type="tel" id="editPhone" name="phone" required>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="editName">Name:</label>
+                        <div class="control">
+                            <input class="input" type="text" id="editName" name="name" required>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="editLastName">Last Name:</label>
+                        <div class="control">
+                            <input class="input" type="text" id="editLastName" name="lastName" required>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="editLocation">Location:</label>
+                        <div class="control">
+                            <input class="input" type="text" id="editLocation" name="location" required>
+                        </div>
+                    </div>
+                    <div class="control">
+                        <button type="submit" class="button is-success">Save Changes</button>
+                    </div>
+                </form>
+            </section>
         </div>
     </div>
 
@@ -171,11 +238,11 @@ $allAccounts = makeHttpRequest($baseUrl . "/account/all", "GET");
             document.getElementById('editLastName').value = profile.lastName;
             document.getElementById('editLocation').value = profile.location;
 
-            document.getElementById('editModal').style.display = "block";
+            document.getElementById('editModal').classList.add('is-active');
         }
 
         function closeEditModal() {
-            document.getElementById('editModal').style.display = "none";
+            document.getElementById('editModal').classList.remove('is-active');
         }
 
         function confirmDeleteProfile(profileId) {

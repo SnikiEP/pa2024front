@@ -16,8 +16,6 @@
             <div class="navbar-start">
                 <a class="navbar-item" data-translate="home" href="../index.php">Home</a>
                 <a class="navbar-item" data-translate="about_us" href="/public/about.php">About us</a>
-                <a class="navbar-item" data-translate="our_missions" href="/public/missions.php">Our missions</a>
-                <a class="navbar-item" data-translate="donation" href="/public/donation.php">Donation</a>
                 <a class="navbar-item" data-translate="contact_us" href="/public/contact.php">Contact us</a>
             </div>
 
@@ -35,6 +33,7 @@
                         <a class="navbar-item" href="../public/calendar.php">Calendar</a>
                         <a class="navbar-item" data-translate="tickets" href="/public/tickets.php">Tickets</a>
                         <a class="navbar-item" href="/public/collecte.php">Collecte</a>
+                        <a class="navbar-item" href="/public/stock.php">Stock</a>
                         <a class="navbar-item" data-translate="events" href="/public/events.php">Events</a>
                         <?php if(in_array('ROLE_ADMIN', $_SESSION['role'])): ?>
                             <a class="navbar-item" data-translate="admin_panel" href="/admin/index.php">Admin panel</a>
