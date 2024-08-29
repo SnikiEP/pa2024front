@@ -99,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <main>
             <div class="content">
                 <div class="container is-max-desktop">
-                    <h1 class="title has-text-centered" data-translate="welcome_message">Welcome, <?= htmlspecialchars($profileData['username']); ?>!</h1>
+                    <h1 class="title has-text-centered" data-translate="welcome_message"><?= 'Welcome, ' . htmlspecialchars($profileData['username']); ?></h1>
                     <form id="profileForm" method="POST">
                         <div class="field">
                             <label class="label" for="username" data-translate="username_label">Username</label>

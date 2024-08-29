@@ -24,6 +24,16 @@ $totalEvents = $totalEventsStmt->fetchColumn();
 $totalVehiclesStmt = $pdo->query("SELECT COUNT(*) FROM vehicles");
 $totalVehicles = $totalVehiclesStmt->fetchColumn();
 
+function loadTranslations($lang = 'en') {
+    $file = __DIR__ . "/locales/{$lang}.json";
+    if (file_exists($file)) {
+        return json_decode(file_get_contents($file), true);
+    }
+    return [];
+}
+
+// Assume that the language is determined somehow. Default is 'en'.
+$translations = loadTranslations('en');
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +41,7 @@ $totalVehicles = $totalVehiclesStmt->fetchColumn();
 
 <head>
     <?php
-    $title = "Admin Panel - HELIX";
+    $title = $translations['admin_panel'];
     include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php');
     ?>
     <link rel="stylesheet" href="/assets/css/panel.css">
@@ -47,32 +57,32 @@ $totalVehicles = $totalVehiclesStmt->fetchColumn();
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php') ?>
         <main>
             <div class="content">
-                <h1 class="title has-text-centered admin-title">Admin Panel - HELIX</h1>
+                <h1 class="title has-text-centered admin-title" data-translate="admin_panel"><?= $translations['admin_panel'] ?></h1>
                 <section class="section">
                     <div class="container">
                         <div class="columns is-multiline">
                             <div class="column is-3">
                                 <div class="box has-text-centered">
                                     <p class="title"><?= $totalUsers ?></p>
-                                    <p class="subtitle">Total Users</p>
+                                    <p class="subtitle" data-translate="total_users"><?= $translations['total_users'] ?></p>
                                 </div>
                             </div>
                             <div class="column is-3">
                                 <div class="box has-text-centered">
                                     <p class="title"><?= $totalLogs ?></p>
-                                    <p class="subtitle">Total Logs</p>
+                                    <p class="subtitle" data-translate="total_logs"><?= $translations['total_logs'] ?></p>
                                 </div>
                             </div>
                             <div class="column is-3">
                                 <div class="box has-text-centered">
                                     <p class="title"><?= $totalEvents ?></p>
-                                    <p class="subtitle">Total Events</p>
+                                    <p class="subtitle" data-translate="total_events"><?= $translations['total_events'] ?></p>
                                 </div>
                             </div>
                             <div class="column is-3">
                                 <div class="box has-text-centered">
                                     <p class="title"><?= $totalVehicles ?></p>
-                                    <p class="subtitle">Total Vehicles</p>
+                                    <p class="subtitle" data-translate="total_vehicles"><?= $translations['total_vehicles'] ?></p>
                                 </div>
                             </div>
                         </div>
@@ -81,17 +91,17 @@ $totalVehicles = $totalVehiclesStmt->fetchColumn();
 
                 <section class="section">
                     <div class="container">
-                        <h2 class="title is-4">Recent Activity</h2>
+                        <h2 class="title is-4" data-translate="recent_activity"><?= $translations['recent_activity'] ?></h2>
                         <div class="logs-list">
                             <table class="table is-striped is-fullwidth">
                                 <thead>
                                     <tr>
-                                        <th>User ID</th>
-                                        <th>Action</th>
-                                        <th>Description</th>
-                                        <th>Method</th>
-                                        <th>Response Code</th>
-                                        <th>Timestamp</th>
+                                        <th data-translate="user_id"><?= $translations['user_id'] ?></th>
+                                        <th data-translate="action"><?= $translations['action'] ?></th>
+                                        <th data-translate="description"><?= $translations['description'] ?></th>
+                                        <th data-translate="method"><?= $translations['method'] ?></th>
+                                        <th data-translate="response_code"><?= $translations['response_code'] ?></th>
+                                        <th data-translate="timestamp"><?= $translations['timestamp'] ?></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -99,30 +109,15 @@ $totalVehicles = $totalVehiclesStmt->fetchColumn();
                                     $recentLogsStmt = $pdo->query("SELECT * FROM log ORDER BY timestamp DESC LIMIT 5");
                                     $recentLogs = $recentLogsStmt->fetchAll(PDO::FETCH_ASSOC);
 
-                                    function escape($value)
-                                    {
+                                    function escape($value) {
                                         return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
-                                    }
-
-                                    function describeAction($action)
-                                    {
-                                        switch ($action) {
-                                            case 'login_attempt':
-                                                return "Tentative de connexion à l'application.";
-                                            case 'login_success':
-                                                return "Connexion réussie à l'application.";
-                                            case 'update_profile':
-                                                return "Mise à jour des informations du profil.";
-                                            default:
-                                                return "Action non spécifiée.";
-                                        }
                                     }
 
                                     foreach ($recentLogs as $log) : ?>
                                         <tr>
                                             <td><?= escape($log['user_id']) ?></td>
                                             <td><?= escape($log['action']) ?></td>
-                                            <td><?= escape(describeAction($log['action'])) ?></td>
+                                            <td><?= escape($log['description']) ?></td>
                                             <td><?= escape($log['request_method']) ?></td>
                                             <td><?= escape($log['response_code']) ?></td>
                                             <td><?= escape($log['timestamp']) ?></td>
@@ -136,7 +131,7 @@ $totalVehicles = $totalVehiclesStmt->fetchColumn();
             </div>
         </main>
         <footer class="footer">
-            &copy; <?= date('Y'); ?> HELIX. All Rights Reserved.
+            <p data-translate="footer_text"><?= str_replace('{year}', date('Y'), $translations['footer_text']) ?></p>
         </footer>
     </div>
 </body>

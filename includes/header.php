@@ -1,4 +1,6 @@
 <header>
+    <script src="/assets/js/translation.js"></script>
+
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="/index.php">
@@ -27,15 +29,15 @@
                             <option value="en">English</option>
                         </select>
                     </div>
-                    <?php if(isset($_SESSION['username'])): ?>
-                        <p class="navbar-item" style="margin-right: 15px;" data-translate="welcome"><?= 'Welcome, ' . $_SESSION['username']; ?></p>
+                    <?php if (isset($_SESSION['username'])): ?>
+                        <p class="navbar-item welcome-message" data-translate="welcome"><?= 'Welcome, ' . htmlspecialchars($_SESSION['username']); ?></p>
                         <a class="navbar-item" data-translate="my_profile" href="/public/myprofil.php">My profile</a>
                         <a class="navbar-item" href="../public/calendar.php">Calendar</a>
                         <a class="navbar-item" data-translate="tickets" href="/public/tickets.php">Tickets</a>
                         <a class="navbar-item" href="/public/collecte.php">Collecte</a>
                         <a class="navbar-item" href="/public/stock.php">Stock</a>
                         <a class="navbar-item" data-translate="events" href="/public/events.php">Events</a>
-                        <?php if(in_array('ROLE_ADMIN', $_SESSION['role'])): ?>
+                        <?php if (in_array('ROLE_ADMIN', $_SESSION['role'])): ?>
                             <a class="navbar-item" data-translate="admin_panel" href="/admin/index.php">Admin panel</a>
                         <?php endif; ?>
                         <a class="button is-info" data-translate="logout" href="/public/logout.php">Logout</a>
@@ -50,3 +52,4 @@
         </div>
     </nav>
 </header>
+

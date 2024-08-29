@@ -104,59 +104,59 @@ function describeAction($action) {
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php') ?>
         <main class="section">
             <div class="container">
-                <h1 class="title has-text-centered">Manage Logs</h1>
+                <h1 class="title has-text-centered" data-translate="manage_logs">Manage Logs</h1>
 
                 <div class="box">
-                    <h2 class="subtitle">Filter Logs</h2>
+                    <h2 class="subtitle" data-translate="filter_logs">Filter Logs</h2>
                     <form method="GET">
                         <div class="field">
-                            <label class="label" for="userIdFilter">User ID</label>
+                            <label class="label" for="userIdFilter" data-translate="user_id">User ID</label>
                             <div class="control">
                                 <input class="input" type="number" id="userIdFilter" name="user_id" value="<?= escape($_GET['user_id'] ?? '') ?>">
                             </div>
                         </div>
 
                         <div class="field">
-                            <label class="label" for="actionFilter">Action</label>
+                            <label class="label" for="actionFilter" data-translate="action">Action</label>
                             <div class="control">
                                 <input class="input" type="text" id="actionFilter" name="action" value="<?= escape($_GET['action'] ?? '') ?>">
                             </div>
                         </div>
 
                         <div class="field">
-                            <label class="label" for="methodFilter">HTTP Method</label>
+                            <label class="label" for="methodFilter" data-translate="http_method">HTTP Method</label>
                             <div class="control">
                                 <div class="select">
                                     <select id="methodFilter" name="request_method">
-                                        <option value="">All Methods</option>
-                                        <option value="GET" <?= (isset($_GET['request_method']) && $_GET['request_method'] == 'GET') ? 'selected' : '' ?>>GET</option>
-                                        <option value="POST" <?= (isset($_GET['request_method']) && $_GET['request_method'] == 'POST') ? 'selected' : '' ?>>POST</option>
-                                        <option value="PUT" <?= (isset($_GET['request_method']) && $_GET['request_method'] == 'PUT') ? 'selected' : '' ?>>PUT</option>
-                                        <option value="DELETE" <?= (isset($_GET['request_method']) && $_GET['request_method'] == 'DELETE') ? 'selected' : '' ?>>DELETE</option>
+                                        <option value="" data-translate="all_methods">All Methods</option>
+                                        <option value="GET" <?= (isset($_GET['request_method']) && $_GET['request_method'] == 'GET') ? 'selected' : '' ?> data-translate="get">GET</option>
+                                        <option value="POST" <?= (isset($_GET['request_method']) && $_GET['request_method'] == 'POST') ? 'selected' : '' ?> data-translate="post">POST</option>
+                                        <option value="PUT" <?= (isset($_GET['request_method']) && $_GET['request_method'] == 'PUT') ? 'selected' : '' ?> data-translate="put">PUT</option>
+                                        <option value="DELETE" <?= (isset($_GET['request_method']) && $_GET['request_method'] == 'DELETE') ? 'selected' : '' ?> data-translate="delete">DELETE</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
 
                         <div class="control">
-                            <button class="button is-primary" type="submit">Filter</button>
+                            <button class="button is-primary" type="submit" data-translate="filter">Filter</button>
                         </div>
                     </form>
                 </div>
 
                 <div class="box">
-                    <h2 class="subtitle">Logs List</h2>
+                    <h2 class="subtitle" data-translate="logs_list">Logs List</h2>
                     <div class="table-container">
                         <table class="table is-striped is-fullwidth">
                             <thead>
                                 <tr>
-                                    <th>User ID</th>
-                                    <th>Username</th>
-                                    <th>Action</th>
-                                    <th>Description</th>
-                                    <th>Method</th>
-                                    <th>Response Code</th>
-                                    <th>Timestamp</th>
+                                    <th data-translate="user_id_header">User ID</th>
+                                    <th data-translate="username_header">Username</th>
+                                    <th data-translate="action_header">Action</th>
+                                    <th data-translate="description_header">Description</th>
+                                    <th data-translate="method_header">Method</th>
+                                    <th data-translate="response_code_header">Response Code</th>
+                                    <th data-translate="timestamp_header">Timestamp</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -181,8 +181,8 @@ function describeAction($action) {
                 </div>
 
                 <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-                    <a class="pagination-previous" <?= $current_page <= 1 ? 'disabled' : 'href="?page=' . ($current_page - 1) . '&' . http_build_query($_GET) . '"' ?>>Previous</a>
-                    <a class="pagination-next" <?= $current_page >= $totalPages ? 'disabled' : 'href="?page=' . ($current_page + 1) . '&' . http_build_query($_GET) . '"' ?>>Next</a>
+                    <a class="pagination-previous" <?= $current_page <= 1 ? 'disabled' : 'href="?page=' . ($current_page - 1) . '&' . http_build_query($_GET) . '"' ?> data-translate="previous">Previous</a>
+                    <a class="pagination-next" <?= $current_page >= $totalPages ? 'disabled' : 'href="?page=' . ($current_page + 1) . '&' . http_build_query($_GET) . '"' ?> data-translate="next">Next</a>
                     <ul class="pagination-list">
                         <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
                             <li>

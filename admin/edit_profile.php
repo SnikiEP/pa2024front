@@ -56,7 +56,7 @@ function escape($value)
 }
 
 if (!isset($_GET['id'])) {
-    echo "ID de l'utilisateur manquant.";
+    echo "User ID missing.";
     exit;
 }
 
@@ -78,9 +78,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $existingemailProfile = makeHttpRequest($baseUrl . "/account/email/{$_POST['email']}", "GET");
 
     if ($existingUsernameProfile ) {
-        echo "Le nom d'utilisateur existe déjà. Veuillez choisir un autre nom.";
+        echo "Username already exists. Please choose another username.";
     } elseif ($existingemailProfile) {
-        echo "L'email existe déjà. Veuillez choisir un autre email.";
+        echo "Email already exists. Please choose another email.";
     } else {
         $jsonData = json_encode($updatedProfile);
 
@@ -102,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 header("Location: account.php");
                 exit;
             } else {
-                echo "Une erreur s'est produite lors de la mise à jour du profil.";
+                echo "An error occurred while updating the profile.";
             }
         }
 
@@ -117,7 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <head>
     <?php
-        $title = "Modifier le profil - HELIX";
+        $title = "Edit Profile - HELIX";
         include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php');
     ?>
     <link rel="stylesheet" href="/assets/css/admin.css">
@@ -128,39 +128,38 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php') ?>
         <main>
             <div class="content">
-                <h2>Modifier le profil de <?= escape($profileDetails['username'] ?? '') ?></h2>
+                <h2 data-translate="edit_profile_title">Edit profile of <?= escape($profileDetails['username'] ?? '') ?></h2>
                 <form id="updateProfileForm" method="POST">
                     <div class="form-group">
-                        <label for="username">Nom d'utilisateur:</label>
+                        <label for="username" data-translate="username_label">Username:</label>
                         <input type="text" id="username" name="username" value="<?= escape($profileDetails['username'] ?? '') ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email:</label>
+                        <label for="email" data-translate="email_label">Email:</label>
                         <input type="email" id="email" name="email" value="<?= escape($profileDetails['email'] ?? '') ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="phone">Téléphone:</label>
+                        <label for="phone" data-translate="phone_label">Phone:</label>
                         <input type="tel" id="phone" name="phone" value="<?= escape($profileDetails['phone'] ?? '') ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="name">Nom:</label>
+                        <label for="name" data-translate="name_label">First Name:</label>
                         <input type="text" id="name" name="name" value="<?= escape($profileDetails['name'] ?? '') ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="lastName">Nom de famille:</label>
+                        <label for="lastName" data-translate="last_name_label">Last Name:</label>
                         <input type="text" id="lastName" name="lastName" value="<?= escape($profileDetails['lastName'] ?? '') ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="location">Location:</label>
+                        <label for="location" data-translate="location_label">Location:</label>
                         <input type="text" id="location" name="location" value="<?= escape($profileDetails['location'] ?? '') ?>" required>
                     </div>
-                    <button type="submit" class="btn-submit">Enregistrer les modifications</button>
+                    <button type="submit" class="btn-submit" data-translate="save_changes">Save Changes</button>
                 </form>
             </div>
         </main>
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/footer.php')?>
     </div>
-
 </body>
 
 </html>

@@ -83,57 +83,57 @@ try {
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php') ?>
         <main class="section">
             <div class="container">
-                <h1 class="title has-text-centered">Manage Accounts</h1>
+                <h1 class="title has-text-centered" data-translate="manage-accounts-title">Manage Accounts</h1>
 
                 <div class="box">
-                    <h2 class="subtitle">Search Accounts</h2>
+                    <h2 class="subtitle" data-translate="search-accounts">Search Accounts</h2>
                     <form method="GET">
                         <div class="field">
-                            <label class="label" for="userIdFilter">User ID:</label>
+                            <label class="label" for="userIdFilter" data-translate="user-id">User ID:</label>
                             <div class="control">
                                 <input class="input" type="number" id="userIdFilter" name="user_id" value="<?= escape($_GET['user_id'] ?? '') ?>">
                             </div>
                         </div>
 
                         <div class="field">
-                            <label class="label" for="usernameFilter">Username:</label>
+                            <label class="label" for="usernameFilter" data-translate="username">Username:</label>
                             <div class="control">
                                 <input class="input" type="text" id="usernameFilter" name="username" value="<?= escape($_GET['username'] ?? '') ?>">
                             </div>
                         </div>
 
                         <div class="field">
-                            <label class="label" for="emailFilter">Email:</label>
+                            <label class="label" for="emailFilter" data-translate="email">Email:</label>
                             <div class="control">
                                 <input class="input" type="text" id="emailFilter" name="email" value="<?= escape($_GET['email'] ?? '') ?>">
                             </div>
                         </div>
 
                         <div class="control">
-                            <button class="button is-primary" type="submit">Search</button>
+                            <button class="button is-primary" type="submit" data-translate="search-button">Search</button>
                         </div>
                     </form>
                 </div>
 
                 <div class="box">
-                    <h2 class="subtitle">Accounts List</h2>
+                    <h2 class="subtitle" data-translate="accounts-list">Accounts List</h2>
                     <?php if (!empty($allAccounts)) : ?>
                         <table class="table is-striped is-fullwidth">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Username</th>
-                                    <th>Name</th>
-                                    <th>Last Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Location</th>
-                                    <th>Role</th>
-                                    <th>Sex</th>
-                                    <th>Last Login</th>
-                                    <th>Registered Date</th>
-                                    <th>Edit</th>
-                                    <th>Delete</th>
+                                    <th data-translate="id">ID</th>
+                                    <th data-translate="username">Username</th>
+                                    <th data-translate="name">Name</th>
+                                    <th data-translate="last-name">Last Name</th>
+                                    <th data-translate="email">Email</th>
+                                    <th data-translate="phone">Phone</th>
+                                    <th data-translate="location">Location</th>
+                                    <th data-translate="role">Role</th>
+                                    <th data-translate="sex">Sex</th>
+                                    <th data-translate="last-login">Last Login</th>
+                                    <th data-translate="registered-date">Registered Date</th>
+                                    <th data-translate="edit">Edit</th>
+                                    <th data-translate="delete">Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -151,24 +151,24 @@ try {
                                     <td><?= formatDate($account['last_login']) ?></td>
                                     <td><?= formatDate($account['register_date']) ?></td>
                                     <td>
-                                        <button class="button is-info is-small" onclick="openEditModal(<?= $account['id'] ?>)">Edit</button>
+                                        <button class="button is-info is-small" onclick="openEditModal(<?= $account['id'] ?>)" data-translate="edit">Edit</button>
                                     </td>
                                     <td>
-                                        <button class="button is-danger is-small" onclick="confirmDeleteProfile(<?= $account['id'] ?>)">Delete</button>
+                                        <button class="button is-danger is-small" onclick="confirmDeleteProfile(<?= $account['id'] ?>)" data-translate="delete">Delete</button>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
                     <?php else : ?>
-                        <p>No accounts found or error fetching accounts.</p>
+                        <p data-translate="no-accounts">No accounts found or error fetching accounts.</p>
                     <?php endif; ?>
                 </div>
             </div>
         </main>
         <footer class="footer">
             <div class="content has-text-centered">
-                &copy; <?= date('Y'); ?> HELIX. All Rights Reserved.
+                <span data-translate="footer-copyright">&copy; <?= date('Y'); ?> HELIX. All Rights Reserved.</span>
             </div>
         </footer>
     </div>
@@ -177,50 +177,50 @@ try {
         <div class="modal-background"></div>
         <div class="modal-card">
             <header class="modal-card-head">
-                <p class="modal-card-title">Edit Account</p>
+                <p class="modal-card-title" data-translate="edit-account">Edit Account</p>
                 <button class="delete" aria-label="close" onclick="closeEditModal()"></button>
             </header>
             <section class="modal-card-body">
                 <form id="editProfileForm">
                     <input type="hidden" id="editProfileId" name="profileId">
                     <div class="field">
-                        <label class="label" for="editUsername">Username:</label>
+                        <label class="label" for="editUsername" data-translate="username">Username:</label>
                         <div class="control">
                             <input class="input" type="text" id="editUsername" name="username" required>
                         </div>
                     </div>
                     <div class="field">
-                        <label class="label" for="editEmail">Email:</label>
+                        <label class="label" for="editEmail" data-translate="email">Email:</label>
                         <div class="control">
                             <input class="input" type="email" id="editEmail" name="email" required>
                         </div>
                     </div>
                     <div class="field">
-                        <label class="label" for="editPhone">Phone:</label>
+                        <label class="label" for="editPhone" data-translate="phone">Phone:</label>
                         <div class="control">
                             <input class="input" type="tel" id="editPhone" name="phone" required>
                         </div>
                     </div>
                     <div class="field">
-                        <label class="label" for="editName">Name:</label>
+                        <label class="label" for="editName" data-translate="name">Name:</label>
                         <div class="control">
                             <input class="input" type="text" id="editName" name="name" required>
                         </div>
                     </div>
                     <div class="field">
-                        <label class="label" for="editLastName">Last Name:</label>
+                        <label class="label" for="editLastName" data-translate="last-name">Last Name:</label>
                         <div class="control">
                             <input class="input" type="text" id="editLastName" name="lastName" required>
                         </div>
                     </div>
                     <div class="field">
-                        <label class="label" for="editLocation">Location:</label>
+                        <label class="label" for="editLocation" data-translate="location">Location:</label>
                         <div class="control">
                             <input class="input" type="text" id="editLocation" name="location" required>
                         </div>
                     </div>
                     <div class="control">
-                        <button type="submit" class="button is-success">Save Changes</button>
+                        <button type="submit" class="button is-success" data-translate="save-changes">Save Changes</button>
                     </div>
                 </form>
             </section>
