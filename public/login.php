@@ -28,6 +28,8 @@ function logAction($pdo, $user_id, $action, $method, $url, $response_code, $requ
     ]);
 }
 
+$errorMessage = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST["username"];
     $password = $_POST["password"];
@@ -49,26 +51,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = @file_get_contents($url, false, $context);
 
     if ($result === FALSE) {
+        $errorMessage = "Échec de la connexion. Veuillez réessayer.";
         logAction($pdo, null, 'login_attempt', 'POST', $url, 401, json_encode($data), 'Login failed');
-        echo "<p data-translate='login_failed'>Login failed.</p>";
     } else {
         $userData = json_decode($result, true);
 
-        if (isset($userData['id']) && isset($userData['username']) && isset($userData['roles'])) {
-            $_SESSION['user_id'] = $userData['id'];
-            $_SESSION['username'] = $userData['username'];
-            $_SESSION['email'] = $userData['email'];
-            $_SESSION['role'] = $userData['roles'];
-            $_SESSION['accessToken'] = $userData['accessToken'];
-            $_SESSION['tokenType'] = $userData['tokenType'];
+        if (isset($userData['message']) && $userData['message'] === "This account has not yet been validated.") {
+            $errorMessage = "Le compte n'est pas vérifié.";
+            logAction($pdo, null, 'login_attempt', 'POST', $url, 401, json_encode($data), 'Account not validated');
+        }
+        else if (isset($userData['id']) && isset($userData['username'])) {
+            if (!isset($userData['roles']) || empty($userData['roles'])) {
+                $errorMessage = "Veuillez valider votre compte auprès d'un administrateur.";
+                logAction($pdo, null, 'login_attempt', 'POST', $url, 401, json_encode($data), 'Account not validated');
+            } else {
+                $_SESSION['user_id'] = $userData['id'];
+                $_SESSION['username'] = $userData['username'];
+                $_SESSION['email'] = $userData['email'];
+                $_SESSION['role'] = $userData['roles'];
+                $_SESSION['accessToken'] = $userData['accessToken'];
+                $_SESSION['tokenType'] = $userData['tokenType'];
 
-            logAction($pdo, $userData['id'], 'login_success', 'POST', $url, 200, json_encode($data), $result);
+                logAction($pdo, $userData['id'], 'login_success', 'POST', $url, 200, json_encode($data), $result);
 
-            header("Location: myprofil.php");
-            exit();
+                header("Location: myprofil.php");
+                exit();
+            }
         } else {
+            $errorMessage = "Échec de la connexion. Réponse invalide du serveur.";
             logAction($pdo, null, 'login_attempt', 'POST', $url, 401, json_encode($data), 'Invalid response from server');
-            echo "<p data-translate='login_failed'>Login failed. Invalid response from server.</p>";
         }
     }
 }
@@ -82,41 +93,60 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
     ?>    
     <script src="/assets/js/translation.js"></script>
+    <style>
+        .error-message {
+            color: red;
+            font-size: 16px;
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 10px;
+            border: 1px solid red;
+            border-radius: 5px;
+            background-color: #ffe5e5;
+            margin-top: 20px; 
+        }
+
+        .content img {
+            margin-bottom: 40px; 
+        }
+
+        .container {
+            max-width: 500px;
+            margin-top: 50px;
+            padding-top: 20px; 
+        }
+
+        main {
+            padding-top: 30px; 
+        }
+    </style>
 </head>
-<style>
-    .container {
-        max-width: 500px;
-        margin-top: 50px;
-    }
-    #btn {
-        margin-top: 15px;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
-</style>
 <body>
     <div class="wrapper">
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/header.php') ?>
         <main>
             <div class="content">
                 <img src="/assets/img/helix_white.png" alt="Helix_logo" width="600px" style="display: block; margin-left: auto; margin-right: auto; margin-top: 30px;">
+                
                 <section class="container is-max-desktop">
+                    <?php if (!empty($errorMessage)): ?>
+                        <div class="error-message"><?= $errorMessage ?></div>
+                    <?php endif; ?>
                     <form action="login.php" method="post">
                         <div class="field">
-                            <label class="label" data-translate="username">Username</label>
+                            <label class="label" data-translate="username">Nom d'utilisateur</label>
                             <div class="control">
                                 <input class="input" type="text" name="username" placeholder="Emperor Palpatine" required>
                             </div>
                         </div>
                         <div class="field">
-                            <label class="label" data-translate="password">Password</label>
+                            <label class="label" data-translate="password">Mot de passe</label>
                             <div class="control">
                                 <input class="input" type="password" name="password" id="password" placeholder="Your super password" required>
                             </div>
                         </div>
                         <div class="control">
-                            <button type="submit" class="button is-info" id="btn" data-translate="log_in">Log in</button>
+                            <button type="submit" class="button is-info" id="btn" data-translate="log_in">Connexion</button>
                         </div>
                     </form>
                 </section>

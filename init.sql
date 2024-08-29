@@ -52,7 +52,7 @@ CREATE TABLE event_participants (
 -- Table des logs
 CREATE TABLE log (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
+    user_id INT DEFAULT NULL,  -- Permettre NULL pour user_id
     action VARCHAR(255) NOT NULL,
     request_method VARCHAR(10) NOT NULL,
     request_url TEXT,
