@@ -90,43 +90,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <section class="container is-max-desktop">
                     <form action="register.php" method="post" onsubmit="return checkPassword();">
                         <div class="field">
-                            <label class="label" data-translate="username">Username</label>
+                            <label class="label" data-translate="username_label">Username</label>
                             <div class="control">
                                 <input class="input" type="text" name="username" placeholder="Emperor Palpatine" required>
                             </div>
                         </div>
                         <div class="field">
-                            <label class="label" data-translate="email">Email</label>
+                            <label class="label" data-translate="email_label">Email</label>
                             <div class="control">
                                 <input class="input" type="email" name="email" placeholder="okenobi@jeditemple.com" required>
                             </div>
                         </div>
                         <div class="field">
-                            <label class="label" data-translate="phone">Phone</label>
+                            <label class="label" data-translate="phone_label">Phone</label>
                             <div class="control">
                                 <input class="input" type="tel" name="phone" placeholder="Your super number" required>
                             </div>
                         </div>
                         <div class="field">
-                            <label class="label" data-translate="name">Name</label>
+                            <label class="label" data-translate="name_label">Name</label>
                             <div class="control">
                                 <input class="input" type="text" name="name" placeholder="Your beautiful name" required>
                             </div>
                         </div>
                         <div class="field">
-                            <label class="label" data-translate="last_name">Last name</label>
+                            <label class="label" data-translate="last_name_label">Last name</label>
                             <div class="control">
                                 <input class="input" type="text" name="lastName" placeholder="Your beautiful last name" required>
                             </div>
                         </div>
                         <div class="field">
-                            <label class="label" data-translate="postal_address">Postal address</label>
+                            <label class="label" data-translate="postal_address_label">Postal address</label>
                             <div class="control">
                                 <input class="input" type="text" name="location" placeholder="Your amazing address" required>
                             </div>
                         </div>
                         <div class="field">
-                            <label class="label" data-translate="password">Password</label>
+                            <label class="label" data-translate="password_label">Password</label>
                             <div class="control">
                                 <input class="input" type="password" name="password" id="password" placeholder="Your super password" required>
                             </div>
@@ -138,12 +138,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                         </div>
                         <div class="field">
-                            <label class="label" data-translate="gender">Your gender</label>
+                            <label class="label" data-translate="gender_label">Your gender</label>
                             <div class="control">
                                 <div class="select">
                                     <select name="gender">
-                                        <option value="M" data-translate="man">Man</option>
-                                        <option value="F" data-translate="woman">Woman</option>
+                                        <option value="M" data-translate="man_option">Man</option>
+                                        <option value="F" data-translate="woman_option">Woman</option>
                                     </select>
                                 </div>
                             </div>
@@ -151,11 +151,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="field">
                             <label class="checkbox">
                                 <input type="checkbox" name="is_benevole">
-                                I want to register as a Volunteer (Bénévole)
+                                <span data-translate="register_as_volunteer">I want to register as a Volunteer (Bénévole)</span>
                             </label>
                         </div>
                         <div class="control">
-                            <button type="submit" class="button is-info" id="btn" data-translate="join_us">Join us</button>
+                            <button type="submit" class="button is-info" id="btn" data-translate="join_us_button">Join us</button>
                         </div>
                     </form>
                 </section>

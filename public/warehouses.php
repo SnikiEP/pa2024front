@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Warehouses - ATD</title>
+    <title data-translate="page_title_warehouses">Warehouses - ATD</title>
     <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php'); ?>
 </head>
 <body>
@@ -66,29 +66,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <main>
             <div class="content">
                 <div class="container">
-                    <h1 class="title">Warehouse Management</h1>
+                    <h1 class="title" data-translate="page_title_warehouses">Warehouse Management</h1>
                     
                     <?php if ($operationMessage): ?>
-                        <p><?= htmlspecialchars($operationMessage); ?></p>
+                        <p data-translate="operation_message_warehouses"><?= htmlspecialchars($operationMessage); ?></p>
                     <?php endif; ?>
 
                     <?php if ($selectedWarehouse): ?>
-                        <h2>Details for Warehouse #<?= htmlspecialchars($selectedWarehouse['warehouse_id']); ?></h2>
-                        <p>Location: <?= htmlspecialchars($selectedWarehouse['location']); ?></p>
-                        <p>Capacity: <?= htmlspecialchars($selectedWarehouse['rack_capacity']); ?></p>
-                        <p>Current Stock: <?= htmlspecialchars($selectedWarehouse['current_stock']); ?></p>
-                        <p>Utilization: <?= htmlspecialchars($selectedWarehouse['utilization']); ?>%</p>
+                        <h2 data-translate="warehouse_details_title">Details for Warehouse #<?= htmlspecialchars($selectedWarehouse['warehouse_id']); ?></h2>
+                        <p data-translate="location_label_warehouses">Location: <?= htmlspecialchars($selectedWarehouse['location']); ?></p>
+                        <p data-translate="capacity_label_warehouses">Capacity: <?= htmlspecialchars($selectedWarehouse['rack_capacity']); ?></p>
+                        <p data-translate="current_stock_label_warehouses">Current Stock: <?= htmlspecialchars($selectedWarehouse['current_stock']); ?></p>
+                        <p data-translate="utilization_label_warehouses">Utilization: <?= htmlspecialchars($selectedWarehouse['utilization']); ?>%</p>
                     <?php else: ?>
-                        <h2>All Warehouses</h2>
+                        <h2 data-translate="all_warehouses_title">All Warehouses</h2>
                         <table>
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Location</th>
-                                    <th>Capacity</th>
-                                    <th>Current Stock</th>
-                                    <th>Utilization</th>
-                                    <th>Actions</th>
+                                    <th data-translate="id_column">ID</th>
+                                    <th data-translate="location_column">Location</th>
+                                    <th data-translate="capacity_column">Capacity</th>
+                                    <th data-translate="current_stock_column">Current Stock</th>
+                                    <th data-translate="utilization_column">Utilization</th>
+                                    <th data-translate="actions_column">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <td><?= htmlspecialchars($warehouse['rack_capacity']); ?></td>
                                         <td><?= htmlspecialchars($warehouse['current_stock']); ?></td>
                                         <td><?= htmlspecialchars($warehouse['utilization']); ?>%</td>
-                                        <td><a href="?warehouse_id=<?= $warehouse['warehouse_id']; ?>">View Details</a></td>
+                                        <td><a href="?warehouse_id=<?= $warehouse['warehouse_id']; ?>" data-translate="view_details_button">View Details</a></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>

@@ -99,57 +99,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <main>
             <div class="content">
                 <div class="container is-max-desktop">
-                    <h1 class="title has-text-centered">Welcome, <?= htmlspecialchars($profileData['username']); ?>!</h1>
+                    <h1 class="title has-text-centered" data-translate="welcome_message">Welcome, <?= htmlspecialchars($profileData['username']); ?>!</h1>
                     <form id="profileForm" method="POST">
                         <div class="field">
-                            <label class="label" for="username">Username</label>
+                            <label class="label" for="username" data-translate="username_label">Username</label>
                             <div class="control">
                                 <input class="input" type="text" id="username" name="username" value="<?= htmlspecialchars($profileData['username']); ?>" disabled>
                             </div>
                         </div>
                         <div class="field">
-                            <label class="label" for="name">First Name</label>
+                            <label class="label" for="name" data-translate="first_name_label">First Name</label>
                             <div class="control">
                                 <input class="input" type="text" id="name" name="name" value="<?= htmlspecialchars($profileData['name']); ?>" disabled>
                             </div>
                         </div>
                         <div class="field">
-                            <label class="label" for="lastName">Last Name</label>
+                            <label class="label" for="lastName" data-translate="last_name_label">Last Name</label>
                             <div class="control">
                                 <input class="input" type="text" id="lastName" name="lastName" value="<?= htmlspecialchars($profileData['lastName']); ?>" disabled>
                             </div>
                         </div>
                         <div class="field">
-                            <label class="label" for="email">Email</label>
+                            <label class="label" for="email" data-translate="email_label">Email</label>
                             <div class="control">
                                 <input class="input" type="email" id="email" name="email" value="<?= htmlspecialchars($profileData['email']); ?>" disabled>
                             </div>
                         </div>
                         <div class="field">
-                            <label class="label" for="location">Location</label>
+                            <label class="label" for="location" data-translate="location_label">Location</label>
                             <div class="control">
                                 <input class="input" type="text" id="location" name="location" value="<?= htmlspecialchars($profileData['location']); ?>" disabled>
                             </div>
                         </div>
                         <div class="field">
-                            <label class="label" for="phone">Phone</label>
+                            <label class="label" for="phone" data-translate="phone_label">Phone</label>
                             <div class="control">
                                 <input class="input" type="text" id="phone" name="phone" value="<?= htmlspecialchars($profileData['phone']); ?>" disabled>
                             </div>
                         </div>
                         <div class="field">
-                            <label class="label" for="password">New Password (leave blank to keep current password)</label>
+                            <label class="label" for="password" data-translate="password_label">New Password (leave blank to keep current password)</label>
                             <div class="control">
                                 <input class="input" type="password" id="password" name="password" disabled>
                             </div>
                         </div>
                         <div class="control">
-                            <button type="button" class="button is-info" id="editBtn">Edit</button>
-                            <button type="submit" class="button is-success is-hidden" id="saveBtn" name="save">Save</button>
-                            <button type="button" class="button is-danger is-hidden" id="cancelBtn">Cancel</button>
+                            <button type="button" class="button is-info" id="editBtn" data-translate="edit_button">Edit</button>
+                            <button type="submit" class="button is-success is-hidden" id="saveBtn" name="save" data-translate="save_button">Save</button>
+                            <button type="button" class="button is-danger is-hidden" id="cancelBtn" data-translate="cancel_button">Cancel</button>
                         </div>
                     </form>
-                    <a href="calendar.php" class="button is-link" style="margin-top: 20px;">View Event Calendar</a>
+                    <a href="calendar.php" class="button is-link" style="margin-top: 20px;" data-translate="view_calendar">View Event Calendar</a>
                 </div>
             </div>
         </main>

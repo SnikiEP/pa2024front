@@ -4,9 +4,11 @@ if (!isset($_SESSION['accessToken'])) {
     header("Location: login.php");
     exit;
 }
+
 $baseUrl = "http://ddns.callidos-mtf.fr:8080/tickets";
 $myTicketsUrl = $baseUrl . "/mytickets";
 $authHeader = "Authorization: Bearer " . $_SESSION['accessToken'];
+
 function makeHttpRequest($url, $method, $data = null) {
     $options = [
         "http" => [
@@ -21,9 +23,11 @@ function makeHttpRequest($url, $method, $data = null) {
     $result = file_get_contents($url, false, $context);
     return $result === FALSE ? [] : json_decode($result, true);
 }
+
 $response = null;
 $messages = [];
 $ticketId = $_GET['ticket_id'] ?? null;
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['create_ticket'])) {
         $data = ["title" => $_POST['title'], "desc" => $_POST['desc']];
@@ -33,20 +37,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $response = makeHttpRequest($baseUrl . "/$ticketId/messages", "POST", $data);
     }
 }
+
 if ($ticketId) {
     $messages = makeHttpRequest($baseUrl . "/$ticketId/messages", "GET");
 }
+
 if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
     header('Content-Type: application/json');
     echo json_encode($messages);
     exit;
 }
+
 $myTickets = $ticketId ? [] : makeHttpRequest($myTicketsUrl, "GET");
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Tickets - ATD</title>
+    <title data-translate="page_title_tickets">Tickets - ATD</title>
     <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php'); ?>
     <style>
         .message-box {
@@ -98,33 +105,33 @@ $myTickets = $ticketId ? [] : makeHttpRequest($myTicketsUrl, "GET");
         <main>
             <div class="content">
                 <div class="container">
-                    <h1 class="title">Ticket Management</h1>
+                    <h1 class="title" data-translate="page_title">Ticket Management</h1>
                     <?php if (!$ticketId): ?>
                         <form method="post">
                             <div class="field">
-                                <label class="label">Title</label>
+                                <label class="label" data-translate="title_label">Title</label>
                                 <div class="control">
                                     <input class="input" type="text" name="title" required>
                                 </div>
                             </div>
                             <div class="field">
-                                <label class="label">Description</label>
+                                <label class="label" data-translate="desc_label">Description</label>
                                 <div class="control">
                                     <textarea class="textarea" name="desc" required></textarea>
                                 </div>
                             </div>
                             <div class="control">
-                                <button type="submit" name="create_ticket" class="button is-link">Create Ticket</button>
+                                <button type="submit" name="create_ticket" class="button is-link" data-translate="create_ticket_button">Create Ticket</button>
                             </div>
                         </form>
                         <div class="section">
                             <table class="table is-striped is-fullwidth">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Title</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
+                                        <th data-translate="id_column">ID</th>
+                                        <th data-translate="title_column">Title</th>
+                                        <th data-translate="status_column">Status</th>
+                                        <th data-translate="actions_column">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -133,21 +140,21 @@ $myTickets = $ticketId ? [] : makeHttpRequest($myTicketsUrl, "GET");
                                             <td><?= htmlspecialchars($ticket['ticket_id']); ?></td>
                                             <td><?= htmlspecialchars($ticket['title']); ?></td>
                                             <td><?= $ticket['resolved'] ? 'Resolved' : 'Not Resolved'; ?></td>
-                                            <td><a href="?ticket_id=<?= $ticket['ticket_id'] ?>" class="button is-small is-info">Open Chat</a></td>
+                                            <td><a href="?ticket_id=<?= $ticket['ticket_id'] ?>" class="button is-small is-info" data-translate="open_chat_button">Open Chat</a></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>
                         </div>
                     <?php else: ?>
-                        <a href="tickets.php" class="button is-small is-primary">Return to Tickets</a>
+                        <a href="tickets.php" class="button is-small is-primary" data-translate="return_button">Return to Tickets</a>
                         <div class="box">
-                            <h2 class="title is-4">Messages for Ticket #<?= htmlspecialchars($ticketId); ?></h2>
+                            <h2 class="title is-4" data-translate="messages_title">Messages for Ticket #<?= htmlspecialchars($ticketId); ?></h2>
                             <div class="message-box" id="message-container"></div>
                             <form method="post">
                                 <input type="hidden" name="ticket_id" value="<?= htmlspecialchars($ticketId); ?>">
-                                <textarea class="textarea" name="message" placeholder="Type your message here..." required></textarea>
-                                <button type="submit" name="send_message" class="button is-link">Send Message</button>
+                                <textarea class="textarea" name="message" placeholder="Type your message here..." required data-translate="message_placeholder"></textarea>
+                                <button type="submit" name="send_message" class="button is-link" data-translate="send_message_button">Send Message</button>
                             </form>
                         </div>
                     <?php endif; ?>

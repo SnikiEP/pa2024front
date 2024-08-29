@@ -102,41 +102,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Warehouse Stock Management Dashboard - ATD</title>
+    <title data-translate="page_title">Warehouse Stock Management Dashboard - ATD</title>
     <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php'); ?>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="/assets/css/warehouse.css">
+    <script src="/assets/js/translation.js"></script>
 </head>
 <body>
     <div class="wrapper">
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/header.php'); ?>
         <main class="section">
             <div class="container">
-                <h1 class="title has-text-centered">Warehouse Stock Management Dashboard</h1>
+                <h1 class="title has-text-centered" data-translate="page_title_stock">Warehouse Stock Management Dashboard</h1>
                 
                 <?php if ($operationMessage): ?>
                     <div class="notification is-success">
-                        <?= htmlspecialchars($operationMessage); ?>
+                        <p data-translate="operation_message"><?= htmlspecialchars($operationMessage); ?></p>
                     </div>
                 <?php endif; ?>
 
                 <div class="box">
-                    <h2 class="subtitle">Add New Warehouse</h2>
+                    <h2 class="subtitle" data-translate="add_warehouse_title">Add New Warehouse</h2>
                     <form method="POST">
                         <div class="field">
-                            <label class="label">Location</label>
+                            <label class="label" data-translate="location_label_stock">Location</label>
                             <div class="control">
                                 <input class="input" type="text" name="location" placeholder="Enter warehouse location" required>
                             </div>
                         </div>
                         <div class="field">
-                            <label class="label">Rack Capacity</label>
+                            <label class="label" data-translate="rack_capacity_label">Rack Capacity</label>
                             <div class="control">
                                 <input class="input" type="number" name="rack_capacity" placeholder="Enter rack capacity" required>
                             </div>
                         </div>
-                        <button class="button is-success" type="submit" name="add_warehouse">Add Warehouse</button>
+                        <button class="button is-success" type="submit" name="add_warehouse" data-translate="add_warehouse_button">Add Warehouse</button>
                     </form>
                 </div>
 
@@ -151,39 +152,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </header>
                                 <div class="card-content">
                                     <div class="content">
-                                        <p><strong>Capacity:</strong> <?= htmlspecialchars($warehouse['rack_capacity']); ?></p>
-                                        <p><strong>Current Stock:</strong> <?= htmlspecialchars($warehouse['current_stock']); ?></p>
-                                        <p><strong>Utilization:</strong> <?= round(($warehouse['current_stock'] / $warehouse['rack_capacity']) * 100, 2); ?>%</p>
+                                        <p><strong data-translate="capacity_label">Capacity:</strong> <?= htmlspecialchars($warehouse['rack_capacity']); ?></p>
+                                        <p><strong data-translate="current_stock_label">Current Stock:</strong> <?= htmlspecialchars($warehouse['current_stock']); ?></p>
+                                        <p><strong data-translate="utilization_label">Utilization:</strong> <?= round(($warehouse['current_stock'] / $warehouse['rack_capacity']) * 100, 2); ?>%</p>
                                     </div>
                                 </div>
                                 <footer class="card-footer">
-                                    <a href="?warehouse_id=<?= $warehouse['id']; ?>" class="card-footer-item">View Details</a>
+                                    <a href="?warehouse_id=<?= $warehouse['id']; ?>" class="card-footer-item" data-translate="view_details_link">View Details</a>
                                 </footer>
                             </div>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <p>No warehouses available.</p>
+                        <p data-translate="no_warehouses_message">No warehouses available.</p>
                     <?php endif; ?>
                 </div>
 
                 <?php if ($selectedWarehouse): ?>
                     <div class="box">
-                        <h2 class="subtitle">Details for Warehouse #<?= htmlspecialchars($selectedWarehouse['id']); ?></h2>
-                        <p><strong>Location:</strong> <?= htmlspecialchars($selectedWarehouse['location']); ?></p>
-                        <p><strong>Capacity:</strong> <?= htmlspecialchars($selectedWarehouse['rack_capacity']); ?></p>
-                        <p><strong>Current Stock:</strong> <?= htmlspecialchars($selectedWarehouse['current_stock']); ?></p>
+                        <h2 class="subtitle" data-translate="details_title">Details for Warehouse #<?= htmlspecialchars($selectedWarehouse['id']); ?></h2>
+                        <p><strong data-translate="location_label">Location:</strong> <?= htmlspecialchars($selectedWarehouse['location']); ?></p>
+                        <p><strong data-translate="capacity_label">Capacity:</strong> <?= htmlspecialchars($selectedWarehouse['rack_capacity']); ?></p>
+                        <p><strong data-translate="current_stock_label">Current Stock:</strong> <?= htmlspecialchars($selectedWarehouse['current_stock']); ?></p>
 
-                        <h3 class="subtitle">Stock Items</h3>
+                        <h3 class="subtitle" data-translate="stock_items_title">Stock Items</h3>
                         <?php if (!empty($foodItems)): ?>
                             <table class="table is-fullwidth is-striped">
                                 <thead>
                                     <tr>
-                                        <th>Food Item</th>
-                                        <th>Quantity</th>
-                                        <th>Unit</th>
-                                        <th>Price per Unit</th>
-                                        <th>Total Value</th>
-                                        <th>Actions</th>
+                                        <th data-translate="food_item_column">Food Item</th>
+                                        <th data-translate="quantity_column">Quantity</th>
+                                        <th data-translate="unit_column">Unit</th>
+                                        <th data-translate="price_per_unit_column">Price per Unit</th>
+                                        <th data-translate="total_value_column">Total Value</th>
+                                        <th data-translate="actions_column">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -199,8 +200,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     <input type="hidden" name="warehouse_id" value="<?= htmlspecialchars($selectedWarehouse['id']); ?>">
                                                     <input type="hidden" name="food_item_id" value="<?= htmlspecialchars($item['id']); ?>">
                                                     <input type="number" name="quantity" value="<?= htmlspecialchars($item['quantity']); ?>" step="0.01">
-                                                    <button class="button is-small is-info" type="submit" name="modify_item">Modify</button>
-                                                    <button class="button is-small is-danger" type="submit" name="delete_item">Delete</button>
+                                                    <button class="button is-small is-info" type="submit" name="modify_item" data-translate="modify_button">Modify</button>
+                                                    <button class="button is-small is-danger" type="submit" name="delete_item" data-translate="delete_button">Delete</button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -208,14 +209,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </tbody>
                             </table>
                         <?php else: ?>
-                            <p>No stock items available for this warehouse.</p>
+                            <p data-translate="no_stock_items_message">No stock items available for this warehouse.</p>
                         <?php endif; ?>
 
-                        <h3 class="subtitle">Add New Food Item</h3>
+                        <h3 class="subtitle" data-translate="add_item_title">Add New Food Item</h3>
                         <form method="POST">
                             <input type="hidden" name="warehouse_id" value="<?= htmlspecialchars($selectedWarehouse['id']); ?>">
                             <div class="field">
-                                <label class="label">Food Type</label>
+                                <label class="label" data-translate="food_type_label">Food Type</label>
                                 <div class="control">
                                     <div class="select">
                                         <select name="food_type_id" required>
@@ -229,17 +230,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                             </div>
                             <div class="field">
-                                <label class="label">Quantity</label>
+                                <label class="label" data-translate="quantity_label">Quantity</label>
                                 <div class="control">
                                     <input class="input" type="number" name="quantity" step="0.01" required>
                                 </div>
                             </div>
-                            <button class="button is-success" type="submit" name="add_item">Add Item</button>
+                            <button class="button is-success" type="submit" name="add_item" data-translate="add_item_button">Add Item</button>
                         </form>
                     </div>
 
                     <div class="box">
-                        <h3 class="subtitle">Warehouse Stock Utilization</h3>
+                        <h3 class="subtitle" data-translate="utilization_title">Warehouse Stock Utilization</h3>
                         <div class="chart-container">
                             <canvas id="stockUtilizationChart"></canvas>
                         </div>
@@ -256,7 +257,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             const stockUtilizationChart = new Chart(stockUtilizationChartCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Current Stock', 'Available Capacity'],
+                    labels: [getTranslation('current_stock_label'), getTranslation('available_capacity_label')],
                     datasets: [{
                         data: [<?= $selectedWarehouse['current_stock']; ?>, <?= $selectedWarehouse['rack_capacity'] - $selectedWarehouse['current_stock']; ?>],
                         backgroundColor: ['#00d1b2', '#ffdd57']
