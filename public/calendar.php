@@ -9,7 +9,7 @@ try {
     $pdo = new PDO($dsn, $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
+    die("<p data-translate='database_connection_failed'>Database connection failed: " . $e->getMessage() . "</p>");
 }
 
 $userId = $_SESSION['user_id']; 
@@ -32,11 +32,19 @@ function generateCalendar($month, $year) {
     $totalDays = (int)$firstDayOfMonth->format('t');
     $firstDayOfWeek = (int)$firstDayOfMonth->format('w');
     
-    $daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    $daysOfWeek = [
+        'Sun' => 'day_Sun',
+        'Mon' => 'day_Mon',
+        'Tue' => 'day_Tue',
+        'Wed' => 'day_Wed',
+        'Thu' => 'day_Thu',
+        'Fri' => 'day_Fri',
+        'Sat' => 'day_Sat'
+    ];
     
     $calendarHtml = '<table class="calendar-table"><thead><tr>';
-    foreach ($daysOfWeek as $day) {
-        $calendarHtml .= "<th>$day</th>";
+    foreach ($daysOfWeek as $day => $translateKey) {
+        $calendarHtml .= "<th data-translate='$translateKey'>$day</th>";
     }
     $calendarHtml .= '</tr></thead><tbody><tr>';
     
@@ -72,7 +80,8 @@ $currentYear = date('Y');
     <?php
         $title = "Event Calendar - ATD";
         include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
-    ?>    
+    ?>
+    <script src="/assets/js/translation.js"></script>
     <style>
         .calendar-table {
             width: 100%;
@@ -124,24 +133,24 @@ $currentYear = date('Y');
         <main>
             <div class="content">
                 <div class="container is-max-desktop">
-                    <h1 class="title has-text-centered">Your Event Calendar</h1>
+                    <h1 class="title has-text-centered" data-translate="your_event_calendar">Your Event Calendar</h1>
                     <?php if (empty($events)): ?>
-                        <p class="has-text-centered">You are not participating in any events.</p>
+                        <p class="has-text-centered" data-translate="no_events_participation">You are not participating in any events.</p>
                     <?php else: ?>
                         <div class="calendar-container">
                             <?php foreach ($events as $event): ?>
                                 <div class="box">
                                     <h3 class="title is-5"><?= htmlspecialchars($event['event_name']) ?></h3>
-                                    <p><strong>Type:</strong> <?= htmlspecialchars($event['event_type']) ?></p>
-                                    <p><strong>Location:</strong> <?= htmlspecialchars($event['location']) ?></p>
-                                    <p><strong>Start:</strong> <?= formatEventDate($event['event_start']) ?></p>
-                                    <p><strong>End:</strong> <?= formatEventDate($event['event_end']) ?></p>
+                                    <p><strong data-translate="type">Type:</strong> <?= htmlspecialchars($event['event_type']) ?></p>
+                                    <p><strong data-translate="location">Location:</strong> <?= htmlspecialchars($event['location']) ?></p>
+                                    <p><strong data-translate="start">Start:</strong> <?= formatEventDate($event['event_start']) ?></p>
+                                    <p><strong data-translate="end">End:</strong> <?= formatEventDate($event['event_end']) ?></p>
                                     <p><?= htmlspecialchars($event['description']) ?></p>
                                 </div>
                             <?php endforeach; ?>
                         </div>
                     <?php endif; ?>
-                    <h2 class="title is-4 has-text-centered">Monthly Calendar - <?= date('F Y') ?></h2>
+                    <h2 class="title is-4 has-text-centered" data-translate="monthly_calendar">Monthly Calendar - <?= date('F Y') ?></h2>
                     <?= generateCalendar($currentMonth, $currentYear); ?>
                 </div>
             </div>
