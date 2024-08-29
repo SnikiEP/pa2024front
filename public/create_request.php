@@ -117,16 +117,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="content">
                 <div class="form-container">
                     <form action="" method="POST">
-                        <input type="text" name="eventName" placeholder="Event Name" required>
-                        <input type="text" name="eventType" placeholder="Event Type" required>
-                        <input type="datetime-local" name="eventStart" placeholder="Event Start" required>
-                        <input type="datetime-local" name="eventEnd" placeholder="Event End" required>
-                        <input type="text" name="location" placeholder="Location" required>
-                        <textarea name="description" placeholder="Description" rows="4" required></textarea>
-                        <button type="submit">Create Event</button>
+                        <input type="text" name="eventName" placeholder="Event Name" required data-translate="event_name_placeholder">
+                        <input type="text" name="eventType" placeholder="Event Type" required data-translate="event_type_placeholder">
+                        <input type="datetime-local" name="eventStart" required data-translate="event_start_placeholder">
+                        <input type="datetime-local" name="eventEnd" required data-translate="event_end_placeholder">
+                        <input type="text" name="location" placeholder="Location" required data-translate="location_placeholder">
+                        <textarea name="description" placeholder="Description" rows="4" required data-translate="description_placeholder"></textarea>
+                        <button type="submit" data-translate="create_event_button">Create Event</button>
                     </form>
                     <?php if (isset($error)): ?>
-                        <p style="color: red;"><?= escape($error) ?></p>
+                        <p style="color: red;" data-translate="error_message"><?= escape($error) ?></p>
                     <?php endif; ?>
                 </div>
             </div>

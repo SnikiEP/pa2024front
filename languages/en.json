@@ -116,8 +116,25 @@
     "location": "Location",
     "start": "Start",
     "end": "End",
-    "monthly_calendar": "Monthly Calendar"
+    "monthly_calendar": "Monthly Calendar",
       
-      
+    "title_collecte": "Route Calculator with Multiple Stops and PDF",
+    "route_calculator_title": "Route Calculator with Multiple Stops",
+    "start_address_label": "Start Address:",
+    "stop_label": "Stop:",
+    "remove_stop_button": "Remove",
+    "add_stop_button": "Add a Stop",
+    "end_address_label": "End Address:",
+    "calculate_route_button": "Calculate Route",
+    "generate_pdf_button": "Generate PDF",
+
+    "event_name_placeholder": "Event Name",
+    "event_type_placeholder": "Event Type",
+    "event_start_placeholder": "Event Start",
+    "event_end_placeholder": "Event End",
+    "location_placeholder": "Location",
+    "description_placeholder": "Description",
+    "create_event_button": "Create Event",
+    "error_message": "An error occurred while creating the event."
 
 }

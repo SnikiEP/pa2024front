@@ -115,5 +115,24 @@
     "location": "Emplacement",
     "start": "Début",
     "end": "Fin",
-    "monthly_calendar": "Calendrier Mensuel"
+    "monthly_calendar": "Calendrier Mensuel",
+
+    "title_collecte": "Calculateur d'Itinéraire avec plusieurs arrêts et PDF",
+    "route_calculator_title": "Calculateur d'Itinéraire avec plusieurs arrêts",
+    "start_address_label": "Adresse de départ :",
+    "stop_label": "Arrêt :",
+    "remove_stop_button": "Supprimer",
+    "add_stop_button": "Ajouter un arrêt",
+    "end_address_label": "Adresse d'arrivée :",
+    "calculate_route_button": "Calculer l'itinéraire",
+    "generate_pdf_button": "Générer le PDF",
+
+    "event_name_placeholder": "Nom de l'événement",
+    "event_type_placeholder": "Type d'événement",
+    "event_start_placeholder": "Début de l'événement",
+    "event_end_placeholder": "Fin de l'événement",
+    "location_placeholder": "Lieu",
+    "description_placeholder": "Description",
+    "create_event_button": "Créer l'événement",
+    "error_message": "Une erreur est survenue lors de la création de l'événement.",
 }

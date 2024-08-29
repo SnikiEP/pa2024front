@@ -17,7 +17,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculateur d'Itinéraire avec plusieurs arrêts et PDF</title>
+    <title data-translate="title_collecte">Calculateur d'Itinéraire avec plusieurs arrêts et PDF</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
     <script src="https://unpkg.com/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"></script>
@@ -63,31 +63,31 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
         <main>
             <div class="content">
                 <div class="container">
-                    <h1 class="title has-text-centered">Calculateur d'Itinéraire avec plusieurs arrêts</h1>
+                    <h1 class="title has-text-centered" data-translate="route_calculator_title">Calculateur d'Itinéraire avec plusieurs arrêts</h1>
                     <form id="route-form" class="box">
                         <div class="field">
-                            <label class="label" for="start">Adresse de départ :</label>
+                            <label class="label" for="start" data-translate="start_address_label">Adresse de départ :</label>
                             <div class="control">
                                 <input class="input" type="text" id="start" placeholder="Ex: 2 rue Gervex, Paris" required>
                             </div>
                         </div>
                         <div id="stops-container">
                             <div class="field stop">
-                                <label class="label" for="stop-1">Arrêt :</label>
+                                <label class="label" for="stop-1" data-translate="stop_label">Arrêt :</label>
                                 <div class="control">
                                     <input class="input" type="text" id="stop-1" placeholder="Ex: Arrêt intermédiaire">
-                                    <button type="button" class="remove-stop">Supprimer</button>
+                                    <button type="button" class="remove-stop" data-translate="remove_stop_button">Supprimer</button>
                                 </div>
                             </div>
                         </div>
-                        <button class="button is-link" type="button" id="add-stop">Ajouter un arrêt</button>
+                        <button class="button is-link" type="button" id="add-stop" data-translate="add_stop_button">Ajouter un arrêt</button>
                         <div class="field" style="margin-top: 20px;">
-                            <label class="label" for="end">Adresse d'arrivée :</label>
+                            <label class="label" for="end" data-translate="end_address_label">Adresse d'arrivée :</label>
                             <div class="control">
                                 <input class="input" type="text" id="end" placeholder="Ex: 34 rue de Clichy, Paris" required>
                             </div>
                         </div>
-                        <button class="button is-primary" type="submit">Calculer l'itinéraire</button>
+                        <button class="button is-primary" type="submit" data-translate="calculate_route_button">Calculer l'itinéraire</button>
                         <input type="hidden" id="mapScreenshot" name="mapScreenshot">
                         <input type="hidden" id="routeInstructions" name="routeInstructions">
                         <input type="hidden" id="distance" name="distance">
@@ -95,7 +95,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                     </form>
 
                     <div id="map"></div>
-                    <button class="button is-success" id="generate-pdf" style="display:none; margin-top: 20px;">Générer le PDF</button>
+                    <button class="button is-success" id="generate-pdf" style="display:none; margin-top: 20px;" data-translate="generate_pdf_button">Générer le PDF</button>
                 </div>
             </div>
         </main>
@@ -118,7 +118,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
 
         document.getElementById('add-stop').addEventListener('click', function() {
             var stopCount = document.querySelectorAll('#stops-container .field').length;
-            var stopInput = `<div class="field stop"><label class="label" for="stop-${stopCount + 1}">Arrêt :</label><div class="control"><input class="input" type="text" id="stop-${stopCount + 1}" placeholder="Ex: Arrêt intermédiaire"><button type="button" class="remove-stop">Supprimer</button></div></div>`;
+            var stopInput = `<div class="field stop"><label class="label" for="stop-${stopCount + 1}" data-translate="stop_label">Arrêt :</label><div class="control"><input class="input" type="text" id="stop-${stopCount + 1}" placeholder="Ex: Arrêt intermédiaire"><button type="button" class="remove-stop" data-translate="remove_stop_button">Supprimer</button></div></div>`;
             document.getElementById('stops-container').insertAdjacentHTML('beforeend', stopInput);
             attachRemoveStopListeners(); 
         });
