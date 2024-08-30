@@ -1,4 +1,16 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['role']) || !is_array($_SESSION['role']) || !in_array('ROLE_ADMIN', $_SESSION['role'])) {
+    header("Location: ../public/login.php");
+    exit;
+}
+?>
+
 <header>
+    
     <script src="/assets/js/translation.js"></script>
 
     <nav class="navbar" role="navigation" aria-label="main navigation">
