@@ -340,7 +340,36 @@
     "select_collection_point": "-- Sélectionnez un Point de Collecte --",
 
     "placeholder_translations": "Le contenu JSON apparaîtra ici...",
-    "placeholder_Newtranslations" : "    Entrez le contenu JSON ici..."
+    "placeholder_Newtranslations" : "    Entrez le contenu JSON ici...",
 
+    "select_vehicle_option": "-- Sélectionnez un camion --",
+    "select_donation": "-- Sélectionnez un point de don --",
+    "add_stop": "Ajouter un arrêt",
+    "remove_stop": "Supprimer",
+    "calculate_route": "Calculer l'itinéraire",
+    "start_delivery": "Lancer la livraison",
+    "generate_pdf": "Générer le PDF",
+    "loading_vehicles": "Chargement des camions...",
+    "loading_stock": "Chargement des stocks...",
+    "stock_loading_error": "Erreur lors du chargement des stocks.",
+    "geocoding_start_warehouse_error": "Impossible de géocoder l'adresse de l'entrepôt de départ.",
+    "geocoding_end_warehouse_error": "Impossible de géocoder l'adresse de l'entrepôt d'arrivée.",
+    "error_select_end_warehouse": "Erreur : L'entrepôt de destination n'a pas été sélectionné.",
+
+    "success_message": "Livraison effectuée, les stocks ont été mis à jour et le camion a été déplacé à l'entrepôt d'arrivée.",
+    "select_start_warehouse": "Sélectionner un entrepôt de départ :",
+    "select_vehicle": "Sélectionner un camion :",
+    "select_donation_point": "Sélectionner un point de don :",
+    "select_end_warehouse": "Sélectionner un entrepôt d'arrivée :",
+    "select_article_delivery" : "Sélectionner les articles à livrer :",
+
+    "error_loading_stock": "Erreur lors du chargement des stocks.",
+    "remove": "Supprimer",
+    "geocode_start_warehouse_error": "Impossible de géocoder l'adresse de l'entrepôt de départ.",
+    "geocode_end_warehouse_error": "Impossible de géocoder l'adresse de l'entrepôt d'arrivée.",
+
+    "success_delivery": "La livraison a été effectuée, les stocks ont été mis à jour et le camion a été déplacé à l'entrepôt d'arrivée.",
+
+    "title_delivery" : "Calculateur d'Itinéraire avec plusieurs arrêts et PDF"
 
 }

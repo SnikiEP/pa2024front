@@ -344,6 +344,37 @@
     "select_collection_point": "-- Select a Collection Point --",
 
     "placeholder_translations": "JSON content will appear here...",
-    "placeholder_Newtranslations" : "Enter JSON content here..."
+    "placeholder_Newtranslations" : "Enter JSON content here...",
+
+    "select_vehicle_option": "-- Select a vehicle --",
+    "select_donation": "-- Select a donation point --",
+    "add_stop": "Add a stop",
+    "remove_stop": "Remove",
+    "calculate_route": "Calculate Route",
+    "start_delivery": "Start Delivery",
+    "generate_pdf": "Generate PDF",
+    "loading_vehicles": "Loading vehicles...",
+    "loading_stock": "Loading stock...",
+    "stock_loading_error": "Error loading stock.",
+    "geocoding_start_warehouse_error": "Unable to geocode the start warehouse address.",
+    "geocoding_end_warehouse_error": "Unable to geocode the end warehouse address.",
+    "error_select_end_warehouse": "Error: The end warehouse has not been selected.",
+
+    
+    "success_message": "Delivery completed, stocks have been updated and the truck has been moved to the destination warehouse.",
+    "select_start_warehouse": "Select a start warehouse:",
+    "select_donation_point": "Select a donation point:",
+    "select_end_warehouse": "Select an end warehouse:",
+    "select_vehicle": "Select a vehicle:",
+    "select_article_delivery" : "Select the items to be delivered: ",
+
+    "error_loading_stock": "Error loading stock.",
+    "remove": "Remove",
+    "geocode_start_warehouse_error": "Unable to geocode the starting warehouse address.",
+    "geocode_end_warehouse_error": "Unable to geocode the destination warehouse address.",
+
+    "success_delivery": "The delivery has been completed, stocks have been updated, and the truck has been moved to the destination warehouse.",
+
+    "title_delivery" : "Route Calculator with Multiple Stops and PDF"
 
 }

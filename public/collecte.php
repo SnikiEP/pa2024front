@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Connexion à la base de données avec PDO
 $dsn = 'mysql:host=db;dbname=helix_db;charset=utf8';
 $username = 'root';
 $password = 'root_password';
@@ -10,7 +9,7 @@ try {
     $pdo = new PDO($dsn, $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
+    die("Échec de la connexion à la base de données : " . $e->getMessage());
 }
 
 if (!isset($_SESSION['accessToken'])) {
@@ -93,8 +92,9 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                             <label class="label" for="start" data-translate="start_address_label">Sélectionner un entrepôt de départ :</label>
                             <div class="control">
                                 <select class="input" name="start-warehouse" id="start-warehouse" required>
-                                    <option value="">-- Sélectionnez un entrepôt --</option>
-                                    <?php
+                                    <option value="" data-translate="select_warehouse">-- Sélectionnez un entrepôt --</option>
+
+                                <?php
                                     $query = "SELECT id, location, address FROM warehouses";
                                     $stmt = $pdo->query($query);
                                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -113,7 +113,9 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                                 <label class="label" for="collection-point-1">Sélectionner un point de collecte :</label>
                                 <div class="control">
                                     <select class="input" name="collection-points[]" id="collection-point-1">
-                                        <option value="">-- Sélectionnez un point de collecte --</option>
+                                        <option value="" data-translate="select_collection_point">-- Sélectionnez un point de collecte --</option>
+
+
                                         <?php
                                         $query = "SELECT id, name, address FROM collection_points";
                                         $stmt = $pdo->query($query);
@@ -131,7 +133,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                             <label class="label" for="end" data-translate="end_address_label">Sélectionner un entrepôt d'arrivée :</label>
                             <div class="control">
                                 <select class="input" name="end-warehouse" id="end-warehouse" required>
-                                    <option value="">-- Sélectionnez un entrepôt --</option>
+                                    <option value="" data-translate="select_warehouse">-- Sélectionnez un entrepôt --</option>
+
                                     <?php
                                     $query = "SELECT id, location, address FROM warehouses";
                                     $stmt = $pdo->query($query);

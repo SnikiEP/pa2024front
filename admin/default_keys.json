@@ -340,7 +340,31 @@
     "select_collection_point": "",
 
     "placeholder_translations": "",
-    "placeholder_Newtranslations" :""
-
+    "placeholder_Newtranslations" :"",
+    "select_vehicle_option": "",
+    "select_donation": "",
+    "add_stop": "",
+    "remove_stop": "",
+    "calculate_route": "",
+    "start_delivery": "",
+    "generate_pdf": "",
+    "loading_vehicles": "",
+    "loading_stock": "",
+    "stock_loading_error": "",
+    "geocoding_start_warehouse_error": "",
+    "geocoding_end_warehouse_error": "",
+    "error_select_end_warehouse": "",
+    "success_message": "",
+    "select_start_warehouse": "",
+    "select_donation_point": "",
+    "select_end_warehouse": "",
+    "select_vehicle": "",
+    "select_article_delivery": "",
+    "error_loading_stock": "",
+    "remove": "",
+    "geocode_start_warehouse_error": "",
+    "geocode_end_warehouse_error": "",
+    "success_delivery": "",
+    "title_delivery" : ""
     
 }
