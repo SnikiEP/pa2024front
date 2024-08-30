@@ -3,9 +3,6 @@
 
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <a class="navbar-item" href="/index.php">
-                <img src="/assets/img/atd_logo.png" alt="ATD logo">
-            </a>
             <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbar">
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
@@ -16,19 +13,17 @@
 
         <div id="navbar" class="navbar-menu">
             <div class="navbar-start">
-                <a class="navbar-item" data-translate="home" href="../index.php">Home</a>
-                <a class="navbar-item" data-translate="about_us" href="/public/about.php">About us</a>
-                <a class="navbar-item" data-translate="contact_us" href="/public/contact.php">Contact us</a>
+            <a class="navbar-item" href="/index.php">
+                <img src="/assets/img/atd_logo.png" alt="ATD logo">
+            </a>                
             </div>
 
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="select is-rounded">
-                        <select id="lang_switch">
-                        </select>
+                        <select id="lang_switch"></select>
                     </div>
                     <?php if (isset($_SESSION['username'])): ?>
-                        <p class="navbar-item welcome-message" data-translate="welcome"><?= 'Welcome, ' . htmlspecialchars($_SESSION['username']); ?></p>
                         <a class="navbar-item" data-translate="my_profile" href="/public/myprofil.php">My profile</a>
                         <a class="navbar-item" data-translate="calendar" href="../public/calendar.php">Calendar</a>
                         <a class="navbar-item" data-translate="tickets" href="/public/tickets.php">Tickets</a>
@@ -52,4 +47,98 @@
             </div>
         </div>
     </nav>
+    <style>
+        body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    background-color: #fff; 
+    border-bottom: 1px solid #ddd;
+}
+
+.navbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0 1rem;
+    font-size: 0.875rem;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.navbar-item img {
+    max-height: 40px;
+}
+
+.navbar-burger {
+    display: none;
+}
+
+.navbar-menu {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.navbar-start, .navbar-end {
+    display: flex;
+}
+
+.navbar-item {
+    margin: 0 0.25rem;
+    font-size: 0.875rem;
+}
+
+.buttons {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.button {
+    font-size: 0.75rem;
+}
+
+@media screen and (max-width: 768px) {
+    .navbar-burger {
+        display: block;
+        cursor: pointer;
+    }
+
+    .navbar-menu {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar-menu.is-active {
+        display: flex;
+    }
+
+    .navbar-start, .navbar-end {
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+
+    .navbar-end {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+
+    </style>
 </header>
