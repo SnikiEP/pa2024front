@@ -7,11 +7,11 @@
     "welcome": "Welcome, ",
     "my_profile": "My Profile",
     "events": "Events",
-    "calendar" :"Calendar",
+    "calendar": "Calendar",
     "tickets": "Tickets",
     "warehouses": "Warehouses",
     "events_add": "Add Event",
-    "translation_manager" : "Translation Manager",
+    "translation_manager": "Translation Manager",
     "logout": "Logout",
     "join_us": "Join Us",
     "log_in": "Log In",
@@ -101,8 +101,6 @@
     "eco_goals": "Our goal is to reduce our carbon footprint and educate our community about the importance of preserving our planet. This ecological mission is integrated into all our actions to ensure a long-term positive impact.",
     "join_our_cause": "If you share our vision and wish to contribute to our missions, we invite you to join our community of volunteers. Every gesture counts, and together, we can achieve great things.",
     "get_involved": "For more information about our missions or to get involved, please do not hesitate to contact us. We would be delighted to welcome you to our No More Waste family.",
-
-
     "day_Sun": "Sun",
     "day_Mon": "Mon",
     "day_Tue": "Tue",
@@ -118,7 +116,6 @@
     "start": "Start",
     "end": "End",
     "monthly_calendar": "Monthly Calendar",
-      
     "title_collecte": "Route Calculator with Multiple Stops",
     "route_calculator_title": "Route Calculator with Multiple Stops",
     "start_address_label": "Start Address:",
@@ -128,7 +125,6 @@
     "end_address_label": "End Address:",
     "calculate_route_button": "Calculate Route",
     "generate_pdf_button": "Generate PDF",
-
     "event_name_placeholder": "Event Name",
     "event_type_placeholder": "Event Type",
     "event_start_placeholder": "Event Start",
@@ -149,7 +145,6 @@
     "save_button": "Save",
     "cancel_button": "Cancel",
     "view_calendar": "View Event Calendar",
-
     "name_label": "Name",
     "postal_address_label": "Postal address",
     "gender_label": "Your gender",
@@ -157,7 +152,6 @@
     "woman_option": "Woman",
     "register_as_volunteer": "I want to register as a Volunteer (Bénévole)",
     "join_us_button": "Join us",
-
     "page_title_stock": "Warehouse Stock Management Dashboard",
     "operation_message": "Operation completed successful.",
     "add_warehouse_title": "Add New Warehouse",
@@ -183,7 +177,6 @@
     "quantity_label": "Quantity",
     "add_item_button": "Add Item",
     "utilization_title": "Warehouse Stock Utilization",
-
     "page_title_tickets": "Tickets - ATD",
     "title_label": "Title",
     "desc_label": "Description",
@@ -196,7 +189,6 @@
     "messages_title": "Messages for Ticket #",
     "message_placeholder": "Type your message here...",
     "send_message_button": "Send Message",
-
     "page_title_warehouses": "Warehouses - ATD",
     "operation_message_warehouses": "Operation completed successfully.",
     "warehouse_details_title": "Details for Warehouse #",
@@ -210,7 +202,6 @@
     "current_stock_column": "Current Stock",
     "utilization_column": "Utilization",
     "view_details_button": "View Details",
-
     "manage-accounts-title": "Manage Accounts",
     "search-accounts": "Search Accounts",
     "user-id": "User ID:",
@@ -227,15 +218,12 @@
     "no-accounts": "No accounts found or error fetching accounts.",
     "edit-account": "Edit Account",
     "save-changes": "Save Changes",
-
-    "logs" : "logs",
-    "accounts" : "accounts" ,
-    "account_not_validate" : "account not validated",
-    "vehicles" : "vehicles",
-
+    "logs": "logs",
+    "accounts": "accounts",
+    "account_not_validate": "account not validated",
+    "vehicles": "vehicles",
     "edit_profile_title": "Edit profile of ",
     "save_changes": "Save Changes",
-
     "vehicles_management": "Vehicles Management",
     "manage_vehicles": "Manage Vehicles",
     "success_update": "Vehicle updated successfully.",
@@ -255,7 +243,6 @@
     "add_vehicle": "Add Vehicle",
     "update_vehicle": "Update Vehicle",
     "add_vehicle_btn": "Add Vehicle",
-
     "admin_panel": "Admin Panel",
     "total_users": "Total Users",
     "total_logs": "Total Logs",
@@ -268,7 +255,6 @@
     "method": "Method",
     "response_code": "Response Code",
     "timestamp": "Timestamp",
-
     "manage_events": "Manage Events",
     "filter_events": "Filter Events",
     "event_type": "Event Type",
@@ -280,7 +266,7 @@
     "event_start": "Event Start",
     "event_end": "Event End",
     "no_events_found": "No events found.",
-    "create_edit_event": "Create/Edit Event",
+    "create_edit_event": "Create\/Edit Event",
     "save_event": "Save Event",
     "select_vehicles": "Select Vehicles",
     "error_date_range": "The end date must be after the start date.",
@@ -288,7 +274,6 @@
     "success_update_events": "Event updated successfully.",
     "success_add_events": "Event added successfully.",
     "error_update_events": "Failed to update the event: %s",
-
     "manage_logs": "Manage Logs",
     "filter_logs": "Filter Logs",
     "http_method": "HTTP Method",
@@ -311,19 +296,15 @@
     "action_update_profile": "Profile updated",
     "action_default": "Unspecified action",
     "unknown": "Unknown",
-
     "id_header": "ID",
     "validate_button": "Validate",
     "account_validated_successfully": "Account validated successfully.",
     "error_validating_account": "Error validating account:",
-
     "vehicle_management": "Vehicle Management",
     "vehicles_list": "Vehicles List",
     "are_you_sure_delete": "Are you sure you want to delete this vehicle?",
     "add_new_vehicle": "Add New Vehicle",
     "error_adding_vehicle": "Error adding vehicle:",
     "error_deleting_vehicle": "Error deleting vehicle:",
-
-    "footer_text": "HELIX. All Rights Reserved."
-
+    "footer_text": "2024 HELIX. All Rights Reserved."
 }

@@ -7,11 +7,11 @@
     "welcome": "Bienvenue, ",
     "my_profile": "Mon Profil",
     "events": "Événements",
-    "calendar" :"Calendrier",
+    "calendar": "Calendrier",
     "tickets": "Billets",
     "warehouses": "Entrepôts",
     "events_add": "Ajouter un Événement",
-    "translation_manager" : "Management de traduction",
+    "translation_manager": "Management de traduction",
     "logout": "Déconnexion",
     "join_us": "Rejoignez-Nous",
     "log_in": "Se Connecter",
@@ -101,7 +101,6 @@
     "eco_goals": "Notre objectif est de réduire notre empreinte carbone et d'éduquer notre communauté sur l'importance de préserver notre planète. Cette mission écologique est intégrée dans toutes nos actions pour garantir un impact positif à long terme.",
     "join_our_cause": "Si vous partagez notre vision et souhaitez contribuer à nos missions, nous vous invitons à rejoindre notre communauté de bénévoles. Chaque geste compte, et ensemble, nous pouvons accomplir de grandes choses.",
     "get_involved": "Pour plus d'informations sur nos missions ou pour vous impliquer, n'hésitez pas à nous contacter. Nous serions ravis de vous accueillir dans notre famille No More Waste.",
-
     "day_Sun": "Dim",
     "day_Mon": "Lun",
     "day_Tue": "Mar",
@@ -117,7 +116,6 @@
     "start": "Début",
     "end": "Fin",
     "monthly_calendar": "Calendrier Mensuel",
-
     "title_collecte": "Calculateur d'Itinéraire avec plusieurs arrêts et PDF",
     "route_calculator_title": "Calculateur d'Itinéraire avec plusieurs arrêts",
     "start_address_label": "Adresse de départ :",
@@ -127,7 +125,6 @@
     "end_address_label": "Adresse d'arrivée :",
     "calculate_route_button": "Calculer l'itinéraire",
     "generate_pdf_button": "Générer le PDF",
-
     "event_name_placeholder": "Nom de l'événement",
     "event_type_placeholder": "Type d'événement",
     "event_start_placeholder": "Début de l'événement",
@@ -136,7 +133,6 @@
     "description_placeholder": "Description",
     "create_event_button": "Créer l'événement",
     "error_message": "Une erreur est survenue lors de la création de l'événement.",
-
     "welcome_message": "Bienvenue, {username}!",
     "username_label": "Nom d'utilisateur",
     "first_name_label": "Prénom",
@@ -149,7 +145,6 @@
     "save_button": "Enregistrer",
     "cancel_button": "Annuler",
     "view_calendar": "Voir le calendrier des événements",
-
     "name_label": "Prénom",
     "postal_address_label": "Adresse postale",
     "gender_label": "Votre sexe",
@@ -157,7 +152,6 @@
     "woman_option": "Femme",
     "register_as_volunteer": "Je souhaite m'inscrire en tant que Bénévole",
     "join_us_button": "Rejoignez-nous",
-
     "page_title_stock": "Tableau de bord de gestion des stocks d'entrepôt",
     "operation_message": "Opération terminée avec succès.",
     "add_warehouse_title": "Ajouter un Nouvel Entrepôt",
@@ -183,7 +177,6 @@
     "quantity_label": "Quantité",
     "add_item_button": "Ajouter l'Article",
     "utilization_title": "Utilisation des Stocks de l'Entrepôt",
-
     "page_title_tickets": "Tickets - ATD",
     "title_label": "Titre",
     "desc_label": "Description",
@@ -196,7 +189,6 @@
     "messages_title": "Messages pour le Ticket #",
     "message_placeholder": "Tapez votre message ici...",
     "send_message_button": "Envoyer le Message",
-
     "page_title": "Entrepôts - ATD",
     "warehouse_details_title": "Détails pour l'Entrepôt #",
     "location_label_warehouses": "Emplacement :",
@@ -209,7 +201,6 @@
     "current_stock_column": "Stock Actuel",
     "utilization_column": "Utilisation",
     "view_details_button": "Voir les Détails",
-
     "manage-accounts-title": "Gérer les Comptes",
     "search-accounts": "Rechercher des Comptes",
     "user-id": "ID Utilisateur:",
@@ -227,15 +218,12 @@
     "footer-copyright": "&copy; {{year}} HELIX. Tous droits réservés.",
     "edit-account": "Modifier le Compte",
     "save-changes": "Sauvegarder les Modifications",
-
-    "logs" : "logs",
-    "accounts" : "comptes" ,
-    "account_not_validate" : "comptes non validés",
-    "vehicles" : "vehicules",
-
+    "logs": "logs",
+    "accounts": "comptes",
+    "account_not_validate": "comptes non validés",
+    "vehicles": "vehicules",
     "edit_profile_title": "Modifier le profil de ",
     "save_changes": "Sauvegarder les modifications",
-
     "vehicles_management": "Gestion des Véhicules",
     "manage_vehicles": "Gérer les Véhicules",
     "success_update": "Véhicule mis à jour avec succès.",
@@ -255,7 +243,6 @@
     "add_vehicle": "Ajouter un Véhicule",
     "update_vehicle": "Mettre à Jour le Véhicule",
     "add_vehicle_btn": "Ajouter un Véhicule",
-
     "admin_panel": "Panneau Administratif",
     "total_users": "Total des Utilisateurs",
     "total_logs": "Total des Journaux",
@@ -268,7 +255,6 @@
     "method": "Méthode",
     "response_code": "Code de Réponse",
     "timestamp": "Horodatage",
-
     "manage_events": "Gérer les Événements",
     "filter_events": "Filtrer les Événements",
     "event_type": "Type d'Événement",
@@ -280,7 +266,7 @@
     "event_start": "Début de l'Événement",
     "event_end": "Fin de l'Événement",
     "no_events_found": "Aucun événement trouvé.",
-    "create_edit_event": "Créer/Modifier un Événement",
+    "create_edit_event": "Créer\/Modifier un Événement",
     "save_event": "Enregistrer l'Événement",
     "select_vehicles": "Sélectionner les Véhicules",
     "error_date_range": "La date de fin doit être après la date de début.",
@@ -288,7 +274,6 @@
     "success_update_events": "Événement mis à jour avec succès.",
     "success_add_events": "Événement ajouté avec succès.",
     "error_update_events": "Échec de la mise à jour de l'événement : %s",
-
     "manage_logs": "Gérer les Journaux",
     "filter_logs": "Filtrer les Journaux",
     "http_method": "Méthode HTTP",
@@ -311,19 +296,15 @@
     "action_update_profile": "Profil mis à jour",
     "action_default": "Action non spécifiée",
     "unknown": "Inconnu",
-
     "id_header": "ID",
     "validate_button": "Valider",
     "account_validated_successfully": "Compte validé avec succès.",
     "error_validating_account": "Erreur lors de la validation du compte :",
-
     "vehicle_management": "Gestion des véhicules",
     "vehicles_list": "Liste des véhicules",
     "are_you_sure_delete": "Êtes-vous sûr de vouloir supprimer ce véhicule ?",
     "add_new_vehicle": "Ajouter un nouveau véhicule",
     "error_adding_vehicle": "Erreur lors de l'ajout du véhicule :",
     "error_deleting_vehicle": "Erreur lors de la suppression du véhicule :",
-
-    "footer_text": "HELIX. Tous droits réservés."
-
+    "footer_text": "2024 HELIX. Tous droits réservés."
 }
