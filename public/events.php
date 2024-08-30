@@ -1,5 +1,5 @@
 <?php
-include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php');
+session_start();
 
 $dsn = 'mysql:host=db;dbname=helix_db;charset=utf8';
 $username = 'root';
