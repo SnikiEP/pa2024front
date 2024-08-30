@@ -29,11 +29,11 @@ if (!isset($_SESSION['role']) || !is_array($_SESSION['role']) || !in_array('ROLE
         <div id="navbar" class="navbar-menu">
             <div class="navbar-start">
                 <a class="navbar-item" data-translate="home" href="<?= '/admin/index.php' ?>">Home</a>
-                <a class="navbar-item" data-translate="events" href="<?= '/admin/events.php' ?>">Events</a>
                 <a class="navbar-item" data-translate="logs" href="<?= '/admin/logs.php' ?>">Logs</a>
                 <a class="navbar-item" data-translate="accounts" href="<?= '/admin/account.php' ?>">Accounts</a>
                 <a class="navbar-item" data-translate="account_not_validate" href="<?= '/admin/validate.php' ?>">Account not validate</a>
-                <a class="navbar-item" data-translate="vehicles" href="<?= '/admin/vehicles.php' ?>">Vehicles</a>
+                <a class="navbar-item" data-translate="translation_manager" href="<?= '/admin/translation_manager.php' ?>">translation Manager</a>
+
             </div>
             <div class="navbar-end">
                 <div class="navbar-item">
