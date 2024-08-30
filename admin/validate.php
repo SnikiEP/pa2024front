@@ -67,51 +67,51 @@ $notValidatedAccounts = makeHttpRequest($baseUrl . "/account/not-validated", "GE
     ?>    
 </head>
 <style>
-  
-  .table-container table {
-      margin-top: 20px;
-      border: 1px solid #ccc;
-      width: 100%;
-      border-collapse: collapse;
-  }
-  .table-container th, .table-container td {
-      padding: 8px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-  }
-  .table-container th {
-      background-color: #f2f2f2;
-  }
+    .table-container table {
+        margin-top: 20px;
+        border: 1px solid #ccc;
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .table-container th, .table-container td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    .table-container th {
+        background-color: #f2f2f2;
+    }
 </style>
 <body>
     <div class="wrapper">
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php') ?>
+        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php') ?>
         <main>
             <div class="content">
                 <img src="<?= '/assets/img/helix_white.png' ?>" alt="Helix_logo" width="600px" style="display: block; margin-left: auto; margin-right: auto; margin-top: 30px;">
                 <div style="text-align: center;">
-                    <h3 class="title is-3" style="margin-top: 10px;">Admin Panel</h3>
+                    <h3 class="title is-3" style="margin-top: 10px;" data-translate="admin_panel">Admin Panel</h3>
                 </div>
                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Username</th>
-                                <th>Action</th>
+                                <th data-translate="id_header">ID</th>
+                                <th data-translate="username_header">Username</th>
+                                <th data-translate="action_header">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($notValidatedAccounts as $account): ?>
-                            <tr>
-                                <td><?= escape($account['id']) ?></td>
-                                <td><?= escape($account['username']) ?></td>
-                                <td>
-                                    <button onclick="validateAccount(<?= $account['id'] ?>)">Validate</button>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td><?= escape($account['id']) ?></td>
+                                    <td><?= escape($account['username']) ?></td>
+                                    <td>
+                                        <button onclick="validateAccount(<?= $account['id'] ?>)">Validate</button>
+                                    </td>
+                                </tr>
                             <?php endforeach; ?>
                         </tbody>
+
                     </table>
                 </div>
             </div>
@@ -119,7 +119,6 @@ $notValidatedAccounts = makeHttpRequest($baseUrl . "/account/not-validated", "GE
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/footer.php')?>
     </div>
     <script>
-
         function validateAccount(accountId) {
             const url = '<?= $baseUrl ?>/account/validate/' + accountId;
 
@@ -132,14 +131,15 @@ $notValidatedAccounts = makeHttpRequest($baseUrl . "/account/not-validated", "GE
             })
             .then(response => {
                 if (response.ok) {
-                    alert('Account validated successfully.');
+                    alert(translations.account_validated_successfully);
                     window.location.reload();
                 } else {
-                    console.error('Error validating account:', response.statusText);
+                    console.error(translations.error_validating_account, response.statusText);
                 }
             })
-            .catch(error => console.error('Error validating account:', error));
+            .catch(error => console.error(translations.error_validating_account, error));
         }
     </script>
 </body>
 </html>
+
