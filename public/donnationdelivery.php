@@ -17,16 +17,43 @@ if (!isset($_SESSION['accessToken'])) {
     exit;
 }
 
+$successMessage = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $selectedVehicleId = $_POST['selected-vehicle'];
+    $endWarehouseId = $_POST['end-warehouse-id'] ?? null;
+    $selectedItems = $_POST['items'] ?? [];
+
+    if ($endWarehouseId === null || $endWarehouseId === '') {
+        die("Erreur: L'entrepôt d'arrivée n'a pas été sélectionné.");
+    }
+
+    $stmt = $pdo->prepare("UPDATE vehicles SET current_warehouse_id = :endWarehouseId WHERE id = :vehicleId");
+    $stmt->execute([
+        ':endWarehouseId' => $endWarehouseId,
+        ':vehicleId' => $selectedVehicleId
+    ]);
+
+    if (!empty($selectedItems)) {
+        foreach ($selectedItems as $itemId) {
+            $stmt = $pdo->prepare("UPDATE stock_items SET quantity = 0 WHERE id = :itemId");
+            $stmt->execute([':itemId' => $itemId]);
+        }
+    }
+
+    $successMessage = "Livraison effectuée, les stocks ont été mis à jour et le camion a été déplacé à l'entrepôt d'arrivée.";
+}
+
 $title = "Livraison - NMW";
 include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
-?>    
+?>
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-translate="title_livraison">Calculateur d'Itinéraire avec plusieurs arrêts et PDF</title>
+    <title>Calculateur d'Itinéraire avec plusieurs arrêts et PDF</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
     <script src="https://unpkg.com/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"></script>
@@ -78,6 +105,18 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
             border-radius: 5px;
             border: 1px solid #ddd;
         }
+        .stock-item {
+            margin-bottom: 5px;
+        }
+        .notification {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .is-success {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
     </style>
 </head>
 <body>
@@ -86,10 +125,18 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
         <main>
             <div class="content">
                 <div class="container">
-                    <h1 class="title has-text-centered" data-translate="route_calculator_title">Calculateur d'Itinéraire avec plusieurs arrêts</h1>
-                    <form id="route-form" class="box">
+                    <h1 class="title has-text-centered">Calculateur d'Itinéraire avec plusieurs arrêts</h1>
+                    <form id="route-form" class="box" method="POST">
+
+                        <!-- Message de succès -->
+                        <?php if ($successMessage): ?>
+                            <div class="notification is-success">
+                                <?= htmlspecialchars($successMessage, ENT_QUOTES, 'UTF-8'); ?>
+                            </div>
+                        <?php endif; ?>
+
                         <div class="field">
-                            <label class="label" for="start" data-translate="start_address_label">Sélectionner un entrepôt de départ :</label>
+                            <label class="label" for="start-warehouse">Sélectionner un entrepôt de départ :</label>
                             <div class="control">
                                 <select class="input" name="start-warehouse" id="start-warehouse" required>
                                     <option value="">-- Sélectionnez un entrepôt --</option>
@@ -101,13 +148,29 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                                         if (!is_null($row['address'])) {
                                             $displayText .= ' - ' . htmlspecialchars($row['address'], ENT_QUOTES, 'UTF-8');
                                         }
-                                        echo '<option value="' . htmlspecialchars($row['address'], ENT_QUOTES, 'UTF-8') . '">' . $displayText . '</option>';
+                                        echo '<option value="' . htmlspecialchars($row['id'], ENT_QUOTES, 'UTF-8') . '">' . $displayText . '</option>';
                                     }
                                     ?>
                                 </select>
                             </div>
                         </div>
-                        
+
+                        <div class="field">
+                            <label class="label" for="select-vehicle">Sélectionner un camion :</label>
+                            <div class="control">
+                                <select class="input" name="selected-vehicle" id="select-vehicle" required>
+                                    <option value="">-- Sélectionnez un camion --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label" for="select-items">Sélectionner les articles à livrer :</label>
+                            <div class="control" id="stock-items">
+                                <p>Chargement des stocks...</p>
+                            </div>
+                        </div>
+
                         <div id="stops-container">
                             <div class="field stop">
                                 <label class="label" for="donation-point-1">Sélectionner un point de don :</label>
@@ -122,15 +185,15 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                                         }
                                         ?>
                                     </select>
-                                    <button type="button" class="remove-stop" data-translate="remove_stop_button">Supprimer</button>
+                                    <button type="button" class="remove-stop">Supprimer</button>
                                 </div>
                             </div>
                         </div>
-                        
-                        <button class="button is-link" type="button" id="add-stop" data-translate="add_stop_button">Ajouter un arrêt</button>
+
+                        <button class="button is-link" type="button" id="add-stop">Ajouter un arrêt</button>
 
                         <div class="field" style="margin-top: 20px;">
-                            <label class="label" for="end" data-translate="end_address_label">Sélectionner un entrepôt d'arrivée :</label>
+                            <label class="label" for="end-warehouse">Sélectionner un entrepôt d'arrivée :</label>
                             <div class="control">
                                 <select class="input" name="end-warehouse" id="end-warehouse" required>
                                     <option value="">-- Sélectionnez un entrepôt --</option>
@@ -142,14 +205,17 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                                         if (!is_null($row['address'])) {
                                             $displayText .= ' - ' . htmlspecialchars($row['address'], ENT_QUOTES, 'UTF-8');
                                         }
-                                        echo '<option value="' . htmlspecialchars($row['address'], ENT_QUOTES, 'UTF-8') . '">' . $displayText . '</option>';
+                                        echo '<option value="' . htmlspecialchars($row['id'], ENT_QUOTES, 'UTF-8') . '">' . $displayText . '</option>';
                                     }
                                     ?>
                                 </select>
                             </div>
                         </div>
 
-                        <button class="button is-primary" type="submit" data-translate="calculate_route_button">Calculer l'itinéraire</button>
+                        <input type="hidden" name="end-warehouse-id" id="end-warehouse-id" value="">
+
+                        <button class="button is-primary" type="button" id="calculate-route">Calculer l'itinéraire</button>
+                        <button class="button is-success" type="submit" id="start-delivery">Lancer la livraison</button>
                         <input type="hidden" id="mapScreenshot" name="mapScreenshot">
                         <input type="hidden" id="routeInstructions" name="routeInstructions">
                         <input type="hidden" id="distance" name="distance">
@@ -157,7 +223,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                     </form>
 
                     <div id="map"></div>
-                    <button class="button is-success" id="generate-pdf" style="display:none; margin-top: 20px;" data-translate="generate_pdf_button">Générer le PDF</button>
+                    <button class="button is-success" id="generate-pdf" style="display:none; margin-top: 20px;">Générer le PDF</button>
                 </div>
             </div>
         </main>
@@ -178,6 +244,33 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
         var routingControl;
         var routeInfo = null;
 
+        document.getElementById('start-warehouse').addEventListener('change', function() {
+            var warehouseId = this.value;
+            var vehicleSelect = document.getElementById('select-vehicle');
+            var stockItemsDiv = document.getElementById('stock-items');
+            vehicleSelect.innerHTML = '<option value="">Chargement des camions...</option>';
+            stockItemsDiv.innerHTML = '<p>Chargement des stocks...</p>';
+
+            fetch('get_vehicles_by_warehouse.php?warehouse_id=' + warehouseId)
+                .then(response => response.json())
+                .then(data => {
+                    vehicleSelect.innerHTML = '<option value="">-- Sélectionnez un camion --</option>';
+                    data.forEach(function(vehicle) {
+                        vehicleSelect.innerHTML += '<option value="' + vehicle.id + '">' + vehicle.id_plate + ' - ' + vehicle.model + '</option>';
+                    });
+                });
+
+            fetch('get_warehouse_items.php?warehouse_id=' + warehouseId)
+                .then(response => response.text())
+                .then(data => {
+                    stockItemsDiv.innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement des stocks:', error);
+                    stockItemsDiv.innerHTML = '<p>Erreur lors du chargement des stocks.</p>';
+                });
+        });
+
         document.getElementById('add-stop').addEventListener('click', function() {
             var stopCount = document.querySelectorAll('#stops-container .field').length;
             var stopInput = `<div class="field stop">
@@ -193,7 +286,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                                         }
                                         ?>
                                     </select>
-                                    <button type="button" class="remove-stop" data-translate="remove_stop_button">Supprimer</button>
+                                    <button type="button" class="remove-stop">Supprimer</button>
                                 </div>
                             </div>`;
             document.getElementById('stops-container').insertAdjacentHTML('beforeend', stopInput);
@@ -215,12 +308,13 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
 
         attachRemoveStopListeners();
 
-        document.getElementById('route-form').addEventListener('submit', function(event) {
+        document.getElementById('calculate-route').addEventListener('click', function(event) {
             event.preventDefault();
             var waypoints = [];
             var stopsProcessed = 0;
-            var startWarehouse = document.getElementById('start-warehouse').value;
-            var endWarehouse = document.getElementById('end-warehouse').value;
+            var startWarehouse = document.getElementById('start-warehouse').selectedOptions[0].textContent.split(' - ')[1];
+            var endWarehouse = document.getElementById('end-warehouse').selectedOptions[0].textContent.split(' - ')[1];
+            document.getElementById('end-warehouse-id').value = document.getElementById('end-warehouse').value;
             var selectedDonationPoints = document.querySelectorAll('#stops-container select');
 
             geocoder.geocode(startWarehouse, function(results) {
