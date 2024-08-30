@@ -26,8 +26,7 @@ function loadTranslations($lang = 'en')
     return [];
 }
 
-// Assume that the language is determined somehow. Default is 'en'.
-$lang = 'en'; // Change this as needed
+$lang = 'en';
 $translations = loadTranslations($lang);
 
 $errorMessage = null;
@@ -348,9 +347,7 @@ $allVehicles = $allVehiclesStmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </main>
         <footer class="footer">
-            <div class="content has-text-centered">
-                <?= str_replace('{year}', date('Y'), escape($translations['footer_text'] ?? 'Footer text with {year}')) ?>
-            </div>
+            <p data-translate="footer_text">&copy; 2024-<?= date("Y"), ($translations['footer_text']) ?></p>
         </footer>
     </div>
 

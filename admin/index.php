@@ -32,7 +32,6 @@ function loadTranslations($lang = 'en') {
     return [];
 }
 
-// Assume that the language is determined somehow. Default is 'en'.
 $translations = loadTranslations('en');
 ?>
 
@@ -131,7 +130,7 @@ $translations = loadTranslations('en');
             </div>
         </main>
         <footer class="footer">
-            <p data-translate="footer_text"><?= str_replace('{year}', date('Y'), $translations['footer_text']) ?></p>
+            <p data-translate="footer_text">&copy; 2024-<?= date("Y"), ($translations['footer_text']) ?></p>
         </footer>
     </div>
 </body>

@@ -1,10 +1,7 @@
 <footer class="footer">
   <div class="content has-text-centered">
-    <p>
-      <strong>&copy; 2024-<?= date("Y") ?> No more waste.</strong> Helix system by <a href="https://callidosgroup.eu">Callidos GROUP</a>.
-    </p>
-    <p>
-        <img src="<?= '/assets/img/ico-cg.png' ?>" alt="callidos-footer-logo" width="45px">
+      <p data-translate="footer_text">&copy; 2024-<?= date("Y"), ($translations['footer_text']) ?></p>
+      <img src="<?= '/assets/img/ico-cg.png' ?>" alt="callidos-footer-logo" width="45px">
     </p>
   </div>
 </footer>

@@ -196,9 +196,7 @@ function describeAction($action) {
             </div>
         </main>
         <footer class="footer">
-            <div class="content has-text-centered">
-                &copy; <?= date('Y'); ?> HELIX. All Rights Reserved.
-            </div>
+            <p data-translate="footer_text">&copy; 2024-<?= date("Y"), ($translations['footer_text']) ?></p>
         </footer>
     </div>
 </body>

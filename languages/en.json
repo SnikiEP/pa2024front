@@ -281,7 +281,6 @@
     "create_edit_event": "Create/Edit Event",
     "save_event": "Save Event",
     "select_vehicles": "Select Vehicles",
-    "footer_text": "Footer text with {year}",
     "error_date_range": "The end date must be after the start date.",
     "error_vehicle_conflict": "Vehicle %s conflicts with an existing event.",
     "success_update_events": "Event updated successfully.",
@@ -309,5 +308,20 @@
     "action_login_success": "Login successful",
     "action_update_profile": "Profile updated",
     "action_default": "Unspecified action",
-    "unknown": "Unknown"
+    "unknown": "Unknown",
+
+    "id_header": "ID",
+    "validate_button": "Validate",
+    "account_validated_successfully": "Account validated successfully.",
+    "error_validating_account": "Error validating account:",
+
+    "vehicle_management": "Vehicle Management",
+    "vehicles_list": "Vehicles List",
+    "are_you_sure_delete": "Are you sure you want to delete this vehicle?",
+    "add_new_vehicle": "Add New Vehicle",
+    "error_adding_vehicle": "Error adding vehicle:",
+    "error_deleting_vehicle": "Error deleting vehicle:",
+
+    "footer_text": "HELIX. All Rights Reserved."
+
 }

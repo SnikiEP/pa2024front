@@ -29,7 +29,6 @@ function loadTranslations($lang = 'en') {
     return [];
 }
 
-// Assume that the language is determined somehow. Default is 'en'.
 $translations = loadTranslations('en');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -170,7 +169,7 @@ if (isset($_GET['edit_vehicle_id'])) {
             </div>
         </main>
         <footer class="footer">
-            <?= str_replace('{year}', date('Y'), $translations['footer_text']) ?>
+            <p data-translate="footer_text">&copy; 2024-<?= date("Y"), ($translations['footer_text']) ?></p>
         </footer>
     </div>
 </body>

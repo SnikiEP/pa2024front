@@ -63,7 +63,7 @@ function formatDate($timestamp) {
 try {
     $allAccounts = makeHttpRequest($baseUrl . "/account/all", "GET");
 } catch (Exception $e) {
-    $allAccounts = []; // En cas d'erreur, définir un tableau vide pour éviter que la page ne plante
+    $allAccounts = [];
 }
 ?>
 
@@ -167,9 +167,7 @@ try {
             </div>
         </main>
         <footer class="footer">
-            <div class="content has-text-centered">
-                <span data-translate="footer-copyright">&copy; <?= date('Y'); ?> HELIX. All Rights Reserved.</span>
-            </div>
+            <p data-translate="footer_text">&copy; 2024-<?= date("Y"), ($translations['footer_text']) ?></p>
         </footer>
     </div>
 
