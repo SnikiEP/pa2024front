@@ -323,5 +323,6 @@
     "new_translations": "New Translations (JSON):",
     "load_default": "Load Default Translation",
     "create_new_translation": "Create New Translation",
-    "manage_existing_files": "Manage Existing Translation Files"
+    "manage_existing_files": "Manage Existing Translation Files",
+    "donnation": "Donation"
 }

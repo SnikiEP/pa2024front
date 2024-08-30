@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Connexion à la base de données avec PDO
 $dsn = 'mysql:host=db;dbname=helix_db;charset=utf8';
 $username = 'root';
 $password = 'root_password';
@@ -18,7 +17,7 @@ if (!isset($_SESSION['accessToken'])) {
     exit;
 }
 
-$title = "Collecte - NMW";
+$title = "Livraison - NMW";
 include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
 ?>    
 
@@ -27,7 +26,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-translate="title_collecte">Calculateur d'Itinéraire avec plusieurs arrêts et PDF</title>
+    <title data-translate="title_livraison">Calculateur d'Itinéraire avec plusieurs arrêts et PDF</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
     <script src="https://unpkg.com/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"></script>
@@ -108,14 +107,15 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                                 </select>
                             </div>
                         </div>
+                        
                         <div id="stops-container">
                             <div class="field stop">
-                                <label class="label" for="collection-point-1">Sélectionner un point de collecte :</label>
+                                <label class="label" for="donation-point-1">Sélectionner un point de don :</label>
                                 <div class="control">
-                                    <select class="input" name="collection-points[]" id="collection-point-1">
-                                        <option value="">-- Sélectionnez un point de collecte --</option>
+                                    <select class="input" name="donation-points[]" id="donation-point-1">
+                                        <option value="">-- Sélectionnez un point de don --</option>
                                         <?php
-                                        $query = "SELECT id, name, address FROM collection_points";
+                                        $query = "SELECT id, name, address FROM donation_points";
                                         $stmt = $pdo->query($query);
                                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                             echo '<option value="' . htmlspecialchars($row['address'], ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($row['name'], ENT_QUOTES, 'UTF-8') . ' - ' . htmlspecialchars($row['address'], ENT_QUOTES, 'UTF-8') . '</option>';
@@ -126,7 +126,9 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                                 </div>
                             </div>
                         </div>
+                        
                         <button class="button is-link" type="button" id="add-stop" data-translate="add_stop_button">Ajouter un arrêt</button>
+
                         <div class="field" style="margin-top: 20px;">
                             <label class="label" for="end" data-translate="end_address_label">Sélectionner un entrepôt d'arrivée :</label>
                             <div class="control">
@@ -146,6 +148,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                                 </select>
                             </div>
                         </div>
+
                         <button class="button is-primary" type="submit" data-translate="calculate_route_button">Calculer l'itinéraire</button>
                         <input type="hidden" id="mapScreenshot" name="mapScreenshot">
                         <input type="hidden" id="routeInstructions" name="routeInstructions">
@@ -178,12 +181,12 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
         document.getElementById('add-stop').addEventListener('click', function() {
             var stopCount = document.querySelectorAll('#stops-container .field').length;
             var stopInput = `<div class="field stop">
-                                <label class="label" for="collection-point-${stopCount + 1}">Sélectionner un point de collecte :</label>
+                                <label class="label" for="donation-point-${stopCount + 1}">Sélectionner un point de don :</label>
                                 <div class="control">
-                                    <select class="input" name="collection-points[]" id="collection-point-${stopCount + 1}">
-                                        <option value="">-- Sélectionnez un point de collecte --</option>
+                                    <select class="input" name="donation-points[]" id="donation-point-${stopCount + 1}">
+                                        <option value="">-- Sélectionnez un point de don --</option>
                                         <?php
-                                        $query = "SELECT id, name, address FROM collection_points";
+                                        $query = "SELECT id, name, address FROM donation_points";
                                         $stmt = $pdo->query($query);
                                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                             echo '<option value="' . htmlspecialchars($row['address'], ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($row['name'], ENT_QUOTES, 'UTF-8') . ' - ' . htmlspecialchars($row['address'], ENT_QUOTES, 'UTF-8') . '</option>';
@@ -218,26 +221,26 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
             var stopsProcessed = 0;
             var startWarehouse = document.getElementById('start-warehouse').value;
             var endWarehouse = document.getElementById('end-warehouse').value;
-            var selectedCollectionPoints = document.querySelectorAll('#stops-container select');
+            var selectedDonationPoints = document.querySelectorAll('#stops-container select');
 
             geocoder.geocode(startWarehouse, function(results) {
                 if (results.length > 0) {
                     waypoints.push(L.latLng(results[0].center.lat, results[0].center.lng));
 
-                    selectedCollectionPoints.forEach(function(point, i) {
+                    selectedDonationPoints.forEach(function(point, i) {
                         if (point.value !== '') {
                             geocoder.geocode(point.value, function(pointResults) {
                                 if (pointResults.length > 0) {
                                     waypoints.push(L.latLng(pointResults[0].center.lat, pointResults[0].center.lng));
                                 }
                                 stopsProcessed++;
-                                if (stopsProcessed === selectedCollectionPoints.length) {
+                                if (stopsProcessed === selectedDonationPoints.length) {
                                     finalizeRouteCalculation(waypoints, endWarehouse);
                                 }
                             });
                         } else {
                             stopsProcessed++;
-                            if (stopsProcessed === selectedCollectionPoints.length) {
+                            if (stopsProcessed === selectedDonationPoints.length) {
                                 finalizeRouteCalculation(waypoints, endWarehouse);
                             }
                         }

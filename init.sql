@@ -1,5 +1,7 @@
+-- Création de la base de données si elle n'existe pas déjà
 CREATE DATABASE IF NOT EXISTS helix_db;
 
+-- Utilisation de la base de données
 USE helix_db;
 
 -- Table des utilisateurs
@@ -62,13 +64,13 @@ CREATE TABLE log (
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- Table des catégories d'aliments (food categories)
+-- Table des catégories d'aliments (food_categories)
 CREATE TABLE food_categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB;
 
--- Table des aliments spécifiques (food items)
+-- Table des aliments spécifiques (food_items)
 CREATE TABLE food_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     category_id INT NOT NULL,
@@ -85,10 +87,11 @@ CREATE TABLE warehouses (
     id INT AUTO_INCREMENT PRIMARY KEY,
     location VARCHAR(255) NOT NULL,
     rack_capacity INT NOT NULL,
-    current_stock INT DEFAULT 0
+    current_stock INT DEFAULT 0,
+    address VARCHAR(255) DEFAULT NULL -- Adresse qui peut être NULL
 ) ENGINE=InnoDB;
 
--- Table des articles en stock (stock items)
+-- Table des articles en stock (stock_items)
 CREATE TABLE stock_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     food_item_id INT NOT NULL,
@@ -98,7 +101,7 @@ CREATE TABLE stock_items (
     FOREIGN KEY (warehouse_id) REFERENCES warehouses(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Table des mouvements de stock (stock movements)
+-- Table des mouvements de stock (stock_movements)
 CREATE TABLE stock_movements (
     id INT AUTO_INCREMENT PRIMARY KEY,
     stock_item_id INT NOT NULL,
@@ -108,14 +111,27 @@ CREATE TABLE stock_movements (
     FOREIGN KEY (stock_item_id) REFERENCES stock_items(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Insérer des exemples de catégories d'aliments
+-- Table des points de collecte (collection_points)
+CREATE TABLE collection_points (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL
+) ENGINE=InnoDB;
+
+-- Table des points de don (donation_points)
+CREATE TABLE donation_points (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL
+) ENGINE=InnoDB;
+
+-- Insertion des données exemples dans les tables
 INSERT INTO food_categories (name) VALUES
 ('Fruits'),
 ('Légumes'),
 ('Produits laitiers'),
 ('Boulangerie');
 
--- Insérer des exemples d'aliments spécifiques
 INSERT INTO food_items (category_id, name, unit, weight, price_per_unit, barcode) VALUES
 ((SELECT id FROM food_categories WHERE name = 'Fruits'), 'Pommes', 'kg', 1.0, 2.5, '1234567890123'),
 ((SELECT id FROM food_categories WHERE name = 'Fruits'), 'Bananes', 'kg', 1.0, 1.8, '1234567890124'),
@@ -123,14 +139,23 @@ INSERT INTO food_items (category_id, name, unit, weight, price_per_unit, barcode
 ((SELECT id FROM food_categories WHERE name = 'Produits laitiers'), 'Lait', 'unit', 1.0, 0.9, '1234567890126'),
 ((SELECT id FROM food_categories WHERE name = 'Boulangerie'), 'Pain', 'unit', 0.5, 1.2, '1234567890127');
 
--- Insérer des exemples d'entrepôts
-INSERT INTO warehouses (location, rack_capacity, current_stock) VALUES
-('Warehouse A', 10000, 5000),
-('Warehouse B', 15000, 8000);
+INSERT INTO warehouses (location, rack_capacity, current_stock, address) VALUES
+('Warehouse A', 10000, 5000, '1 rue du Commerce, Paris'),
+('Warehouse B', 15000, 8000, '15 avenue des Champs, Paris'),
+('Warehouse C', 20000, 15000, NULL);
 
--- Ajouter des aliments aux entrepôts existants
 INSERT INTO stock_items (food_item_id, warehouse_id, quantity) VALUES
 ((SELECT id FROM food_items WHERE name = 'Pommes' LIMIT 1), (SELECT id FROM warehouses WHERE location = 'Warehouse A' LIMIT 1), 100),
 ((SELECT id FROM food_items WHERE name = 'Bananes' LIMIT 1), (SELECT id FROM warehouses WHERE location = 'Warehouse A' LIMIT 1), 200),
 ((SELECT id FROM food_items WHERE name = 'Courgettes' LIMIT 1), (SELECT id FROM warehouses WHERE location = 'Warehouse B' LIMIT 1), 150),
 ((SELECT id FROM food_items WHERE name = 'Lait' LIMIT 1), (SELECT id FROM warehouses WHERE location = 'Warehouse B' LIMIT 1), 500);
+
+INSERT INTO collection_points (name, address) VALUES
+('Point A', '2 rue Gervex, Paris'),
+('Point B', '34 rue de Clichy, Paris'),
+('Point C', '25 avenue Montaigne, Paris');
+
+INSERT INTO donation_points (name, address) VALUES
+('Point de Don A', '10 rue de la Paix, Paris'),
+('Point de Don B', '20 avenue des Ternes, Paris'),
+('Point de Don C', '30 boulevard Saint-Germain, Paris');

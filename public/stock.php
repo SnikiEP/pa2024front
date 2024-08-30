@@ -132,11 +132,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->execute([':id' => $stockItemId]);
 
         $operationMessage = "Aliment supprimé avec succès.";
-    }
+    } elseif (isset($_POST['modify_warehouse'])) {
+        $location = $_POST['location'];
+        $address = $_POST['address'];
+        $warehouseId = $_POST['warehouse_id'];
 
-    header("Location: stock.php?warehouse_id=" . $warehouseId);
-    exit;
+        $stmt = $pdo->prepare("UPDATE warehouses SET location = :location, address = :address WHERE id = :id");
+        $stmt->execute([
+            ':location' => $location,
+            ':address' => $address,
+            ':id' => $warehouseId
+        ]);
+
+        $operationMessage = "Entrepôt modifié avec succès.";
+        header("Location: stock.php?warehouse_id=" . $warehouseId);
+        exit;
+    }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -162,19 +175,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                 <?php endif; ?>
 
-                <div class="box">
-                    <h2 class="subtitle" data-translate="add_warehouse_title">Add New Warehouse</h2>
-                    <form method="POST">
-                        <div class="field">
-                            <label class="label" data-translate="location_label_stock">Location</label>
-                            <div class="control">
-                                <input class="input" type="text" name="location" placeholder="Enter warehouse location" required>
-                            </div>
-                        </div>
-                        <button class="button is-success" type="submit" name="add_warehouse" data-translate="add_warehouse_button">Add Warehouse</button>
-                    </form>
-                </div>
-
                 <div class="dashboard-container">
                     <?php if (!empty($warehouses)): ?>
                         <?php foreach ($warehouses as $warehouse): ?>
@@ -187,11 +187,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="card-content">
                                     <div class="content">
                                         <p><strong data-translate="current_stock_label">Current Stock:</strong> <?= htmlspecialchars($warehouse['current_stock']); ?></p>
+                                        <p><strong data-translate="address_label">Address:</strong> <?= htmlspecialchars($warehouse['address']); ?></p>
                                     </div>
                                 </div>
                                 <footer class="card-footer">
                                     <a href="?warehouse_id=<?= $warehouse['id']; ?>" class="card-footer-item" data-translate="view_details_link">View Details</a>
+                                    <a href="#edit-warehouse-<?= $warehouse['id']; ?>" class="card-footer-item" data-translate="modify_button">Modify</a>
                                 </footer>
+                            </div>
+
+                            <div id="edit-warehouse-<?= $warehouse['id']; ?>" class="modal">
+                                <div class="modal-background"></div>
+                                <div class="modal-card">
+                                    <header class="modal-card-head">
+                                        <p class="modal-card-title">Modifier l'entrepôt</p>
+                                        <button class="delete" aria-label="close"></button>
+                                    </header>
+                                    <form method="POST">
+                                        <section class="modal-card-body">
+                                            <input type="hidden" name="warehouse_id" value="<?= htmlspecialchars($warehouse['id']); ?>">
+                                            <div class="field">
+                                                <label class="label">Location</label>
+                                                <div class="control">
+                                                    <input class="input" type="text" name="location" value="<?= htmlspecialchars($warehouse['location']); ?>" required>
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <label class="label">Address</label>
+                                                <div class="control">
+                                                    <input class="input" type="text" name="address" value="<?= htmlspecialchars($warehouse['address']); ?>">
+                                                </div>
+                                            </div>
+                                        </section>
+                                        <footer class="modal-card-foot">
+                                            <button class="button is-success" type="submit" name="modify_warehouse">Save changes</button>
+                                            <button class="button cancel-modal">Cancel</button>
+                                        </footer>
+                                    </form>
+                                </div>
                             </div>
                         <?php endforeach; ?>
                     <?php else: ?>
@@ -204,6 +237,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <h2 class="subtitle" data-translate="details_title">Details for Warehouse #<?= htmlspecialchars($selectedWarehouse['id']); ?></h2>
                         <p><strong data-translate="location_label">Location:</strong> <?= htmlspecialchars($selectedWarehouse['location']); ?></p>
                         <p><strong data-translate="current_stock_label">Current Stock:</strong> <?= htmlspecialchars($selectedWarehouse['current_stock']); ?></p>
+                        <p><strong data-translate="address_label">Address:</strong> <?= htmlspecialchars($selectedWarehouse['address']); ?></p>
 
                         <h3 class="subtitle" data-translate="stock_items_title">Stock Items</h3>
                         <?php if (!empty($stockItems)): ?>
@@ -318,6 +352,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <script>
+        document.querySelectorAll('.modal').forEach(function(modal) {
+            const closeModal = function() {
+                modal.classList.remove('is-active');
+            };
+
+            modal.querySelector('.modal-background').addEventListener('click', closeModal);
+            modal.querySelector('.delete').addEventListener('click', closeModal);
+            modal.querySelector('.cancel-modal').addEventListener('click', closeModal);
+
+            const openModalButton = document.querySelector(`[href="#${modal.id}"]`);
+            if (openModalButton) {
+                openModalButton.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    modal.classList.add('is-active');
+                });
+            }
+        });
+
         <?php if ($selectedWarehouse): ?>
             const stockUtilizationChartCtx = document.getElementById('stockUtilizationChart');
             if (stockUtilizationChartCtx) {

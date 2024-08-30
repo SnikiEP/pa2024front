@@ -318,5 +318,6 @@
     "new_translations": "Nouvelles traductions (JSON):",
     "load_default": "Charger la traduction par défaut",
     "create_new_translation": "Créer une nouvelle traduction",
-    "manage_existing_files": "Gérer les fichiers de traduction existants"
+    "manage_existing_files": "Gérer les fichiers de traduction existants",
+    "donnation": "Donnation"
 }
