@@ -1,5 +1,4 @@
 <?php 
-// Vérifiez qu'il n'y a aucun espace ou sortie avant cette balise
 include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php');
 
 function getAvailableLanguages() {
@@ -26,15 +25,47 @@ function saveTranslation($langCode, $translations) {
     file_put_contents($filePath, json_encode($translations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $langCode = $_POST['langCode'] ?? '';
-    $translations = json_decode($_POST['translations'] ?? '{}', true);
+function deleteTranslation($langCode) {
+    $filePath = "../languages/{$langCode}.json";
+    if (file_exists($filePath)) {
+        unlink($filePath);
+        return true;
+    }
+    return false;
+}
 
-    if ($langCode && $translations) {
-        saveTranslation($langCode, $translations);
-        $message = "Translations for {$langCode} have been saved successfully.";
-    } else {
-        $message = "Failed to save translations.";
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['langCode']) && isset($_POST['translations'])) {
+        $langCode = $_POST['langCode'];
+        $translations = json_decode($_POST['translations'], true);
+
+        if ($langCode && $translations) {
+            saveTranslation($langCode, $translations);
+            $message = "Translations for {$langCode} have been saved successfully.";
+        } else {
+            $message = "Failed to save translations.";
+        }
+    }
+
+    if (isset($_POST['newLangCode']) && isset($_POST['newTranslations'])) {
+        $newLangCode = $_POST['newLangCode'];
+        $newTranslations = json_decode($_POST['newTranslations'], true);
+
+        if ($newLangCode && $newTranslations) {
+            saveTranslation($newLangCode, $newTranslations);
+            $message = "New translation file {$newLangCode}.json has been created successfully.";
+        } else {
+            $message = "Failed to create new translation file.";
+        }
+    }
+
+    if (isset($_POST['deleteLangCode'])) {
+        $deleteLangCode = $_POST['deleteLangCode'];
+        if (deleteTranslation($deleteLangCode)) {
+            $message = "Translation file {$deleteLangCode}.json has been deleted successfully.";
+        } else {
+            $message = "Failed to delete translation file.";
+        }
     }
 }
 
@@ -107,6 +138,12 @@ $availableLanguages = getAvailableLanguages();
         .form-section {
             margin-bottom: 40px;
         }
+        .language-list {
+            margin-top: 20px;
+        }
+        .language-item {
+            margin-bottom: 10px;
+        }
         @media (max-width: 768px) {
             .container {
                 width: 100%;
@@ -151,8 +188,24 @@ $availableLanguages = getAvailableLanguages();
             <label for="newTranslations">New Translations (JSON):</label>
             <textarea name="newTranslations" id="newTranslations" placeholder="Enter JSON content here..."></textarea>
 
+            <button type="button" id="loadDefault">Load Default Translation</button>
             <button type="button" id="createNewTranslation">Create New Translation</button>
         </form>
+    </div>
+
+    <div class="form-section">
+        <h2>Manage Existing Translation Files</h2>
+        <div class="language-list">
+            <?php foreach ($availableLanguages as $lang): ?>
+                <div class="language-item">
+                    <?= htmlspecialchars($lang) ?>
+                    <form method="POST" style="display:inline;">
+                        <input type="hidden" name="deleteLangCode" value="<?= htmlspecialchars($lang) ?>">
+                        <button type="submit" onclick="return confirm('Are you sure you want to delete this file?');">Delete</button>
+                    </form>
+                </div>
+            <?php endforeach; ?>
+        </div>
     </div>
 </div>
 
@@ -173,6 +226,17 @@ $availableLanguages = getAvailableLanguages();
         }
     });
 
+    document.getElementById('loadDefault').addEventListener('click', function() {
+        fetch('default_keys.json')
+            .then(response => response.json())
+            .then(translations => {
+                document.getElementById('newTranslations').value = JSON.stringify(translations, null, 4);
+            })
+            .catch(error => {
+                alert('Error loading default translation file: ' + error);
+            });
+    });
+
     document.getElementById('createNewTranslation').addEventListener('click', function() {
         const langCode = document.getElementById('newLangCode').value;
         const translations = document.getElementById('newTranslations').value;
@@ -183,7 +247,7 @@ $availableLanguages = getAvailableLanguages();
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `langCode=${encodeURIComponent(langCode)}&translations=${encodeURIComponent(translations)}`
+                body: `newLangCode=${encodeURIComponent(langCode)}&newTranslations=${encodeURIComponent(translations)}`
             })
             .then(response => response.text())
             .then(data => {

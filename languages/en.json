@@ -16,6 +16,7 @@
     "join_us": "Join Us",
     "log_in": "Log In",
     "main_title": "No More Waste",
+
     "main_subtitle": "France's largest food aid and educational support association.",
     "username": "Username",
     "password": "Password",
@@ -85,6 +86,7 @@
     "introduction": "Introduction",
     "intro_desc": "No More Waste is an organization committed to improving the quality of life for people in difficulty through various services and initiatives. Our missions are at the heart of our action, guiding each project and every act of solidarity. Discover below the main missions that animate our association.",
     "food_aid": "Food Aid",
+    
     "food_aid_desc": "We believe everyone has the right to healthy, balanced nutrition. Each week, we organize food distributions for families and individuals in precarious situations. Thanks to our partnerships with local businesses and producers, we are able to provide nutritious and varied meals.",
     "volunteer_efforts": "Our dedicated volunteers work tirelessly to collect, prepare, and distribute these meals, ensuring that no one goes without food. This mission is essential to combat hunger and malnutrition in our community.",
     "educational_support": "Educational Support",
@@ -160,6 +162,8 @@
     "add_warehouse_button": "Add Warehouse",
     "capacity_label": "Capacity",
     "current_stock_label": "Current Stock",
+
+
     "utilization_label": "Utilization",
     "view_details_link": "View Details",
     "no_warehouses_message": "No warehouses available.",
@@ -215,6 +219,7 @@
     "registered-date": "Registered Date",
     "edit": "Edit",
     "delete": "Delete",
+
     "no-accounts": "No accounts found or error fetching accounts.",
     "edit-account": "Edit Account",
     "save-changes": "Save Changes",
@@ -307,4 +312,5 @@
     "error_adding_vehicle": "Error adding vehicle:",
     "error_deleting_vehicle": "Error deleting vehicle:",
     "footer_text": "2024 HELIX. All Rights Reserved."
+    
 }
