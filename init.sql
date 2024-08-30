@@ -134,6 +134,7 @@ INSERT INTO food_categories (name) VALUES
 ('Fruits'),
 ('Légumes'),
 ('Produits laitiers'),
+('Autres'),
 ('Boulangerie');
 
 -- Insérer des exemples d'aliments spécifiques

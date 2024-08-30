@@ -31,14 +31,22 @@ if (isset($_GET['warehouse_id'])) {
     $stmt->execute(['id' => $_GET['warehouse_id']]);
     $selectedWarehouse = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    $barcodeFilter = '';
+    $params = ['warehouse_id' => $_GET['warehouse_id']];
+
+    if (isset($_GET['barcode']) && !empty($_GET['barcode'])) {
+        $barcodeFilter = " AND fi.barcode = :barcode";
+        $params['barcode'] = $_GET['barcode'];
+    }
+
     $stockItemsStmt = $pdo->prepare("
         SELECT si.*, fi.name AS food_name, fi.unit, fi.price_per_unit, fi.barcode, fc.name AS category_name 
         FROM stock_items si 
         JOIN food_items fi ON si.food_item_id = fi.id
         JOIN food_categories fc ON fi.category_id = fc.id
-        WHERE si.warehouse_id = :warehouse_id
+        WHERE si.warehouse_id = :warehouse_id $barcodeFilter
     ");
-    $stockItemsStmt->execute(['warehouse_id' => $_GET['warehouse_id']]);
+    $stockItemsStmt->execute($params);
     $stockItems = $stockItemsStmt->fetchAll(PDO::FETCH_ASSOC);
 
     $categorySummary = [];
@@ -102,14 +110,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $foodItemId = $pdo->lastInsertId();
 
             $stmt = $pdo->prepare("
-                INSERT INTO stock_items (food_item_id, warehouse_id, quantity, unit_type)
-                VALUES (:food_item_id, :warehouse_id, :quantity, :unit_type)
+                INSERT INTO stock_items (food_item_id, warehouse_id, quantity)
+                VALUES (:food_item_id, :warehouse_id, :quantity)
             ");
             $stmt->execute([
                 ':food_item_id' => $foodItemId,
                 ':warehouse_id' => $warehouseId,
-                ':quantity' => $quantity,
-                ':unit_type' => $unit
+                ':quantity' => $quantity
             ]);
 
             $operationMessage = "$foodName a été ajouté avec succès.";
@@ -240,6 +247,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <p><strong data-translate="address_label">Adresse :</strong> <?= htmlspecialchars($selectedWarehouse['address']); ?></p>
 
                         <h3 class="subtitle" data-translate="stock_items_title">Articles en Stock</h3>
+
+                        <form method="GET" class="mb-4">
+                            <input type="hidden" name="warehouse_id" value="<?= htmlspecialchars($selectedWarehouse['id']); ?>">
+                            <div class="field has-addons">
+                                <div class="control">
+                                    <input class="input" type="text" name="barcode" placeholder="Rechercher par code-barres" value="<?= htmlspecialchars($_GET['barcode'] ?? ''); ?>">
+                                </div>
+                                <div class="control">
+                                    <button class="button is-info" type="submit" data-translate="search_button">Rechercher</button>
+                                </div>
+                            </div>
+                        </form>
+
                         <?php if (!empty($stockItems)): ?>
                             <table class="table is-fullwidth is-striped">
                                 <thead>

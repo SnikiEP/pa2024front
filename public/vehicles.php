@@ -17,13 +17,14 @@ function escape($value) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_plate'])) {
-    $stmt = $pdo->prepare("INSERT INTO vehicles (id_plate, fret_capacity, human_capacity, model) VALUES (:id_plate, :fret_capacity, :human_capacity, :model)");
+    $stmt = $pdo->prepare("INSERT INTO vehicles (id_plate, fret_capacity, human_capacity, model, current_warehouse_id) VALUES (:id_plate, :fret_capacity, :human_capacity, :model, :current_warehouse_id)");
     try {
         $stmt->execute([
             ':id_plate' => $_POST['id_plate'],
             ':fret_capacity' => $_POST['fret_capacity'],
             ':human_capacity' => $_POST['human_capacity'],
-            ':model' => $_POST['model']
+            ':model' => $_POST['model'],
+            ':current_warehouse_id' => $_POST['current_warehouse_id']
         ]);
         header('Location: vehicles.php');
         exit;
@@ -43,7 +44,11 @@ if (isset($_POST['delete_vehicle_id'])) {
     }
 }
 
-$allVehiclesStmt = $pdo->query("SELECT * FROM vehicles");
+$allVehiclesStmt = $pdo->query("
+    SELECT vehicles.*, warehouses.location 
+    FROM vehicles 
+    LEFT JOIN warehouses ON vehicles.current_warehouse_id = warehouses.id
+");
 $allVehicles = $allVehiclesStmt->fetchAll(PDO::FETCH_ASSOC);
 
 if (!$allVehicles) {
@@ -80,13 +85,14 @@ if (!$allVehicles) {
                                     <th data-translate="fret_capacity">Fret Capacity</th>
                                     <th data-translate="human_capacity">Human Capacity</th>
                                     <th data-translate="model">Model</th>
+                                    <th data-translate="warehouse">Warehouse</th>
                                     <th data-translate="actions">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php if (empty($allVehicles)): ?>
                                     <tr>
-                                        <td colspan="6" class="has-text-centered" data-translate="no_vehicles_found">No vehicles found.</td>
+                                        <td colspan="7" class="has-text-centered" data-translate="no_vehicles_found">No vehicles found.</td>
                                     </tr>
                                 <?php else: ?>
                                     <?php foreach ($allVehicles as $vehicle): ?>
@@ -96,6 +102,7 @@ if (!$allVehicles) {
                                             <td><?= escape($vehicle['fret_capacity']) ?></td>
                                             <td><?= escape($vehicle['human_capacity']) ?></td>
                                             <td><?= escape($vehicle['model']) ?></td>
+                                            <td><?= escape($vehicle['location'] ?? 'Unknown') ?></td>
                                             <td>
                                                 <form action="edit_vehicle.php" method="GET" style="display:inline;">
                                                     <input type="hidden" name="id" value="<?= escape($vehicle['id']) ?>">
@@ -139,6 +146,23 @@ if (!$allVehicles) {
                             <label class="label" for="model" data-translate="model">Model</label>
                             <div class="control">
                                 <input class="input" type="text" name="model" id="model" placeholder="" required data-translate-placeholder="model">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="current_warehouse_id" data-translate="current_warehouse">Warehouse</label>
+                            <div class="control">
+                                <div class="select">
+                                    <select name="current_warehouse_id" id="current_warehouse_id" required>
+                                        <option value="" disabled selected>Select Warehouse</option>
+                                        <?php
+                                        $warehousesStmt = $pdo->query("SELECT id, location FROM warehouses");
+                                        $warehouses = $warehousesStmt->fetchAll(PDO::FETCH_ASSOC);
+                                        foreach ($warehouses as $warehouse) {
+                                            echo '<option value="' . escape($warehouse['id']) . '">' . escape($warehouse['location']) . '</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="control">
