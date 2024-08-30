@@ -23,73 +23,113 @@ $operationMessage = "";
 $warehousesStmt = $pdo->query("SELECT * FROM warehouses");
 $warehouses = $warehousesStmt->fetchAll(PDO::FETCH_ASSOC);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_warehouse'])) {
-    $location = $_POST['location'];
-    $rack_capacity = $_POST['rack_capacity'];
-
-    $stmt = $pdo->prepare("INSERT INTO warehouses (location, rack_capacity) VALUES (:location, :rack_capacity)");
-    $stmt->execute([
-        ':location' => $location,
-        ':rack_capacity' => $rack_capacity
-    ]);
-
-    $operationMessage = "Entrepôt ajouté avec succès.";
-}
-
-$selectedWarehouse = null;
-$foodItems = [];
-$foodTypesStmt = $pdo->query("SELECT * FROM food_types");
-$foodTypes = $foodTypesStmt->fetchAll(PDO::FETCH_ASSOC);
+$categoriesStmt = $pdo->query("SELECT * FROM food_categories");
+$categories = $categoriesStmt->fetchAll(PDO::FETCH_ASSOC);
 
 if (isset($_GET['warehouse_id'])) {
     $stmt = $pdo->prepare("SELECT * FROM warehouses WHERE id = :id");
     $stmt->execute(['id' => $_GET['warehouse_id']]);
     $selectedWarehouse = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $foodItemsStmt = $pdo->prepare("
-        SELECT fi.*, ft.name AS food_name, ft.unit, ft.price_per_unit 
-        FROM food_items fi 
-        JOIN food_types ft ON fi.food_type_id = ft.id
-        WHERE fi.warehouse_id = :warehouse_id
+    $stockItemsStmt = $pdo->prepare("
+        SELECT si.*, fi.name AS food_name, fi.unit, fi.price_per_unit, fi.barcode, fc.name AS category_name 
+        FROM stock_items si 
+        JOIN food_items fi ON si.food_item_id = fi.id
+        JOIN food_categories fc ON fi.category_id = fc.id
+        WHERE si.warehouse_id = :warehouse_id
     ");
-    $foodItemsStmt->execute(['warehouse_id' => $_GET['warehouse_id']]);
-    $foodItems = $foodItemsStmt->fetchAll(PDO::FETCH_ASSOC);
+    $stockItemsStmt->execute(['warehouse_id' => $_GET['warehouse_id']]);
+    $stockItems = $stockItemsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $categorySummary = [];
+    foreach ($stockItems as $item) {
+        if (!isset($categorySummary[$item['category_name']])) {
+            $categorySummary[$item['category_name']] = 0;
+        }
+        $categorySummary[$item['category_name']] += $item['quantity'];
+    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $warehouseId = $_POST['warehouse_id'] ?? null;
 
     if (isset($_POST['add_item'])) {
-        $foodTypeId = $_POST['food_type_id'];
+        $categoryId = $_POST['category_id'];
+        $foodName = $_POST['food_name'];
+        $unit = $_POST['unit'];
+        $weight = $_POST['weight'];
         $quantity = $_POST['quantity'];
+        $pricePerUnit = $_POST['price_per_unit'];
+        $barcode = $_POST['barcode'];
 
         $stmt = $pdo->prepare("
-            INSERT INTO food_items (food_type_id, warehouse_id, quantity)
-            VALUES (:food_type_id, :warehouse_id, :quantity)
+            SELECT si.id, si.quantity
+            FROM stock_items si
+            JOIN food_items fi ON si.food_item_id = fi.id
+            WHERE fi.name = :food_name AND fi.category_id = :category_id AND si.warehouse_id = :warehouse_id
         ");
         $stmt->execute([
-            ':food_type_id' => $foodTypeId,
-            ':warehouse_id' => $warehouseId,
-            ':quantity' => $quantity
+            ':food_name' => $foodName,
+            ':category_id' => $categoryId,
+            ':warehouse_id' => $warehouseId
         ]);
+        $existingItem = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $operationMessage = "Aliment ajouté avec succès.";
+        if ($existingItem) {
+            $stmt = $pdo->prepare("
+                UPDATE stock_items 
+                SET quantity = quantity + :quantity 
+                WHERE id = :id
+            ");
+            $stmt->execute([
+                ':quantity' => $quantity,
+                ':id' => $existingItem['id']
+            ]);
+            $operationMessage = "La quantité de $foodName a été mise à jour.";
+        } else {
+            $stmt = $pdo->prepare("
+                INSERT INTO food_items (category_id, name, unit, weight, price_per_unit, barcode)
+                VALUES (:category_id, :name, :unit, :weight, :price_per_unit, :barcode)
+            ");
+            $stmt->execute([
+                ':category_id' => $categoryId,
+                ':name' => $foodName,
+                ':unit' => $unit,
+                ':weight' => $weight,
+                ':price_per_unit' => $pricePerUnit,
+                ':barcode' => $barcode
+            ]);
+            $foodItemId = $pdo->lastInsertId();
+
+            $stmt = $pdo->prepare("
+                INSERT INTO stock_items (food_item_id, warehouse_id, quantity, unit_type)
+                VALUES (:food_item_id, :warehouse_id, :quantity, :unit_type)
+            ");
+            $stmt->execute([
+                ':food_item_id' => $foodItemId,
+                ':warehouse_id' => $warehouseId,
+                ':quantity' => $quantity,
+                ':unit_type' => $unit
+            ]);
+
+            $operationMessage = "$foodName a été ajouté avec succès.";
+        }
     } elseif (isset($_POST['modify_item'])) {
-        $foodItemId = $_POST['food_item_id'];
+        $stockItemId = $_POST['stock_item_id'];
         $quantity = $_POST['quantity'];
 
-        $stmt = $pdo->prepare("UPDATE food_items SET quantity = :quantity WHERE id = :id");
+        $stmt = $pdo->prepare("UPDATE stock_items SET quantity = :quantity WHERE id = :id");
         $stmt->execute([
             ':quantity' => $quantity,
-            ':id' => $foodItemId
+            ':id' => $stockItemId
         ]);
 
         $operationMessage = "Aliment modifié avec succès.";
     } elseif (isset($_POST['delete_item'])) {
-        $foodItemId = $_POST['food_item_id'];
+        $stockItemId = $_POST['stock_item_id'];
 
-        $stmt = $pdo->prepare("DELETE FROM food_items WHERE id = :id");
-        $stmt->execute([':id' => $foodItemId]);
+        $stmt = $pdo->prepare("DELETE FROM stock_items WHERE id = :id");
+        $stmt->execute([':id' => $stockItemId]);
 
         $operationMessage = "Aliment supprimé avec succès.";
     }
@@ -131,12 +171,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <input class="input" type="text" name="location" placeholder="Enter warehouse location" required>
                             </div>
                         </div>
-                        <div class="field">
-                            <label class="label" data-translate="rack_capacity_label">Rack Capacity</label>
-                            <div class="control">
-                                <input class="input" type="number" name="rack_capacity" placeholder="Enter rack capacity" required>
-                            </div>
-                        </div>
                         <button class="button is-success" type="submit" name="add_warehouse" data-translate="add_warehouse_button">Add Warehouse</button>
                     </form>
                 </div>
@@ -152,9 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </header>
                                 <div class="card-content">
                                     <div class="content">
-                                        <p><strong data-translate="capacity_label">Capacity:</strong> <?= htmlspecialchars($warehouse['rack_capacity']); ?></p>
                                         <p><strong data-translate="current_stock_label">Current Stock:</strong> <?= htmlspecialchars($warehouse['current_stock']); ?></p>
-                                        <p><strong data-translate="utilization_label">Utilization:</strong> <?= round(($warehouse['current_stock'] / $warehouse['rack_capacity']) * 100, 2); ?>%</p>
                                     </div>
                                 </div>
                                 <footer class="card-footer">
@@ -171,34 +203,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="box">
                         <h2 class="subtitle" data-translate="details_title">Details for Warehouse #<?= htmlspecialchars($selectedWarehouse['id']); ?></h2>
                         <p><strong data-translate="location_label">Location:</strong> <?= htmlspecialchars($selectedWarehouse['location']); ?></p>
-                        <p><strong data-translate="capacity_label">Capacity:</strong> <?= htmlspecialchars($selectedWarehouse['rack_capacity']); ?></p>
                         <p><strong data-translate="current_stock_label">Current Stock:</strong> <?= htmlspecialchars($selectedWarehouse['current_stock']); ?></p>
 
                         <h3 class="subtitle" data-translate="stock_items_title">Stock Items</h3>
-                        <?php if (!empty($foodItems)): ?>
+                        <?php if (!empty($stockItems)): ?>
                             <table class="table is-fullwidth is-striped">
                                 <thead>
                                     <tr>
                                         <th data-translate="food_item_column">Food Item</th>
                                         <th data-translate="quantity_column">Quantity</th>
                                         <th data-translate="unit_column">Unit</th>
+                                        <th data-translate="barcode_column">Barcode</th>
                                         <th data-translate="price_per_unit_column">Price per Unit</th>
                                         <th data-translate="total_value_column">Total Value</th>
                                         <th data-translate="actions_column">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($foodItems as $item): ?>
+                                    <?php foreach ($stockItems as $item): ?>
                                         <tr>
-                                            <td><?= htmlspecialchars($item['food_name']); ?></td>
+                                            <td><?= htmlspecialchars($item['category_name']) . " - " . htmlspecialchars($item['food_name']); ?></td>
                                             <td><?= htmlspecialchars($item['quantity']); ?></td>
                                             <td><?= htmlspecialchars($item['unit']); ?></td>
+                                            <td><?= htmlspecialchars($item['barcode']); ?></td>
                                             <td><?= htmlspecialchars($item['price_per_unit']); ?> €</td>
                                             <td><?= htmlspecialchars($item['quantity'] * $item['price_per_unit']); ?> €</td>
                                             <td>
                                                 <form method="POST">
                                                     <input type="hidden" name="warehouse_id" value="<?= htmlspecialchars($selectedWarehouse['id']); ?>">
-                                                    <input type="hidden" name="food_item_id" value="<?= htmlspecialchars($item['id']); ?>">
+                                                    <input type="hidden" name="stock_item_id" value="<?= htmlspecialchars($item['id']); ?>">
                                                     <input type="number" name="quantity" value="<?= htmlspecialchars($item['quantity']); ?>" step="0.01">
                                                     <button class="button is-small is-info" type="submit" name="modify_item" data-translate="modify_button">Modify</button>
                                                     <button class="button is-small is-danger" type="submit" name="delete_item" data-translate="delete_button">Delete</button>
@@ -219,14 +252,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <label class="label" data-translate="food_type_label">Food Type</label>
                                 <div class="control">
                                     <div class="select">
-                                        <select name="food_type_id" required>
-                                            <?php foreach ($foodTypes as $type): ?>
-                                                <option value="<?= htmlspecialchars($type['id']); ?>">
-                                                    <?= htmlspecialchars($type['name']); ?> (<?= htmlspecialchars($type['unit']); ?>)
-                                                </option>
+                                        <select name="category_id" required>
+                                            <?php foreach ($categories as $category): ?>
+                                                <option value="<?= htmlspecialchars($category['id']); ?>"><?= htmlspecialchars($category['name']); ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label" data-translate="food_name_label">Food Name</label>
+                                <div class="control">
+                                    <input class="input" type="text" name="food_name" placeholder="Enter food name" required>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label" data-translate="unit_label">Unit</label>
+                                <div class="control">
+                                    <div class="select">
+                                        <select name="unit" required>
+                                            <option value="kg">Kilograms (kg)</option>
+                                            <option value="litres">Litres (l)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label" data-translate="weight_label">Weight</label>
+                                <div class="control">
+                                    <input class="input" type="number" name="weight" step="0.01" required>
                                 </div>
                             </div>
                             <div class="field">
@@ -235,12 +289,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <input class="input" type="number" name="quantity" step="0.01" required>
                                 </div>
                             </div>
+                            <div class="field">
+                                <label class="label" data-translate="price_per_unit_label">Price per Unit</label>
+                                <div class="control">
+                                    <input class="input" type="number" name="price_per_unit" step="0.01" required>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label" data-translate="barcode_label">Barcode</label>
+                                <div class="control">
+                                    <input class="input" type="text" name="barcode" placeholder="Enter barcode" required>
+                                </div>
+                            </div>
                             <button class="button is-success" type="submit" name="add_item" data-translate="add_item_button">Add Item</button>
                         </form>
                     </div>
 
                     <div class="box">
-                        <h3 class="subtitle" data-translate="utilization_title">Warehouse Stock Utilization</h3>
+                        <h3 class="subtitle" data-translate="utilization_title">Warehouse Stock Utilization by Category</h3>
                         <div class="chart-container">
                             <canvas id="stockUtilizationChart"></canvas>
                         </div>
@@ -253,21 +319,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <script>
         <?php if ($selectedWarehouse): ?>
-            const stockUtilizationChartCtx = document.getElementById('stockUtilizationChart').getContext('2d');
-            const stockUtilizationChart = new Chart(stockUtilizationChartCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: [getTranslation('current_stock_label'), getTranslation('available_capacity_label')],
-                    datasets: [{
-                        data: [<?= $selectedWarehouse['current_stock']; ?>, <?= $selectedWarehouse['rack_capacity'] - $selectedWarehouse['current_stock']; ?>],
-                        backgroundColor: ['#00d1b2', '#ffdd57']
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false
-                }
-            });
+            const stockUtilizationChartCtx = document.getElementById('stockUtilizationChart');
+            if (stockUtilizationChartCtx) {
+                const stockUtilizationChart = new Chart(stockUtilizationChartCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: <?= json_encode(array_keys($categorySummary)); ?>,
+                        datasets: [{
+                            data: <?= json_encode(array_values($categorySummary)); ?>,
+                            backgroundColor: ['#00d1b2', '#ffdd57', '#ff3860', '#3273dc', '#23d160', '#ff851b']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(tooltipItem) {
+                                        return tooltipItem.label + ': ' + tooltipItem.raw + ' units';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            } else {
+                console.error('Canvas element not found for stock utilization chart.');
+            }
         <?php endif; ?>
     </script>
 </body>

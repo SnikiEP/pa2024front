@@ -62,6 +62,24 @@ CREATE TABLE log (
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
+-- Table des catégories d'aliments (food categories)
+CREATE TABLE food_categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+) ENGINE=InnoDB;
+
+-- Table des aliments spécifiques (food items)
+CREATE TABLE food_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,  -- Nom de l'aliment (ex: Courgette)
+    unit VARCHAR(50) NOT NULL,  -- 'kg' pour poids ou 'unit' pour unité
+    weight DECIMAL(10, 2) NOT NULL,  -- Poids en kg ou par unité
+    price_per_unit DECIMAL(10, 2) NOT NULL,
+    barcode VARCHAR(255) NOT NULL UNIQUE,  -- Code-barres unique pour chaque produit
+    FOREIGN KEY (category_id) REFERENCES food_categories(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 -- Table des entrepôts (warehouses)
 CREATE TABLE warehouses (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -70,42 +88,49 @@ CREATE TABLE warehouses (
     current_stock INT DEFAULT 0
 ) ENGINE=InnoDB;
 
--- Table des types d'aliments (food types)
-CREATE TABLE food_types (
+-- Table des articles en stock (stock items)
+CREATE TABLE stock_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    unit VARCHAR(50) NOT NULL,  -- 'kg' pour poids ou 'unit' pour unité
-    price_per_unit DECIMAL(10, 2) NOT NULL
-) ENGINE=InnoDB;
-
--- Table des aliments (food items)
-CREATE TABLE food_items (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    food_type_id INT NOT NULL,
+    food_item_id INT NOT NULL,
     warehouse_id INT NOT NULL,
     quantity DECIMAL(10, 2) NOT NULL,  -- Quantité peut être en kg ou en unité
-    FOREIGN KEY (food_type_id) REFERENCES food_types(id) ON DELETE CASCADE,
+    FOREIGN KEY (food_item_id) REFERENCES food_items(id) ON DELETE CASCADE,
     FOREIGN KEY (warehouse_id) REFERENCES warehouses(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- Table des mouvements de stock (stock movements)
 CREATE TABLE stock_movements (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    food_item_id INT NOT NULL,
+    stock_item_id INT NOT NULL,
     movement_type ENUM('IN', 'OUT') NOT NULL,  -- 'IN' pour entrée, 'OUT' pour sortie
     quantity DECIMAL(10, 2) NOT NULL,  -- Quantité ajoutée ou retirée
     movement_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (food_item_id) REFERENCES food_items(id) ON DELETE CASCADE
+    FOREIGN KEY (stock_item_id) REFERENCES stock_items(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Insérer des exemples de types d'aliments
-INSERT INTO food_types (name, unit, price_per_unit) VALUES
-('Apples', 'kg', 2.5),
-('Bananas', 'kg', 1.8),
-('Milk', 'unit', 0.9),
-('Bread', 'unit', 1.2);
+-- Insérer des exemples de catégories d'aliments
+INSERT INTO food_categories (name) VALUES
+('Fruits'),
+('Légumes'),
+('Produits laitiers'),
+('Boulangerie');
+
+-- Insérer des exemples d'aliments spécifiques
+INSERT INTO food_items (category_id, name, unit, weight, price_per_unit, barcode) VALUES
+((SELECT id FROM food_categories WHERE name = 'Fruits'), 'Pommes', 'kg', 1.0, 2.5, '1234567890123'),
+((SELECT id FROM food_categories WHERE name = 'Fruits'), 'Bananes', 'kg', 1.0, 1.8, '1234567890124'),
+((SELECT id FROM food_categories WHERE name = 'Légumes'), 'Courgettes', 'kg', 1.0, 2.0, '1234567890125'),
+((SELECT id FROM food_categories WHERE name = 'Produits laitiers'), 'Lait', 'unit', 1.0, 0.9, '1234567890126'),
+((SELECT id FROM food_categories WHERE name = 'Boulangerie'), 'Pain', 'unit', 0.5, 1.2, '1234567890127');
 
 -- Insérer des exemples d'entrepôts
 INSERT INTO warehouses (location, rack_capacity, current_stock) VALUES
 ('Warehouse A', 10000, 5000),
 ('Warehouse B', 15000, 8000);
+
+-- Ajouter des aliments aux entrepôts existants
+INSERT INTO stock_items (food_item_id, warehouse_id, quantity) VALUES
+((SELECT id FROM food_items WHERE name = 'Pommes' LIMIT 1), (SELECT id FROM warehouses WHERE location = 'Warehouse A' LIMIT 1), 100),
+((SELECT id FROM food_items WHERE name = 'Bananes' LIMIT 1), (SELECT id FROM warehouses WHERE location = 'Warehouse A' LIMIT 1), 200),
+((SELECT id FROM food_items WHERE name = 'Courgettes' LIMIT 1), (SELECT id FROM warehouses WHERE location = 'Warehouse B' LIMIT 1), 150),
+((SELECT id FROM food_items WHERE name = 'Lait' LIMIT 1), (SELECT id FROM warehouses WHERE location = 'Warehouse B' LIMIT 1), 500);
