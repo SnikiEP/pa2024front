@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    $successMessage = "Livraison effectuée, les stocks ont été mis à jour et le camion a été déplacé à l'entrepôt d'arrivée.";
+    $successMessage = "<div class=\"notification is-success\" data-translate=\"success_delivery\"></div>";
 }
 
 $title = "Livraison - NMW";
@@ -139,7 +139,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                             <label class="label" for="start-warehouse">Sélectionner un entrepôt de départ :</label>
                             <div class="control">
                                 <select class="input" name="start-warehouse" id="start-warehouse" required>
-                                    <option value="">-- Sélectionnez un entrepôt --</option>
+                                    <option value="" data-translate="select_warehouse">-- Sélectionnez un entrepôt --</option>
+
                                     <?php
                                     $query = "SELECT id, location, address FROM warehouses";
                                     $stmt = $pdo->query($query);
@@ -157,17 +158,19 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
 
                         <div class="field">
                             <label class="label" for="select-vehicle">Sélectionner un camion :</label>
+
                             <div class="control">
                                 <select class="input" name="selected-vehicle" id="select-vehicle" required>
-                                    <option value="">-- Sélectionnez un camion --</option>
+                                    <option value="" data-translate="select_vehicle_option">-- Sélectionnez un camion --</option>
+
                                 </select>
                             </div>
                         </div>
 
                         <div class="field">
-                            <label class="label" for="select-items">Sélectionner les articles à livrer :</label>
+                            <label class="label" for="select-items" data-translate="select_article_delivery">Sélectionner les articles à livrer :</label>
                             <div class="control" id="stock-items">
-                                <p>Chargement des stocks...</p>
+                                <p data-translate="loading_stock">Chargement des stocks...</p>
                             </div>
                         </div>
 
@@ -176,7 +179,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                                 <label class="label" for="donation-point-1">Sélectionner un point de don :</label>
                                 <div class="control">
                                     <select class="input" name="donation-points[]" id="donation-point-1">
-                                        <option value="">-- Sélectionnez un point de don --</option>
+                                        <option value="" data-translate="select_donation">-- Sélectionnez un point de don --</option>
+
                                         <?php
                                         $query = "SELECT id, name, address FROM donation_points";
                                         $stmt = $pdo->query($query);
@@ -185,18 +189,19 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                                         }
                                         ?>
                                     </select>
-                                    <button type="button" class="remove-stop">Supprimer</button>
+                                    <button type="button" class="remove-stop" data-translate="delete">Supprimer</button>
                                 </div>
                             </div>
                         </div>
 
-                        <button class="button is-link" type="button" id="add-stop">Ajouter un arrêt</button>
+                        <button class="button is-link" type="button" id="add-stop" data-translate="add_stop">Ajouter un arrêt</button>
 
                         <div class="field" style="margin-top: 20px;">
-                            <label class="label" for="end-warehouse">Sélectionner un entrepôt d'arrivée :</label>
+                            <label class="label" for="end-warehouse" data-translate="select_end_warehouse">Sélectionner un entrepôt d'arrivée :</label>
                             <div class="control">
                                 <select class="input" name="end-warehouse" id="end-warehouse" required>
-                                    <option value="">-- Sélectionnez un entrepôt --</option>
+                                    <option value="" data-translate="select_warehouse">-- Sélectionnez un entrepôt --</option>
+
                                     <?php
                                     $query = "SELECT id, location, address FROM warehouses";
                                     $stmt = $pdo->query($query);
@@ -214,8 +219,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
 
                         <input type="hidden" name="end-warehouse-id" id="end-warehouse-id" value="">
 
-                        <button class="button is-primary" type="button" id="calculate-route">Calculer l'itinéraire</button>
-                        <button class="button is-success" type="submit" id="start-delivery">Lancer la livraison</button>
+                        <button class="button is-primary" type="button" id="calculate-route" data-translate="calculate_route_button">Calculer l'itinéraire</button>
+                        <button class="button is-success" type="submit" id="start-delivery" data-translate="start_delivery">Lancer la livraison</button>
                         <input type="hidden" id="mapScreenshot" name="mapScreenshot">
                         <input type="hidden" id="routeInstructions" name="routeInstructions">
                         <input type="hidden" id="distance" name="distance">
@@ -223,7 +228,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                     </form>
 
                     <div id="map"></div>
-                    <button class="button is-success" id="generate-pdf" style="display:none; margin-top: 20px;">Générer le PDF</button>
+                    <button class="button is-success" id="generate-pdf" style="display:none; margin-top: 20px;" data-translate="generate_pdf">Générer le PDF</button>
                 </div>
             </div>
         </main>
