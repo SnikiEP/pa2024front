@@ -1,10 +1,6 @@
 <?php
-session_start();
+include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php');
 
-if (!in_array('ROLE_ADMIN', $_SESSION['role'])) {
-    header("Location: login.php");
-    exit;
-}
 
 $dsn = 'mysql:host=db;dbname=helix_db;charset=utf8';
 $username = 'root';

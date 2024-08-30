@@ -1,10 +1,6 @@
 <?php 
-session_start();
+include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php');
 
-if(!isset($_SESSION['role']) || !in_array('ROLE_ADMIN', $_SESSION['role'])){
-    header("Location: login.php");
-    exit;
-}
 
 $baseUrl = "http://ddns.callidos-mtf.fr:8085";
 $authHeader = "Authorization: Bearer " . $_SESSION['accessToken'];
