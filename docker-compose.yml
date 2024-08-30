@@ -8,6 +8,9 @@ services:
       - "8080:80"
     depends_on:
       - db
+    volumes:
+      - ./languages:/var/www/html/languages
+    user: www-data
 
   db:
     image: mysql:5.7
