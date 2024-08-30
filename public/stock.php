@@ -155,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title data-translate="page_title">Warehouse Stock Management Dashboard - ATD</title>
+    <title data-translate="page_title_stock_ATD">Tableau de Bord de Gestion des Stocks d'Entrepôt - ATD</title>
     <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php'); ?>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -167,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/header.php'); ?>
         <main class="section">
             <div class="container">
-                <h1 class="title has-text-centered" data-translate="page_title_stock">Warehouse Stock Management Dashboard</h1>
+                <h1 class="title has-text-centered" data-translate="page_title_stock">Tableau de Bord de Gestion des Stocks d'Entrepôt</h1>
                 
                 <?php if ($operationMessage): ?>
                     <div class="notification is-success">
@@ -186,13 +186,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </header>
                                 <div class="card-content">
                                     <div class="content">
-                                        <p><strong data-translate="current_stock_label">Current Stock:</strong> <?= htmlspecialchars($warehouse['current_stock']); ?></p>
-                                        <p><strong data-translate="address_label">Address:</strong> <?= htmlspecialchars($warehouse['address']); ?></p>
+                                        <p><strong data-translate="current_stock_label">Stock Actuel :</strong> <?= htmlspecialchars($warehouse['current_stock']); ?></p>
+                                        <p><strong data-translate="address_label">Adresse :</strong> <?= htmlspecialchars($warehouse['address']); ?></p>
                                     </div>
                                 </div>
                                 <footer class="card-footer">
-                                    <a href="?warehouse_id=<?= $warehouse['id']; ?>" class="card-footer-item" data-translate="view_details_link">View Details</a>
-                                    <a href="#edit-warehouse-<?= $warehouse['id']; ?>" class="card-footer-item" data-translate="modify_button">Modify</a>
+                                    <a href="?warehouse_id=<?= $warehouse['id']; ?>" class="card-footer-item" data-translate="view_details_link">Voir les Détails</a>
+                                    <a href="#edit-warehouse-<?= $warehouse['id']; ?>" class="card-footer-item" data-translate="modify_button">Modifier</a>
                                 </footer>
                             </div>
 
@@ -200,56 +200,56 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="modal-background"></div>
                                 <div class="modal-card">
                                     <header class="modal-card-head">
-                                        <p class="modal-card-title">Modifier l'entrepôt</p>
+                                        <p class="modal-card-title" data-translate="edit_warehouse_title">Modifier l'Entrepôt</p>
                                         <button class="delete" aria-label="close"></button>
                                     </header>
                                     <form method="POST">
                                         <section class="modal-card-body">
                                             <input type="hidden" name="warehouse_id" value="<?= htmlspecialchars($warehouse['id']); ?>">
                                             <div class="field">
-                                                <label class="label">Location</label>
+                                                <label class="label" data-translate="location_label">Emplacement</label>
                                                 <div class="control">
                                                     <input class="input" type="text" name="location" value="<?= htmlspecialchars($warehouse['location']); ?>" required>
                                                 </div>
                                             </div>
                                             <div class="field">
-                                                <label class="label">Address</label>
+                                                <label class="label" data-translate="address_label">Adresse</label>
                                                 <div class="control">
                                                     <input class="input" type="text" name="address" value="<?= htmlspecialchars($warehouse['address']); ?>">
                                                 </div>
                                             </div>
                                         </section>
                                         <footer class="modal-card-foot">
-                                            <button class="button is-success" type="submit" name="modify_warehouse">Save changes</button>
-                                            <button class="button cancel-modal">Cancel</button>
+                                            <button class="button is-success" type="submit" name="modify_warehouse" data-translate="save_changes_button">Enregistrer les modifications</button>
+                                            <button class="button cancel-modal" data-translate="cancel_button">Annuler</button>
                                         </footer>
                                     </form>
                                 </div>
                             </div>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <p data-translate="no_warehouses_message">No warehouses available.</p>
+                        <p data-translate="no_warehouses_message">Aucun entrepôt disponible.</p>
                     <?php endif; ?>
                 </div>
 
                 <?php if ($selectedWarehouse): ?>
                     <div class="box">
-                        <h2 class="subtitle" data-translate="details_title">Details for Warehouse #<?= htmlspecialchars($selectedWarehouse['id']); ?></h2>
-                        <p><strong data-translate="location_label">Location:</strong> <?= htmlspecialchars($selectedWarehouse['location']); ?></p>
-                        <p><strong data-translate="current_stock_label">Current Stock:</strong> <?= htmlspecialchars($selectedWarehouse['current_stock']); ?></p>
-                        <p><strong data-translate="address_label">Address:</strong> <?= htmlspecialchars($selectedWarehouse['address']); ?></p>
+                        <h2 class="subtitle" data-translate="details_title">Détails de l'Entrepôt #<?= htmlspecialchars($selectedWarehouse['id']); ?></h2>
+                        <p><strong data-translate="location_label">Emplacement :</strong> <?= htmlspecialchars($selectedWarehouse['location']); ?></p>
+                        <p><strong data-translate="current_stock_label">Stock Actuel :</strong> <?= htmlspecialchars($selectedWarehouse['current_stock']); ?></p>
+                        <p><strong data-translate="address_label">Adresse :</strong> <?= htmlspecialchars($selectedWarehouse['address']); ?></p>
 
-                        <h3 class="subtitle" data-translate="stock_items_title">Stock Items</h3>
+                        <h3 class="subtitle" data-translate="stock_items_title">Articles en Stock</h3>
                         <?php if (!empty($stockItems)): ?>
                             <table class="table is-fullwidth is-striped">
                                 <thead>
                                     <tr>
-                                        <th data-translate="food_item_column">Food Item</th>
-                                        <th data-translate="quantity_column">Quantity</th>
-                                        <th data-translate="unit_column">Unit</th>
-                                        <th data-translate="barcode_column">Barcode</th>
-                                        <th data-translate="price_per_unit_column">Price per Unit</th>
-                                        <th data-translate="total_value_column">Total Value</th>
+                                        <th data-translate="food_item_column">Article Alimentaire</th>
+                                        <th data-translate="quantity_column">Quantité</th>
+                                        <th data-translate="unit_column">Unité</th>
+                                        <th data-translate="barcode_column">Code-barres</th>
+                                        <th data-translate="price_per_unit_column">Prix par Unité</th>
+                                        <th data-translate="total_value_column">Valeur Totale</th>
                                         <th data-translate="actions_column">Actions</th>
                                     </tr>
                                 </thead>
@@ -267,8 +267,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     <input type="hidden" name="warehouse_id" value="<?= htmlspecialchars($selectedWarehouse['id']); ?>">
                                                     <input type="hidden" name="stock_item_id" value="<?= htmlspecialchars($item['id']); ?>">
                                                     <input type="number" name="quantity" value="<?= htmlspecialchars($item['quantity']); ?>" step="0.01">
-                                                    <button class="button is-small is-info" type="submit" name="modify_item" data-translate="modify_button">Modify</button>
-                                                    <button class="button is-small is-danger" type="submit" name="delete_item" data-translate="delete_button">Delete</button>
+                                                    <button class="button is-small is-info" type="submit" name="modify_item" data-translate="modify_button">Modifier</button>
+                                                    <button class="button is-small is-danger" type="submit" name="delete_item" data-translate="delete_button">Supprimer</button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -276,14 +276,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </tbody>
                             </table>
                         <?php else: ?>
-                            <p data-translate="no_stock_items_message">No stock items available for this warehouse.</p>
+                            <p data-translate="no_stock_items_message">Aucun article en stock pour cet entrepôt.</p>
                         <?php endif; ?>
 
-                        <h3 class="subtitle" data-translate="add_item_title">Add New Food Item</h3>
+                        <h3 class="subtitle" data-translate="add_item_title">Ajouter un Nouvel Article Alimentaire</h3>
                         <form method="POST">
                             <input type="hidden" name="warehouse_id" value="<?= htmlspecialchars($selectedWarehouse['id']); ?>">
                             <div class="field">
-                                <label class="label" data-translate="food_type_label">Food Type</label>
+                                <label class="label" data-translate="food_type_label">Type d'Aliment</label>
                                 <div class="control">
                                     <div class="select">
                                         <select name="category_id" required>
@@ -295,52 +295,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                             </div>
                             <div class="field">
-                                <label class="label" data-translate="food_name_label">Food Name</label>
+                                <label class="label" data-translate="food_name_label">Nom de l'Aliment</label>
                                 <div class="control">
-                                    <input class="input" type="text" name="food_name" placeholder="Enter food name" required>
+                                    <input class="input" type="text" name="food_name" placeholder="Entrez le nom de l'aliment" required>
                                 </div>
                             </div>
                             <div class="field">
-                                <label class="label" data-translate="unit_label">Unit</label>
+                                <label class="label" data-translate="unit_label">Unité</label>
                                 <div class="control">
                                     <div class="select">
                                         <select name="unit" required>
-                                            <option value="kg">Kilograms (kg)</option>
+                                            <option value="kg">Kilogrammes (kg)</option>
                                             <option value="litres">Litres (l)</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="field">
-                                <label class="label" data-translate="weight_label">Weight</label>
+                                <label class="label" data-translate="weight_label">Poids</label>
                                 <div class="control">
                                     <input class="input" type="number" name="weight" step="0.01" required>
                                 </div>
                             </div>
                             <div class="field">
-                                <label class="label" data-translate="quantity_label">Quantity</label>
+                                <label class="label" data-translate="quantity_label">Quantité</label>
                                 <div class="control">
                                     <input class="input" type="number" name="quantity" step="0.01" required>
                                 </div>
                             </div>
                             <div class="field">
-                                <label class="label" data-translate="price_per_unit_label">Price per Unit</label>
+                                <label class="label" data-translate="price_per_unit_label">Prix par Unité</label>
                                 <div class="control">
                                     <input class="input" type="number" name="price_per_unit" step="0.01" required>
                                 </div>
                             </div>
                             <div class="field">
-                                <label class="label" data-translate="barcode_label">Barcode</label>
+                                <label class="label" data-translate="barcode_label">Code-barres</label>
                                 <div class="control">
-                                    <input class="input" type="text" name="barcode" placeholder="Enter barcode" required>
+                                    <input class="input" type="text" name="barcode" placeholder="Entrez le code-barres" required>
                                 </div>
                             </div>
-                            <button class="button is-success" type="submit" name="add_item" data-translate="add_item_button">Add Item</button>
+                            <button class="button is-success" type="submit" name="add_item" data-translate="add_item_button">Ajouter l'Article</button>
                         </form>
                     </div>
 
                     <div class="box">
-                        <h3 class="subtitle" data-translate="utilization_title">Warehouse Stock Utilization by Category</h3>
+                        <h3 class="subtitle" data-translate="utilization_title">Utilisation des Stocks de l'Entrepôt par Catégorie</h3>
                         <div class="chart-container">
                             <canvas id="stockUtilizationChart"></canvas>
                         </div>
