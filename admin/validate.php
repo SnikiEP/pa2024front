@@ -1,7 +1,6 @@
 <?php 
 include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php');
 
-
 $baseUrl = "http://ddns.callidos-mtf.fr:8085";
 $authHeader = "Authorization: Bearer " . $_SESSION['accessToken'];
 
@@ -49,8 +48,21 @@ function escape($value) {
     return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
 }
 
-$notValidatedAccounts = makeHttpRequest($baseUrl . "/account/not-validated", "GET");
+$notValidatedUsernames = makeHttpRequest($baseUrl . "/account/not-validated", "GET");
+$allAccounts = makeHttpRequest($baseUrl . "/account/all", "GET");
 
+$notValidatedAccounts = [];
+
+if (is_array($notValidatedUsernames) && is_array($allAccounts)) {
+    foreach ($notValidatedUsernames as $username) {
+        foreach ($allAccounts as $account) {
+            if ($account['username'] === $username) {
+                $notValidatedAccounts[] = $account; 
+                break;
+            }
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -61,6 +73,7 @@ $notValidatedAccounts = makeHttpRequest($baseUrl . "/account/not-validated", "GE
         $title = "Home - HELIX";
         include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php');
     ?>    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
 </head>
 <style>
     .table-container table {
@@ -73,9 +86,6 @@ $notValidatedAccounts = makeHttpRequest($baseUrl . "/account/not-validated", "GE
         padding: 8px;
         text-align: left;
         border-bottom: 1px solid #ddd;
-    }
-    .table-container th {
-        background-color: #f2f2f2;
     }
 </style>
 <body>
@@ -97,15 +107,21 @@ $notValidatedAccounts = makeHttpRequest($baseUrl . "/account/not-validated", "GE
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($notValidatedAccounts as $account): ?>
+                            <?php if (is_array($notValidatedAccounts)): ?>
+                                <?php foreach ($notValidatedAccounts as $account): ?>
+                                    <tr>
+                                        <td><?= escape($account['id']) ?></td>
+                                        <td><?= escape($account['username']) ?></td>
+                                        <td>
+                                            <button onclick="validateAccount(<?= $account['id'] ?>)">Validate</button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
                                 <tr>
-                                    <td><?= escape($account['id']) ?></td>
-                                    <td><?= escape($account['username']) ?></td>
-                                    <td>
-                                        <button onclick="validateAccount(<?= $account['id'] ?>)">Validate</button>
-                                    </td>
+                                    <td colspan="3">Erreur : réponse inattendue de l'API.</td>
                                 </tr>
-                            <?php endforeach; ?>
+                            <?php endif; ?>
                         </tbody>
 
                     </table>
@@ -127,15 +143,14 @@ $notValidatedAccounts = makeHttpRequest($baseUrl . "/account/not-validated", "GE
             })
             .then(response => {
                 if (response.ok) {
-                    alert(translations.account_validated_successfully);
+                    alert('Account validated successfully!');
                     window.location.reload();
                 } else {
-                    console.error(translations.error_validating_account, response.statusText);
+                    console.error('Error validating account:', response.statusText);
                 }
             })
-            .catch(error => console.error(translations.error_validating_account, error));
+            .catch(error => console.error('Error validating account:', error));
         }
     </script>
 </body>
 </html>
-

@@ -43,12 +43,7 @@ $translations = loadTranslations('en');
     $title = $translations['admin_panel'];
     include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php');
     ?>
-    <link rel="stylesheet" href="/assets/css/panel.css">
-    <style>
-        .admin-title {
-            margin-top: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
 </head>
 
 <body>
