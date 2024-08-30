@@ -320,7 +320,27 @@
     "load_default": "",
     "create_new_translation": "",
     "manage_existing_files": "",
-    "donnation": ""
+    "donnation": "",
+
+    "page_title_stock_ATD": "",
+    "address_label": "",
+    "modify_button": "",
+    "edit_warehouse_title": "",
+    "save_changes_button": "",
+    "barcode_column": "",
+    "delete_button": "",
+    "food_name_label": "",
+    "unit_label": "",
+    "weight_label": "",
+    "price_per_unit_label": "",
+    "barcode_label": "",
+
+    "select_warehouse": "",
+    "select_collection_point_label": "",
+    "select_collection_point": "",
+
+    "placeholder_translations": "",
+    "placeholder_Newtranslations" :""
 
     
 }

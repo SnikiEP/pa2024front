@@ -152,7 +152,6 @@
     "woman_option": "Femme",
     "register_as_volunteer": "Je souhaite m'inscrire en tant que Bénévole",
     "join_us_button": "Rejoignez-nous",
-    "page_title_stock": "Tableau de bord de gestion des stocks d'entrepôt",
     "operation_message": "Opération terminée avec succès.",
     "add_warehouse_title": "Ajouter un Nouvel Entrepôt",
     "location_label_stock": "Emplacement",
@@ -171,7 +170,6 @@
     "price_per_unit_column": "Prix par Unité",
     "total_value_column": "Valeur Totale",
     "actions_column": "Actions",
-    "no_stock_items_message": "Aucun article en stock disponible pour cet entrepôt.",
     "add_item_title": "Ajouter un Nouvel Article Alimentaire",
     "food_type_label": "Type d'Aliment",
     "quantity_label": "Quantité",
@@ -218,10 +216,10 @@
     "footer-copyright": "&copy; {{year}} HELIX. Tous droits réservés.",
     "edit-account": "Modifier le Compte",
     "save-changes": "Sauvegarder les Modifications",
-    "logs": "logs",
-    "accounts": "comptes",
-    "account_not_validate": "comptes non validés",
-    "vehicles": "vehicules",
+    "logs": "Logs",
+    "accounts": "Comptes",
+    "account_not_validate": "Comptes non validés",
+    "vehicles": "Vehicules",
     "edit_profile_title": "Modifier le profil de ",
     "save_changes": "Sauvegarder les modifications",
     "vehicles_management": "Gestion des Véhicules",
@@ -319,5 +317,30 @@
     "load_default": "Charger la traduction par défaut",
     "create_new_translation": "Créer une nouvelle traduction",
     "manage_existing_files": "Gérer les fichiers de traduction existants",
-    "donnation": "Donnation"
+    "donnation": "Donnation",
+    
+    "page_title_stock_ATD": "Tableau de Bord de Gestion des Stocks d'Entrepôt - ATD",
+    "page_title_stock": "Tableau de Bord de Gestion des Stocks d'Entrepôt",
+
+    "address_label": "Adresse :",
+    "modify_button": "Modifier",
+    "edit_warehouse_title": "Modifier l'Entrepôt",
+    "save_changes_button": "Enregistrer les modifications",
+    "barcode_column": "Code-barres",
+    "delete_button": "Supprimer",
+    "no_stock_items_message": "Aucun article en stock pour cet entrepôt.",
+    "food_name_label": "Nom de l'Aliment",
+    "unit_label": "Unité",
+    "weight_label": "Poids",
+    "price_per_unit_label": "Prix par Unité",
+    "barcode_label": "Code-barres",
+    
+    "select_warehouse": "-- Sélectionnez un Entrepôt --",
+    "select_collection_point_label": "Sélectionner un point de collecte :",
+    "select_collection_point": "-- Sélectionnez un Point de Collecte --",
+
+    "placeholder_translations": "Le contenu JSON apparaîtra ici...",
+    "placeholder_Newtranslations" : "    Entrez le contenu JSON ici..."
+
+
 }

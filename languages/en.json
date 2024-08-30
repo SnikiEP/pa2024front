@@ -154,7 +154,6 @@
     "woman_option": "Woman",
     "register_as_volunteer": "I want to register as a Volunteer (Bénévole)",
     "join_us_button": "Join us",
-    "page_title_stock": "Warehouse Stock Management Dashboard",
     "operation_message": "Operation completed successful.",
     "add_warehouse_title": "Add New Warehouse",
     "location_label_stock": "Location",
@@ -223,10 +222,10 @@
     "no-accounts": "No accounts found or error fetching accounts.",
     "edit-account": "Edit Account",
     "save-changes": "Save Changes",
-    "logs": "logs",
-    "accounts": "accounts",
-    "account_not_validate": "account not validated",
-    "vehicles": "vehicles",
+    "logs": "Logs",
+    "accounts": "Accounts",
+    "account_not_validate": "Account not validated",
+    "vehicles": "Vehicles",
     "edit_profile_title": "Edit profile of ",
     "save_changes": "Save Changes",
     "vehicles_management": "Vehicles Management",
@@ -324,5 +323,27 @@
     "load_default": "Load Default Translation",
     "create_new_translation": "Create New Translation",
     "manage_existing_files": "Manage Existing Translation Files",
-    "donnation": "Donation"
+    "donnation": "Donation",
+
+    "page_title_stock_ATD": "Warehouse Stock Management Dashboard - ATD",
+    "page_title_stock": "Warehouse Stock Management Dashboard",
+    "address_label": "Address:",
+    "modify_button": "Modify",
+    "edit_warehouse_title": "Edit Warehouse",
+    "save_changes_button": "Save changes",
+    "barcode_column": "Barcode",
+    "delete_button": "Delete",
+    "food_name_label": "Food Name",
+    "unit_label": "Unit",
+    "weight_label": "Weight",
+    "price_per_unit_label": "Price per Unit",
+    "barcode_label": "Barcode",
+
+    "select_warehouse": "-- Select a Warehouse --",
+    "select_collection_point_label": "Select a Collection Point:",
+    "select_collection_point": "-- Select a Collection Point --",
+
+    "placeholder_translations": "JSON content will appear here...",
+    "placeholder_Newtranslations" : "Enter JSON content here..."
+
 }
