@@ -307,7 +307,19 @@
     "add_new_vehicle": "",
     "error_adding_vehicle": "",
     "error_deleting_vehicle": "",
-    "footer_text": ""
+    "footer_text": "",
+
+    "select_language_file": "",
+    "select_language": "-",
+    "translations": "",
+    "load_translation": "",
+    "save_translation": "",
+    "create_new_translation_file": "",
+    "new_language_code": "",
+    "new_translations": "",
+    "load_default": "",
+    "create_new_translation": "",
+    "manage_existing_files": ""
 
     
 }

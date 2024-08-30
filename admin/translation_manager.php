@@ -75,7 +75,7 @@ $availableLanguages = getAvailableLanguages();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php  include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php'); 
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php'); 
     $title = "Translation Manager - HELIX"; ?>
     <style>
         body {
@@ -155,53 +155,53 @@ $availableLanguages = getAvailableLanguages();
 <body>
 
 <div class="container">
-    <h1>Translation Manager</h1>
+    <h1 data-translate="translation_manager">Translation Manager</h1>
 
     <?php if (!empty($message)): ?>
-        <div class="message"><?= htmlspecialchars($message) ?></div>
+        <div class="message" data-translate="message"><?= htmlspecialchars($message) ?></div>
     <?php endif; ?>
 
     <div class="form-section">
         <form id="translationForm" method="POST">
-            <label for="langCode">Select Language File:</label>
+            <label for="langCode" data-translate="select_language_file">Select Language File:</label>
             <select name="langCode" id="langCode">
-                <option value="">-- Select Language --</option>
+                <option value="" data-translate="select_language">-- Select Language --</option>
                 <?php foreach ($availableLanguages as $lang): ?>
                     <option value="<?= htmlspecialchars($lang) ?>"><?= htmlspecialchars($lang) ?></option>
                 <?php endforeach; ?>
             </select>
 
-            <label for="translations">Translations (JSON):</label>
+            <label for="translations" data-translate="translations">Translations (JSON):</label>
             <textarea name="translations" id="translations" placeholder="JSON content will appear here..."></textarea>
 
-            <button type="button" id="loadTranslation">Load Translation</button>
-            <button type="submit">Save Translation</button>
+            <button type="button" id="loadTranslation" data-translate="load_translation">Load Translation</button>
+            <button type="submit" data-translate="save_translation">Save Translation</button>
         </form>
     </div>
 
     <div class="form-section">
-        <h2>Create New Translation File</h2>
+        <h2 data-translate="create_new_translation_file">Create New Translation File</h2>
         <form id="newTranslationForm" method="POST">
-            <label for="newLangCode">New Language Code:</label>
+            <label for="newLangCode" data-translate="new_language_code">New Language Code:</label>
             <input type="text" name="newLangCode" id="newLangCode" placeholder="es, de, it, ...">
 
-            <label for="newTranslations">New Translations (JSON):</label>
+            <label for="newTranslations" data-translate="new_translations">New Translations (JSON):</label>
             <textarea name="newTranslations" id="newTranslations" placeholder="Enter JSON content here..."></textarea>
 
-            <button type="button" id="loadDefault">Load Default Translation</button>
-            <button type="button" id="createNewTranslation">Create New Translation</button>
+            <button type="button" id="loadDefault" data-translate="load_default">Load Default Translation</button>
+            <button type="button" id="createNewTranslation" data-translate="create_new_translation">Create New Translation</button>
         </form>
     </div>
 
     <div class="form-section">
-        <h2>Manage Existing Translation Files</h2>
+        <h2 data-translate="manage_existing_files">Manage Existing Translation Files</h2>
         <div class="language-list">
             <?php foreach ($availableLanguages as $lang): ?>
                 <div class="language-item">
                     <?= htmlspecialchars($lang) ?>
                     <form method="POST" style="display:inline;">
                         <input type="hidden" name="deleteLangCode" value="<?= htmlspecialchars($lang) ?>">
-                        <button type="submit" onclick="return confirm('Are you sure you want to delete this file?');">Delete</button>
+                        <button type="submit" onclick="return confirm('Are you sure you want to delete this file?');" data-translate="delete">Delete</button>
                     </form>
                 </div>
             <?php endforeach; ?>
@@ -210,6 +210,15 @@ $availableLanguages = getAvailableLanguages();
 </div>
 
 <script>
+    function translatePage(translations) {
+        document.querySelectorAll('[data-translate]').forEach(function(element) {
+            var key = element.getAttribute('data-translate');
+            if (translations[key]) {
+                element.textContent = translations[key];
+            }
+        });
+    }
+
     document.getElementById('loadTranslation').addEventListener('click', function() {
         const langCode = document.getElementById('langCode').value;
         if (langCode) {
@@ -261,6 +270,15 @@ $availableLanguages = getAvailableLanguages();
             alert('Please provide a language code and JSON content.');
         }
     });
+
+    fetch('translations.json')
+        .then(response => response.json())
+        .then(translations => {
+            translatePage(translations);
+        })
+        .catch(error => {
+            console.error('Error loading translations:', error);
+        });
 </script>
 
 </body>

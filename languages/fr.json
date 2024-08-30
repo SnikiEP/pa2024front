@@ -11,7 +11,7 @@
     "tickets": "Billets",
     "warehouses": "Entrepôts",
     "events_add": "Ajouter un Événement",
-    "translation_manager": "Management de traduction",
+    "translation_manager": "Gestionnaire de Traductions",
     "logout": "Déconnexion",
     "join_us": "Rejoignez-Nous",
     "log_in": "Se Connecter",
@@ -306,5 +306,17 @@
     "add_new_vehicle": "Ajouter un nouveau véhicule",
     "error_adding_vehicle": "Erreur lors de l'ajout du véhicule :",
     "error_deleting_vehicle": "Erreur lors de la suppression du véhicule :",
-    "footer_text": "2024 HELIX. Tous droits réservés."
+    "footer_text": "2024 HELIX. Tous droits réservés.",
+
+    "select_language_file": "Sélectionner le fichier de langue:",
+    "select_language": "-- Sélectionner la langue --",
+    "translations": "Traductions (JSON):",
+    "load_translation": "Charger la traduction",
+    "save_translation": "Enregistrer la traduction",
+    "create_new_translation_file": "Créer un nouveau fichier de traduction",
+    "new_language_code": "Nouveau code de langue:",
+    "new_translations": "Nouvelles traductions (JSON):",
+    "load_default": "Charger la traduction par défaut",
+    "create_new_translation": "Créer une nouvelle traduction",
+    "manage_existing_files": "Gérer les fichiers de traduction existants"
 }

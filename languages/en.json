@@ -311,6 +311,17 @@
     "add_new_vehicle": "Add New Vehicle",
     "error_adding_vehicle": "Error adding vehicle:",
     "error_deleting_vehicle": "Error deleting vehicle:",
-    "footer_text": "2024 HELIX. All Rights Reserved."
+    "footer_text": "2024 HELIX. All Rights Reserved.",
     
+    "select_language_file": "Select Language File:",
+    "select_language": "-- Select Language --",
+    "translations": "Translations (JSON):",
+    "load_translation": "Load Translation",
+    "save_translation": "Save Translation",
+    "create_new_translation_file": "Create New Translation File",
+    "new_language_code": "New Language Code:",
+    "new_translations": "New Translations (JSON):",
+    "load_default": "Load Default Translation",
+    "create_new_translation": "Create New Translation",
+    "manage_existing_files": "Manage Existing Translation Files"
 }
