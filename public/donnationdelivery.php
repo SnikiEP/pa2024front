@@ -53,7 +53,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculateur d'Itinéraire avec plusieurs arrêts et PDF</title>
+    <title data-translate="title_delivery">Calculateur d'Itinéraire avec plusieurs arrêts et PDF</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
     <script src="https://unpkg.com/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"></script>

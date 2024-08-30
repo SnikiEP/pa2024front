@@ -373,6 +373,8 @@
     "geocode_start_warehouse_error": "Unable to geocode the starting warehouse address.",
     "geocode_end_warehouse_error": "Unable to geocode the destination warehouse address.",
 
-    "success_delivery": "The delivery has been completed, stocks have been updated, and the truck has been moved to the destination warehouse."
+    "success_delivery": "The delivery has been completed, stocks have been updated, and the truck has been moved to the destination warehouse.",
+
+    "title_delivery" : "Route Calculator with Multiple Stops and PDF"
 
 }

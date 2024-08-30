@@ -368,6 +368,8 @@
     "geocode_start_warehouse_error": "Impossible de géocoder l'adresse de l'entrepôt de départ.",
     "geocode_end_warehouse_error": "Impossible de géocoder l'adresse de l'entrepôt d'arrivée.",
 
-    "success_delivery": "La livraison a été effectuée, les stocks ont été mis à jour et le camion a été déplacé à l'entrepôt d'arrivée."
+    "success_delivery": "La livraison a été effectuée, les stocks ont été mis à jour et le camion a été déplacé à l'entrepôt d'arrivée.",
+
+    "title_delivery" : "Calculateur d'Itinéraire avec plusieurs arrêts et PDF"
 
 }
