@@ -166,7 +166,7 @@ $allVehicles = $allVehiclesStmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <?php
     $title = $translations['manage_events'] ?? 'Manage Events';
-    include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php');
+    include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
     ?>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -174,7 +174,7 @@ $allVehicles = $allVehiclesStmt->fetchAll(PDO::FETCH_ASSOC);
 
 <body>
     <div class="wrapper">
-        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php') ?>
+        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/header.php') ?>
         <main class="section">
             <div class="container">
                 <h1 class="title has-text-centered"><?= escape($translations['manage_events'] ?? 'Manage Events') ?></h1>

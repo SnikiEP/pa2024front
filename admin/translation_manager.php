@@ -172,7 +172,7 @@ $availableLanguages = getAvailableLanguages();
             </select>
 
             <label for="translations" data-translate="translations">Translations (JSON):</label>
-            <textarea name="translations" id="translations" placeholder="JSON content will appear here..."></textarea>
+            <textarea name="translations" id="translations" placeholder="<!-- placeholder_translations -->"></textarea>
 
             <button type="button" id="loadTranslation" data-translate="load_translation">Load Translation</button>
             <button type="submit" data-translate="save_translation">Save Translation</button>
@@ -186,7 +186,7 @@ $availableLanguages = getAvailableLanguages();
             <input type="text" name="newLangCode" id="newLangCode" placeholder="es, de, it, ...">
 
             <label for="newTranslations" data-translate="new_translations">New Translations (JSON):</label>
-            <textarea name="newTranslations" id="newTranslations" placeholder="Enter JSON content here..."></textarea>
+            <textarea name="newTranslations" id="newTranslations" placeholder="<!-- placeholder_Newtranslations -->"></textarea>
 
             <button type="button" id="loadDefault" data-translate="load_default">Load Default Translation</button>
             <button type="button" id="createNewTranslation" data-translate="create_new_translation">Create New Translation</button>
