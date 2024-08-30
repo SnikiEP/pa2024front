@@ -35,6 +35,8 @@
                         <a class="navbar-item" href="/public/collecte.php">Collecte</a>
                         <a class="navbar-item" href="/public/stock.php">Stock</a>
                         <a class="navbar-item" data-translate="events" href="/public/events.php">Events</a>
+                        <a class="navbar-item" data-translate="vehicles" href="/public/vehicles.php">Vehicles</a>
+
                         <?php if (in_array('ROLE_ADMIN', $_SESSION['role'])): ?>
                             <a class="navbar-item" data-translate="admin_panel" href="/admin/index.php">Admin panel</a>
                         <?php endif; ?>
