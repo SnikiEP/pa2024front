@@ -71,6 +71,13 @@ CREATE TABLE IF NOT EXISTS stock_movements (
     FOREIGN KEY (stock_item_id) REFERENCES stock_items(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+-- Table des points de collecte (collection_points)
+CREATE TABLE collection_points (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL
+) ENGINE=InnoDB;
+
 -- Table des points de donation (donation points)
 CREATE TABLE IF NOT EXISTS donation_points (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -142,6 +149,12 @@ INSERT INTO warehouses (location, address, rack_capacity, current_stock) VALUES
 ('Warehouse A', '1 rue du Commerce, Paris', 10000, 5000),
 ('Warehouse B', '15 rue de la Paix, Paris', 15000, 8000),
 ('Warehouse C', '30 boulevard Saint-Germain, Paris', 20000, 12000);
+
+
+INSERT INTO collection_points (name, address) VALUES
+('Point A', '2 rue Gervex, Paris'),
+('Point B', '34 rue de Clichy, Paris'),
+('Point C', '25 avenue Montaigne, Paris');
 
 -- Ajouter des aliments aux entrepôts existants
 INSERT INTO stock_items (food_item_id, warehouse_id, quantity) VALUES
