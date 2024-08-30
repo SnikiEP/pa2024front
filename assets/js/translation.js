@@ -1,6 +1,26 @@
 document.addEventListener('DOMContentLoaded', function() {
     const langSwitcher = document.getElementById('lang_switch');
 
+    function loadLanguages() {
+        fetch('../admin/get_languages.php')
+            .then(response => response.json())
+            .then(languages => {
+                langSwitcher.innerHTML = '';
+
+                for (const [code, name] of Object.entries(languages)) {
+                    const option = document.createElement('option');
+                    option.value = code;
+                    option.textContent = name;
+                    langSwitcher.appendChild(option);
+                }
+
+                const savedLanguage = localStorage.getItem('selectedLanguage') || 'fr';
+                langSwitcher.value = savedLanguage;
+                loadLanguage(savedLanguage);
+            })
+            .catch(error => console.error('Error loading languages:', error));
+    }
+
     function loadLanguage(lang) {
         fetch(`/languages/${lang}.json`)
             .then(response => {
@@ -10,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response.json();
             })
             .then(translations => {
-                console.log('Loaded translations:', translations);
                 document.querySelectorAll('[data-translate]').forEach(element => {
                     const key = element.getAttribute('data-translate');
                     if (translations[key]) {
@@ -30,7 +49,5 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('selectedLanguage', selectedLang);
     });
 
-    const savedLanguage = localStorage.getItem('selectedLanguage') || 'fr';
-    langSwitcher.value = savedLanguage;
-    loadLanguage(savedLanguage);
+    loadLanguages();
 });

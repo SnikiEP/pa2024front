@@ -25,8 +25,6 @@
                 <div class="navbar-item">
                     <div class="select is-rounded">
                         <select id="lang_switch">
-                            <option value="fr">Français</option>
-                            <option value="en">English</option>
                         </select>
                     </div>
                     <?php if (isset($_SESSION['username'])): ?>
@@ -52,4 +50,3 @@
         </div>
     </nav>
 </header>
-

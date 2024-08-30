@@ -69,13 +69,28 @@ try {
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <?php
     $title = "Manage Accounts - HELIX";
     include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/head.php');
     ?>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+    <style>
+        @media (max-width: 768px) {
+            table.is-fullwidth {
+                font-size: 0.9rem;
+            }
+
+            table.is-fullwidth th, table.is-fullwidth td {
+                white-space: nowrap;
+            }
+
+            table.is-fullwidth td button {
+                font-size: 0.8rem;
+                padding: 0.25rem 0.5rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -118,48 +133,50 @@ try {
                 <div class="box">
                     <h2 class="subtitle" data-translate="accounts-list">Accounts List</h2>
                     <?php if (!empty($allAccounts)) : ?>
-                        <table class="table is-striped is-fullwidth">
-                            <thead>
-                                <tr>
-                                    <th data-translate="id">ID</th>
-                                    <th data-translate="username">Username</th>
-                                    <th data-translate="name">Name</th>
-                                    <th data-translate="last-name">Last Name</th>
-                                    <th data-translate="email">Email</th>
-                                    <th data-translate="phone">Phone</th>
-                                    <th data-translate="location">Location</th>
-                                    <th data-translate="role">Role</th>
-                                    <th data-translate="sex">Sex</th>
-                                    <th data-translate="last-login">Last Login</th>
-                                    <th data-translate="registered-date">Registered Date</th>
-                                    <th data-translate="edit">Edit</th>
-                                    <th data-translate="delete">Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($allAccounts as $account): ?>
-                                <tr>
-                                    <td><?= escape($account['id']) ?></td>
-                                    <td><?= escape($account['username']) ?></td>
-                                    <td><?= escape($account['name']) ?></td>
-                                    <td><?= escape($account['lastName']) ?></td>
-                                    <td><?= escape($account['email']) ?></td>
-                                    <td><?= escape($account['phone']) ?></td>
-                                    <td><?= escape($account['location']) ?></td>
-                                    <td><?= escape($account['role']) ?></td>
-                                    <td><?= escape($account['sex']) ?></td>
-                                    <td><?= formatDate($account['last_login']) ?></td>
-                                    <td><?= formatDate($account['register_date']) ?></td>
-                                    <td>
-                                        <button class="button is-info is-small" onclick="openEditModal(<?= $account['id'] ?>)" data-translate="edit">Edit</button>
-                                    </td>
-                                    <td>
-                                        <button class="button is-danger is-small" onclick="confirmDeleteProfile(<?= $account['id'] ?>)" data-translate="delete">Delete</button>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
+                        <div class="table-container">
+                            <table class="table is-striped is-fullwidth">
+                                <thead>
+                                    <tr>
+                                        <th data-translate="id">ID</th>
+                                        <th data-translate="username">Username</th>
+                                        <th data-translate="name">Name</th>
+                                        <th data-translate="last-name">Last Name</th>
+                                        <th data-translate="email">Email</th>
+                                        <th data-translate="phone">Phone</th>
+                                        <th data-translate="location">Location</th>
+                                        <th data-translate="role">Role</th>
+                                        <th data-translate="sex">Sex</th>
+                                        <th data-translate="last-login">Last Login</th>
+                                        <th data-translate="registered-date">Registered Date</th>
+                                        <th data-translate="edit">Edit</th>
+                                        <th data-translate="delete">Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($allAccounts as $account): ?>
+                                    <tr>
+                                        <td><?= escape($account['id']) ?></td>
+                                        <td><?= escape($account['username']) ?></td>
+                                        <td><?= escape($account['name']) ?></td>
+                                        <td><?= escape($account['lastName']) ?></td>
+                                        <td><?= escape($account['email']) ?></td>
+                                        <td><?= escape($account['phone']) ?></td>
+                                        <td><?= escape($account['location']) ?></td>
+                                        <td><?= escape($account['role']) ?></td>
+                                        <td><?= escape($account['sex']) ?></td>
+                                        <td><?= formatDate($account['last_login']) ?></td>
+                                        <td><?= formatDate($account['register_date']) ?></td>
+                                        <td>
+                                            <button class="button is-info is-small" onclick="openEditModal(<?= $account['id'] ?>)" data-translate="edit">Edit</button>
+                                        </td>
+                                        <td>
+                                            <button class="button is-danger is-small" onclick="confirmDeleteProfile(<?= $account['id'] ?>)" data-translate="delete">Delete</button>
+                                        </td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
                     <?php else : ?>
                         <p data-translate="no-accounts">No accounts found or error fetching accounts.</p>
                     <?php endif; ?>
@@ -167,7 +184,7 @@ try {
             </div>
         </main>
         <footer class="footer">
-            <p data-translate="footer_text">&copy; 2024-<?= date("Y"), ($translations['footer_text']) ?></p>
+            <p data-translate="footer_text">&copy; 2024-<?= date("Y") ($translations['footer_text']) ?></p>
         </footer>
     </div>
 
