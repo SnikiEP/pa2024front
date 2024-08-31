@@ -128,7 +128,9 @@ if (is_array($notValidatedUsernames) && is_array($allAccounts)) {
                 </div>
             </div>
         </main>
-        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/footer.php')?>
+        <footer class="footer">
+            <p data-translate="footer_text">&copy; 2024-<?= date("Y"), ($translations['footer_text']) ?></p>
+        </footer>
     </div>
     <script>
         function validateAccount(accountId) {

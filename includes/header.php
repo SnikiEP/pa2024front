@@ -13,9 +13,9 @@
 
         <div id="navbar" class="navbar-menu">
             <div class="navbar-start">
-            <a class="navbar-item" href="/index.php">
-                <img src="/assets/img/atd_logo.png" alt="ATD logo">
-            </a>                
+                <a class="navbar-item" href="/index.php">
+                    <img src="/assets/img/atd_logo.png" alt="ATD logo">
+                </a>                
             </div>
 
             <div class="navbar-end">
@@ -46,97 +46,108 @@
             </div>
         </div>
     </nav>
+
     <style>
         body, html {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-header {
-    background-color: #fff; 
-}
+        header {
+            background-color: #fff; 
+        }
 
-.navbar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    padding: 0 1rem;
-    font-size: 0.875rem;
-}
+        .navbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            padding: 0 1rem;
+            font-size: 0.875rem;
+        }
 
-.navbar-brand {
-    display: flex;
-    align-items: center;
-    flex: 1;
-}
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
 
-.navbar-item img {
-    max-height: 40px;
-}
+        .navbar-item img {
+            max-height: 40px;
+        }
 
-.navbar-burger {
-    display: none;
-}
+        .navbar-burger {
+            display: none;
+        }
 
-.navbar-menu {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-}
+        .navbar-menu {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
 
-.navbar-start, .navbar-end {
-    display: flex;
-}
+        .navbar-start, .navbar-end {
+            display: flex;
+        }
 
-.navbar-item {
-    margin: 0 0.25rem;
-    font-size: 0.875rem;
-}
+        .navbar-item {
+            margin: 0 0.25rem;
+            font-size: 0.875rem;
+        }
 
-.buttons {
-    display: flex;
-    gap: 0.25rem;
-}
+        .buttons {
+            display: flex;
+            gap: 0.25rem;
+        }
 
-.button {
-    font-size: 0.75rem;
-}
+        .button {
+            font-size: 0.75rem;
+        }
 
-@media screen and (max-width: 768px) {
-    .navbar-burger {
-        display: block;
-        cursor: pointer;
-    }
+        @media screen and (max-width: 768px) {
+            .navbar-burger {
+                display: block;
+                cursor: pointer;
+            }
 
-    .navbar-menu {
-        display: none;
-        width: 100%;
-        flex-direction: column;
-        align-items: flex-start;
-    }
+            .navbar-menu {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: flex-start;
+            }
 
-    .navbar-menu.is-active {
-        display: flex;
-    }
+            .navbar-menu.is-active {
+                display: flex;
+            }
 
-    .navbar-start, .navbar-end {
-        width: 100%;
-        justify-content: center;
-        margin-top: 0.5rem;
-    }
+            .navbar-start, .navbar-end {
+                width: 100%;
+                justify-content: center;
+                margin-top: 0.5rem;
+            }
 
-    .navbar-end {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+            .navbar-end {
+                flex-direction: column;
+                align-items: flex-start;
+            }
 
-    .buttons {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-}
-
-
+            .buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
     </style>
 </header>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const burgerIcon = document.querySelector('.navbar-burger');
+        const navbarMenu = document.getElementById(burgerIcon.dataset.target);
+
+        burgerIcon.addEventListener('click', () => {
+            burgerIcon.classList.toggle('is-active');
+            navbarMenu.classList.toggle('is-active');
+        });
+    });
+</script>
