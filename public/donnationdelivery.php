@@ -12,7 +12,6 @@ if (!isset($_SESSION['role']) ||
     exit;
 }
 
-
 $dsn = 'mysql:host=db;dbname=helix_db;charset=utf8';
 $username = 'root';
 $password = 'root_password';
@@ -53,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    $successMessage = "<div class=\"notification is-success\" data-translate=\"success_delivery\"></div>";
+    $successMessage = "<div class=\"notification is-success\">La livraison a été effectuée avec succès.</div>";
 }
 
 $title = "Livraison - NMW";
@@ -141,9 +140,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                     <form id="route-form" class="box" method="POST">
 
                         <?php if ($successMessage): ?>
-                            <div class="notification is-success">
-                                <?= htmlspecialchars($successMessage, ENT_QUOTES, 'UTF-8'); ?>
-                            </div>
+                            <?= $successMessage; ?>
                         <?php endif; ?>
 
                         <div class="field">
@@ -231,7 +228,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                         <input type="hidden" name="end-warehouse-id" id="end-warehouse-id" value="">
 
                         <button class="button is-primary" type="button" id="calculate-route" data-translate="calculate_route_button">Calculer l'itinéraire</button>
-                        <button class="button is-success" type="submit" id="start-delivery" data-translate="start_delivery">Lancer la livraison</button>
+                        <button class="button is-success" type="submit" id="start-delivery" data-translate="start_delivery" disabled>Lancer la livraison</button>
                         <input type="hidden" id="mapScreenshot" name="mapScreenshot">
                         <input type="hidden" id="routeInstructions" name="routeInstructions">
                         <input type="hidden" id="distance" name="distance">
@@ -277,9 +274,18 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                 });
 
             fetch('get_warehouse_items.php?warehouse_id=' + warehouseId)
-                .then(response => response.text())
+                .then(response => response.json())
                 .then(data => {
-                    stockItemsDiv.innerHTML = data;
+                    var html = '';
+                    data.forEach(function(item) {
+                        if (item.quantity > 0) {  
+                            html += `<div class="stock-item">
+                                        <input type="checkbox" name="items[]" value="${item.id}">
+                                        ${item.name} - Quantité: ${item.quantity}
+                                    </div>`;
+                        }
+                    });
+                    stockItemsDiv.innerHTML = html || '<p>Aucun article disponible en stock.</p>';
                 })
                 .catch(error => {
                     console.error('Erreur lors du chargement des stocks:', error);
@@ -382,6 +388,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                         document.getElementById('routeInstructions').value = JSON.stringify(routeInfo.instructions.map(i => i.text));
                         document.getElementById('distance').value = routeInfo.summary.totalDistance;
                         document.getElementById('duration').value = routeInfo.summary.totalTime;
+                        document.getElementById('start-delivery').disabled = false; 
                         captureMap();
                     }).addTo(map);
                 } else {

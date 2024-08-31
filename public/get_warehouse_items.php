@@ -3,7 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if (!isset($_SESSION['role']) || !is_array($_SESSION['role']) ) {
+if (!isset($_SESSION['role']) || !is_array($_SESSION['role'])) {
     header("Location: login.php");
     exit;
 }
@@ -16,32 +16,32 @@ try {
     $pdo = new PDO($dsn, $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
+    echo json_encode(['error' => 'Database connection failed: ' . $e->getMessage()]);
+    exit;
 }
 
 $warehouseId = $_GET['warehouse_id'] ?? null;
 
 if ($warehouseId) {
-    $stmt = $pdo->prepare("
-        SELECT si.id, fi.name, si.quantity, fi.unit
-        FROM stock_items si
-        JOIN food_items fi ON si.food_item_id = fi.id
-        WHERE si.warehouse_id = :warehouse_id
-    ");
-    $stmt->execute([':warehouse_id' => $warehouseId]);
-    $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    try {
+        $stmt = $pdo->prepare("
+            SELECT si.id, fi.name, si.quantity, fi.unit
+            FROM stock_items si
+            JOIN food_items fi ON si.food_item_id = fi.id
+            WHERE si.warehouse_id = :warehouse_id AND si.quantity > 0
+        ");
+        $stmt->execute([':warehouse_id' => $warehouseId]);
+        $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    if ($items) {
-        foreach ($items as $item) {
-            echo '<div>';
-            echo '<label>';
-            echo '<input type="checkbox" name="items[]" value="' . htmlspecialchars($item['id']) . '">';
-            echo htmlspecialchars($item['name']) . ' - ' . htmlspecialchars($item['quantity']) . ' ' . htmlspecialchars($item['unit']);
-            echo '</label>';
-            echo '</div>';
+        if ($items) {
+            echo json_encode($items);
+        } else {
+            echo json_encode([]);
         }
-    } else {
-        echo '<p>Aucun article disponible dans cet entrepôt.</p>';
+    } catch (PDOException $e) {
+        echo json_encode(['error' => 'Query failed: ' . $e->getMessage()]);
     }
+} else {
+    echo json_encode(['error' => 'No warehouse ID provided']);
 }
 ?>
