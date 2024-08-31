@@ -1,10 +1,7 @@
--- Créer la base de données si elle n'existe pas
 CREATE DATABASE IF NOT EXISTS helix_db;
 
--- Utiliser la base de données
 USE helix_db;
 
--- Table des utilisateurs
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
@@ -13,7 +10,6 @@ CREATE TABLE IF NOT EXISTS users (
     roles VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB;
 
--- Table des entrepôts
 CREATE TABLE IF NOT EXISTS warehouses (
     id INT AUTO_INCREMENT PRIMARY KEY,
     location VARCHAR(255) NOT NULL,
@@ -22,13 +18,11 @@ CREATE TABLE IF NOT EXISTS warehouses (
     current_stock INT DEFAULT 0
 ) ENGINE=InnoDB;
 
--- Table des catégories d'aliments (food categories)
 CREATE TABLE IF NOT EXISTS food_categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB;
 
--- Table des aliments spécifiques (food items)
 CREATE TABLE IF NOT EXISTS food_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     category_id INT NOT NULL,
@@ -40,7 +34,6 @@ CREATE TABLE IF NOT EXISTS food_items (
     FOREIGN KEY (category_id) REFERENCES food_categories(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Table des véhicules
 CREATE TABLE IF NOT EXISTS vehicles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_plate VARCHAR(255) NOT NULL,
@@ -51,7 +44,6 @@ CREATE TABLE IF NOT EXISTS vehicles (
     FOREIGN KEY (current_warehouse_id) REFERENCES warehouses(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
--- Table des articles en stock (stock items)
 CREATE TABLE IF NOT EXISTS stock_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     food_item_id INT NOT NULL,
@@ -61,7 +53,6 @@ CREATE TABLE IF NOT EXISTS stock_items (
     FOREIGN KEY (warehouse_id) REFERENCES warehouses(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Table des mouvements de stock (stock movements)
 CREATE TABLE IF NOT EXISTS stock_movements (
     id INT AUTO_INCREMENT PRIMARY KEY,
     stock_item_id INT NOT NULL,
@@ -71,21 +62,18 @@ CREATE TABLE IF NOT EXISTS stock_movements (
     FOREIGN KEY (stock_item_id) REFERENCES stock_items(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Table des points de collecte (collection_points)
 CREATE TABLE collection_points (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB;
 
--- Table des points de donation (donation points)
 CREATE TABLE IF NOT EXISTS donation_points (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB;
 
--- Table des événements
 CREATE TABLE IF NOT EXISTS events (
     id INT AUTO_INCREMENT PRIMARY KEY,
     event_name VARCHAR(255) NOT NULL,
@@ -96,7 +84,6 @@ CREATE TABLE IF NOT EXISTS events (
     description TEXT NOT NULL
 ) ENGINE=InnoDB;
 
--- Table des relations entre événements et véhicules
 CREATE TABLE IF NOT EXISTS event_vehicle (
     event_id INT,
     vehicle_id INT,
@@ -105,16 +92,24 @@ CREATE TABLE IF NOT EXISTS event_vehicle (
     FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Table des participants aux événements
 CREATE TABLE IF NOT EXISTS event_participants (
     user_id INT,
     event_id INT,
     PRIMARY KEY (user_id, event_id),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Table des logs
+CREATE TABLE IF NOT EXISTS event_invitations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    event_id INT NOT NULL,
+    inviter_username VARCHAR(255) NOT NULL,
+    inviter_email VARCHAR(255) NOT NULL,
+    invitee_username VARCHAR(255) NOT NULL,
+    invitee_email VARCHAR(255) NOT NULL,
+    status ENUM('pending', 'accepted', 'declined') DEFAULT 'pending',
+    FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS log (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT DEFAULT NULL,
@@ -127,9 +122,6 @@ CREATE TABLE IF NOT EXISTS log (
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- Insertion de données exemple
-
--- Insérer des exemples de catégories d'aliments
 INSERT INTO food_categories (name) VALUES
 ('Fruits'),
 ('Légumes'),
@@ -137,7 +129,6 @@ INSERT INTO food_categories (name) VALUES
 ('Autres'),
 ('Boulangerie');
 
--- Insérer des exemples d'aliments spécifiques
 INSERT INTO food_items (category_id, name, unit, weight, price_per_unit, barcode) VALUES
 ((SELECT id FROM food_categories WHERE name = 'Fruits'), 'Pommes', 'kg', 1.0, 2.5, '1234567890123'),
 ((SELECT id FROM food_categories WHERE name = 'Fruits'), 'Bananes', 'kg', 1.0, 1.8, '1234567890124'),
@@ -145,32 +136,27 @@ INSERT INTO food_items (category_id, name, unit, weight, price_per_unit, barcode
 ((SELECT id FROM food_categories WHERE name = 'Produits laitiers'), 'Lait', 'unit', 1.0, 0.9, '1234567890126'),
 ((SELECT id FROM food_categories WHERE name = 'Boulangerie'), 'Pain', 'unit', 0.5, 1.2, '1234567890127');
 
--- Insérer des exemples d'entrepôts
 INSERT INTO warehouses (location, address, rack_capacity, current_stock) VALUES
 ('Warehouse A', '1 rue du Commerce, Paris', 10000, 5000),
 ('Warehouse B', '15 rue de la Paix, Paris', 15000, 8000),
 ('Warehouse C', '30 boulevard Saint-Germain, Paris', 20000, 12000);
-
 
 INSERT INTO collection_points (name, address) VALUES
 ('Point A', '2 rue Gervex, Paris'),
 ('Point B', '34 rue de Clichy, Paris'),
 ('Point C', '25 avenue Montaigne, Paris');
 
--- Ajouter des aliments aux entrepôts existants
 INSERT INTO stock_items (food_item_id, warehouse_id, quantity) VALUES
 ((SELECT id FROM food_items WHERE name = 'Pommes' LIMIT 1), (SELECT id FROM warehouses WHERE location = 'Warehouse A' LIMIT 1), 100),
 ((SELECT id FROM food_items WHERE name = 'Bananes' LIMIT 1), (SELECT id FROM warehouses WHERE location = 'Warehouse A' LIMIT 1), 200),
 ((SELECT id FROM food_items WHERE name = 'Courgettes' LIMIT 1), (SELECT id FROM warehouses WHERE location = 'Warehouse B' LIMIT 1), 150),
 ((SELECT id FROM food_items WHERE name = 'Lait' LIMIT 1), (SELECT id FROM warehouses WHERE location = 'Warehouse B' LIMIT 1), 500);
 
--- Insérer des exemples de véhicules
 INSERT INTO vehicles (id_plate, model, fret_capacity, human_capacity, current_warehouse_id) VALUES
 ('ABC-123', 'Camion A', 5000, 2, (SELECT id FROM warehouses WHERE location = 'Warehouse A' LIMIT 1)),
 ('DEF-456', 'Camion B', 7000, 2, (SELECT id FROM warehouses WHERE location = 'Warehouse B' LIMIT 1)),
 ('GHI-789', 'Camion C', 10000, 3, (SELECT id FROM warehouses WHERE location = 'Warehouse C' LIMIT 1));
 
--- Insérer des exemples de points de donation
 INSERT INTO donation_points (name, address) VALUES
 ('Point de Don A', '10 rue de la Paix, Paris'),
 ('Point de Don B', '20 avenue des Ternes, Paris'),

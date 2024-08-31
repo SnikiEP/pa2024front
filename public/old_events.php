@@ -377,7 +377,6 @@ $allVehicles = $allVehiclesStmt->fetchAll(PDO::FETCH_ASSOC);
             document.getElementById('location').value = event.location;
             document.getElementById('description').value = event.description;
 
-            // For vehicle selection
             var vehicleCheckboxes = document.querySelectorAll('input[name="vehicleIds[]"]');
             vehicleCheckboxes.forEach(function(checkbox) {
                 checkbox.checked = event.vehicleIds.includes(checkbox.value);
