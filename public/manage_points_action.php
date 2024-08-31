@@ -31,39 +31,49 @@ if ($action === 'add') {
     $name = $_POST['point-name'];
     $address = $_POST['point-address'];
 
-    if ($type === 'collection') {
-        $query = "INSERT INTO collection_points (name, address) VALUES (:name, :address)";
+    if (empty($name) || empty($address)) {
+        $response['message'] = 'Le nom et l\'adresse sont obligatoires.';
     } else {
-        $query = "INSERT INTO donation_points (name, address) VALUES (:name, :address)";
-    }
+        if ($type === 'collection') {
+            $query = "INSERT INTO collection_points (name, address) VALUES (:name, :address)";
+        } else {
+            $query = "INSERT INTO donation_points (name, address) VALUES (:name, :address)";
+        }
 
-    $stmt = $pdo->prepare($query);
-    $stmt->bindParam(':name', $name);
-    $stmt->bindParam(':address', $address);
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':address', $address);
 
-    if ($stmt->execute()) {
-        $response = ['success' => true];
-    } else {
-        $response['message'] = 'Échec de l\'ajout du point.';
+        if ($stmt->execute()) {
+            $response = ['success' => true];
+        } else {
+            $errorInfo = $stmt->errorInfo();
+            $response['message'] = 'Échec de l\'ajout du point : ' . $errorInfo[2];
+        }
     }
 
 } elseif ($action === 'delete') {
     $id = $_GET['id'];
     $type = $_GET['type'];
 
-    if ($type === 'collection') {
-        $query = "DELETE FROM collection_points WHERE id = :id";
+    if (empty($id)) {
+        $response['message'] = 'L\'ID est obligatoire pour la suppression.';
     } else {
-        $query = "DELETE FROM donation_points WHERE id = :id";
-    }
+        if ($type === 'collection') {
+            $query = "DELETE FROM collection_points WHERE id = :id";
+        } else {
+            $query = "DELETE FROM donation_points WHERE id = :id";
+        }
 
-    $stmt = $pdo->prepare($query);
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
-    if ($stmt->execute()) {
-        $response = ['success' => true];
-    } else {
-        $response['message'] = 'Échec de la suppression du point.';
+        if ($stmt->execute()) {
+            $response = ['success' => true];
+        } else {
+            $errorInfo = $stmt->errorInfo();
+            $response['message'] = 'Échec de la suppression du point : ' . $errorInfo[2];
+        }
     }
 
 } elseif ($action === 'edit') {
@@ -72,21 +82,26 @@ if ($action === 'add') {
     $name = $_POST['name'];
     $address = $_POST['address'];
 
-    if ($type === 'collection') {
-        $query = "UPDATE collection_points SET name = :name, address = :address WHERE id = :id";
+    if (empty($id) || empty($name) || empty($address)) {
+        $response['message'] = 'L\'ID, le nom, et l\'adresse sont obligatoires pour la modification.';
     } else {
-        $query = "UPDATE donation_points SET name = :name, address = :address WHERE id = :id";
-    }
+        if ($type === 'collection') {
+            $query = "UPDATE collection_points SET name = :name, address = :address WHERE id = :id";
+        } else {
+            $query = "UPDATE donation_points SET name = :name, address = :address WHERE id = :id";
+        }
 
-    $stmt = $pdo->prepare($query);
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    $stmt->bindParam(':name', $name);
-    $stmt->bindParam(':address', $address);
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':address', $address);
 
-    if ($stmt->execute()) {
-        $response = ['success' => true];
-    } else {
-        $response['message'] = 'Échec de la modification du point.';
+        if ($stmt->execute()) {
+            $response = ['success' => true];
+        } else {
+            $errorInfo = $stmt->errorInfo();
+            $response['message'] = 'Échec de la modification du point : ' . $errorInfo[2];
+        }
     }
 }
 

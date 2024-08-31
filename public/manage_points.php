@@ -10,6 +10,7 @@ if (!isset($_SESSION['role']) ||
     header("Location: login.php");
     exit;
 }
+
 $dsn = 'mysql:host=db;dbname=helix_db;charset=utf8';
 $username = 'root';
 $password = 'root_password';
@@ -18,7 +19,8 @@ try {
     $pdo = new PDO($dsn, $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    die("Échec de la connexion à la base de données : " . $e->getMessage());
+    echo json_encode(['success' => false, 'message' => "Échec de la connexion à la base de données : " . $e->getMessage()]);
+    exit;
 }
 
 $title = "Gérer les Points de Collecte et de Don - NMW";
@@ -30,11 +32,12 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-translate="manage_collection_donation_points">Gérer les Points de Collecte et de Don</title>
+    <title>Gérer les Points de Collecte et de Don</title>
     <style>
         body {
             color: #fff;
             font-family: Arial, sans-serif;
+            background-color: #121212;
         }
 
         table {
@@ -143,15 +146,15 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/header.php'); ?>
         <main>
             <div class="container">
-                <h1 data-translate="manage_collection_donation_points">Gérer les Points de Collecte et de Don</h1>
+                <h1>Gérer les Points de Collecte et de Don</h1>
 
-                <h2 data-translate="collection_points">Points de Collecte</h2>
+                <h2>Points de Collecte</h2>
                 <table>
                     <thead>
                         <tr>
-                            <th data-translate="name">Nom</th>
-                            <th data-translate="address">Adresse</th>
-                            <th data-translate="actions">Actions</th>
+                            <th>Nom</th>
+                            <th>Adresse</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -170,12 +173,12 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                                   </td>";
                             echo "<td>
                                     <div class='action-buttons'>
-                                        <button class='edit-button' data-translate='edit'>Modifier</button>
-                                        <button class='delete-button' data-translate='delete'>Supprimer</button>
+                                        <button class='edit-button'>Modifier</button>
+                                        <button class='delete-button'>Supprimer</button>
                                     </div>
                                     <div class='edit-buttons'>
-                                        <button class='save-button' data-translate='save'>Enregistrer</button>
-                                        <button class='cancel-button' data-translate='cancel'>Annuler</button>
+                                        <button class='save-button'>Enregistrer</button>
+                                        <button class='cancel-button'>Annuler</button>
                                     </div>
                                   </td>";
                             echo "</tr>";
@@ -184,13 +187,13 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                     </tbody>
                 </table>
 
-                <h2 data-translate="donation_points">Points de Don</h2>
+                <h2>Points de Don</h2>
                 <table>
                     <thead>
                         <tr>
-                            <th data-translate="name">Nom</th>
-                            <th data-translate="address">Adresse</th>
-                            <th data-translate="actions">Actions</th>
+                            <th>Nom</th>
+                            <th>Adresse</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -209,12 +212,12 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                                   </td>";
                             echo "<td>
                                     <div class='action-buttons'>
-                                        <button class='edit-button' data-translate='edit'>Modifier</button>
-                                        <button class='delete-button' data-translate='delete'>Supprimer</button>
+                                        <button class='edit-button'>Modifier</button>
+                                        <button class='delete-button'>Supprimer</button>
                                     </div>
                                     <div class='edit-buttons'>
-                                        <button class='save-button' data-translate='save'>Enregistrer</button>
-                                        <button class='cancel-button' data-translate='cancel'>Annuler</button>
+                                        <button class='save-button'>Enregistrer</button>
+                                        <button class='cancel-button'>Annuler</button>
                                     </div>
                                   </td>";
                             echo "</tr>";
@@ -223,24 +226,24 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                     </tbody>
                 </table>
 
-                <h2 data-translate="add_new_point">Ajouter un nouveau Point</h2>
+                <h2>Ajouter un nouveau Point</h2>
                 <form id="add-point-form">
                     <div class="form-group">
-                        <label for="point-type" data-translate="point_type">Type de point :</label>
+                        <label for="point-type">Type de point :</label>
                         <select id="point-type" name="point-type">
-                            <option value="collection" data-translate="collection_point">Point de Collecte</option>
-                            <option value="donation" data-translate="donation_point">Point de Don</option>
+                            <option value="collection">Point de Collecte</option>
+                            <option value="donation">Point de Don</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="point-name" data-translate="name">Nom :</label>
+                        <label for="point-name">Nom :</label>
                         <input type="text" id="point-name" name="point-name" required>
                     </div>
                     <div class="form-group">
-                        <label for="point-address" data-translate="address">Adresse :</label>
+                        <label for="point-address">Adresse :</label>
                         <input type="text" id="point-address" name="point-address" required>
                     </div>
-                    <button type="submit" data-translate="add_point">Ajouter le Point</button>
+                    <button type="submit">Ajouter le Point</button>
                 </form>
             </div>
         </main>
@@ -252,6 +255,10 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
             button.addEventListener('click', function() {
                 var row = this.closest('tr');
                 row.classList.add('editing');
+                row.querySelectorAll('.edit-field').forEach(field => field.style.display = 'block');
+                row.querySelectorAll('.display-field').forEach(field => field.style.display = 'none');
+                row.querySelector('.edit-buttons').style.display = 'flex';
+                row.querySelector('.action-buttons').style.display = 'none';
             });
         });
 
@@ -259,6 +266,10 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
             button.addEventListener('click', function() {
                 var row = this.closest('tr');
                 row.classList.remove('editing');
+                row.querySelectorAll('.edit-field').forEach(field => field.style.display = 'none');
+                row.querySelectorAll('.display-field').forEach(field => field.style.display = 'block');
+                row.querySelector('.edit-buttons').style.display = 'none';
+                row.querySelector('.action-buttons').style.display = 'flex';
             });
         });
 
@@ -267,8 +278,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                 var row = this.closest('tr');
                 var id = row.getAttribute('data-id');
                 var type = row.getAttribute('data-type');
-                var newName = row.querySelector('input[type="text"]:nth-child(1)').value;
-                var newAddress = row.querySelector('input[type="text"]:nth-child(2)').value;
+                var newName = row.querySelector('input.edit-field').value;
+                var newAddress = row.querySelector('input.edit-field:nth-of-type(2)').value;
 
                 var formData = new FormData();
                 formData.append('id', id);
@@ -284,6 +295,10 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                         row.querySelector('.display-field:nth-child(1)').textContent = newName;
                         row.querySelector('.display-field:nth-child(2)').textContent = newAddress;
                         row.classList.remove('editing');
+                        row.querySelectorAll('.edit-field').forEach(field => field.style.display = 'none');
+                        row.querySelectorAll('.display-field').forEach(field => field.style.display = 'block');
+                        row.querySelector('.edit-buttons').style.display = 'none';
+                        row.querySelector('.action-buttons').style.display = 'flex';
                     } else {
                         alert('Erreur : ' + data.message);
                     }
