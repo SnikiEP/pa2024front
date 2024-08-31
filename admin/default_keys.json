@@ -8,7 +8,6 @@
     "my_profile": "",
     "events": "",
     "calendar": "",
-    "tickets": "",
     "warehouses": "",
     "events_add": "",
     "translation_manager": "",
@@ -178,10 +177,8 @@
     "quantity_label": "",
     "add_item_button": "",
     "utilization_title": "",
-    "page_title_tickets": "",
     "title_label": "",
     "desc_label": "",
-    "create_ticket_button": "",
     "id_column": "",
     "title_column": "",
     "status_column": "",
@@ -307,7 +304,6 @@
     "add_new_vehicle": "",
     "error_adding_vehicle": "",
     "error_deleting_vehicle": "",
-    "footer_text": "",
 
     "select_language_file": "",
     "select_language": "-",
@@ -385,6 +381,7 @@
     "no_events": "",
     "quit_event": "",
     "no_invitations": "",
-    "invited_by_label": ""
-    
+    "invited_by_label": "",
+    "footer_text": ""
+
 }
