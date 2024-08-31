@@ -382,6 +382,8 @@
     "quit_event": "",
     "no_invitations": "",
     "invited_by_label": "",
+    "download_next_week": "",
+    "download_this_week" : "",
     "footer_text": ""
 
 }

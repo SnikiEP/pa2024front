@@ -49,11 +49,20 @@ function generateCalendar($month, $year, $events) {
     $totalDays = (int)$firstDayOfMonth->format('t');
     $firstDayOfWeek = (int)$firstDayOfMonth->format('w');
     
-    $daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    $daysOfWeek = [
+        'day_Sun',
+        'day_Mon',
+        'day_Tue', 
+        'day_Wed',
+        'day_Thu',
+        'day_Fri',
+        'day_Sat' 
+    ];
+    
     $calendarHtml = '<table class="calendar-table"><thead><tr>';
     
     foreach ($daysOfWeek as $day) {
-        $calendarHtml .= "<th>$day</th>";
+        $calendarHtml .= "<th data-translate='$day'></th>";
     }
     $calendarHtml .= '</tr></thead><tbody><tr>';
     
@@ -109,6 +118,7 @@ function generateCalendar($month, $year, $events) {
     
     return $calendarHtml;
 }
+
 
 $prevMonth = $month - 1;
 $prevYear = $year;
