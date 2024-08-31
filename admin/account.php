@@ -1,7 +1,5 @@
 <?php 
-
 include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php');
-
 
 $baseUrl = "http://ddns.callidos-mtf.fr:8085";
 $authHeader = "Authorization: Bearer " . $_SESSION['accessToken'];
@@ -59,9 +57,11 @@ function formatDate($timestamp) {
 }
 
 try {
-    $allAccounts = makeHttpRequest($baseUrl . "/account/all", "GET");
+    $url = $baseUrl . "/account/all";
+    $allAccounts = makeHttpRequest($url, "GET");  // Faire la requête API pour récupérer tous les comptes
 } catch (Exception $e) {
     $allAccounts = [];
+    error_log("Error fetching accounts: " . $e->getMessage());
 }
 ?>
 
@@ -96,93 +96,89 @@ try {
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/header.php') ?>
         <main class="section">
             <div class="container">
-                <h1 class="title has-text-centered" data-translate="manage-accounts-title">Manage Accounts</h1>
+                <h1 class="title has-text-centered">Manage Accounts</h1>
 
                 <div class="box">
-                    <h2 class="subtitle" data-translate="search-accounts">Search Accounts</h2>
-                    <form method="GET">
+                    <h2 class="subtitle">Search Accounts</h2>
+                    <form method="GET" onsubmit="return false;">
                         <div class="field">
-                            <label class="label" for="userIdFilter" data-translate="user-id">User ID:</label>
+                            <label class="label" for="userIdFilter">User ID:</label>
                             <div class="control">
-                                <input class="input" type="number" id="userIdFilter" name="user_id" value="<?= escape($_GET['user_id'] ?? '') ?>">
+                                <input class="input" type="number" id="userIdFilter">
                             </div>
                         </div>
 
                         <div class="field">
-                            <label class="label" for="usernameFilter" data-translate="username">Username:</label>
+                            <label class="label" for="usernameFilter">Username:</label>
                             <div class="control">
-                                <input class="input" type="text" id="usernameFilter" name="username" value="<?= escape($_GET['username'] ?? '') ?>">
+                                <input class="input" type="text" id="usernameFilter">
                             </div>
                         </div>
 
                         <div class="field">
-                            <label class="label" for="emailFilter" data-translate="email">Email:</label>
+                            <label class="label" for="emailFilter">Email:</label>
                             <div class="control">
-                                <input class="input" type="text" id="emailFilter" name="email" value="<?= escape($_GET['email'] ?? '') ?>">
+                                <input class="input" type="text" id="emailFilter">
                             </div>
                         </div>
 
                         <div class="control">
-                            <button class="button is-primary" type="submit" data-translate="search-button">Search</button>
+                            <button class="button is-primary" id="searchButton">Search</button>
                         </div>
                     </form>
                 </div>
 
                 <div class="box">
-                    <h2 class="subtitle" data-translate="accounts-list">Accounts List</h2>
-                    <?php if (!empty($allAccounts)) : ?>
-                        <div class="table-container">
-                            <table class="table is-striped is-fullwidth">
-                                <thead>
-                                    <tr>
-                                        <th data-translate="id">ID</th>
-                                        <th data-translate="username">Username</th>
-                                        <th data-translate="name">Name</th>
-                                        <th data-translate="last-name">Last Name</th>
-                                        <th data-translate="email">Email</th>
-                                        <th data-translate="phone">Phone</th>
-                                        <th data-translate="location">Location</th>
-                                        <th data-translate="role">Role</th>
-                                        <th data-translate="sex">Sex</th>
-                                        <th data-translate="last-login">Last Login</th>
-                                        <th data-translate="registered-date">Registered Date</th>
-                                        <th data-translate="edit">Edit</th>
-                                        <th data-translate="delete">Delete</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($allAccounts as $account): ?>
-                                    <tr>
-                                        <td><?= escape($account['id']) ?></td>
-                                        <td><?= escape($account['username']) ?></td>
-                                        <td><?= escape($account['name']) ?></td>
-                                        <td><?= escape($account['lastName']) ?></td>
-                                        <td><?= escape($account['email']) ?></td>
-                                        <td><?= escape($account['phone']) ?></td>
-                                        <td><?= escape($account['location']) ?></td>
-                                        <td><?= escape($account['role']) ?></td>
-                                        <td><?= escape($account['sex']) ?></td>
-                                        <td><?= formatDate($account['last_login']) ?></td>
-                                        <td><?= formatDate($account['register_date']) ?></td>
-                                        <td>
-                                            <button class="button is-info is-small" onclick="openEditModal(<?= $account['id'] ?>)" data-translate="edit">Edit</button>
-                                        </td>
-                                        <td>
-                                            <button class="button is-danger is-small" onclick="confirmDeleteProfile(<?= $account['id'] ?>)" data-translate="delete">Delete</button>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    <?php else : ?>
-                        <p data-translate="no-accounts">No accounts found or error fetching accounts.</p>
-                    <?php endif; ?>
+                    <h2 class="subtitle">Accounts List</h2>
+                    <div class="table-container">
+                        <table class="table is-striped is-fullwidth" id="accountsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Location</th>
+                                    <th>Role</th>
+                                    <th>Sex</th>
+                                    <th>Last Login</th>
+                                    <th>Registered Date</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($allAccounts as $account): ?>
+                                <tr>
+                                    <td><?= escape($account['id']) ?></td>
+                                    <td><?= escape($account['username']) ?></td>
+                                    <td><?= escape($account['name']) ?></td>
+                                    <td><?= escape($account['lastName']) ?></td>
+                                    <td><?= escape($account['email']) ?></td>
+                                    <td><?= escape($account['phone']) ?></td>
+                                    <td><?= escape($account['location']) ?></td>
+                                    <td><?= escape($account['role']) ?></td>
+                                    <td><?= escape($account['sex']) ?></td>
+                                    <td><?= formatDate($account['last_login']) ?></td>
+                                    <td><?= formatDate($account['register_date']) ?></td>
+                                    <td>
+                                        <button class="button is-info is-small" onclick="openEditModal(<?= $account['id'] ?>)">Edit</button>
+                                    </td>
+                                    <td>
+                                        <button class="button is-danger is-small" onclick="confirmDeleteProfile(<?= $account['id'] ?>)">Delete</button>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </main>
         <footer class="footer">
-            <p data-translate="footer_text">&copy; 2024-<?= date("Y") ($translations['footer_text']) ?></p>
+            <p>&copy; 2024-<?= date("Y") ?> Your Company</p>
         </footer>
     </div>
 
@@ -190,50 +186,50 @@ try {
         <div class="modal-background"></div>
         <div class="modal-card">
             <header class="modal-card-head">
-                <p class="modal-card-title" data-translate="edit-account">Edit Account</p>
+                <p class="modal-card-title">Edit Account</p>
                 <button class="delete" aria-label="close" onclick="closeEditModal()"></button>
             </header>
             <section class="modal-card-body">
                 <form id="editProfileForm">
                     <input type="hidden" id="editProfileId" name="profileId">
                     <div class="field">
-                        <label class="label" for="editUsername" data-translate="username">Username:</label>
+                        <label class="label" for="editUsername">Username:</label>
                         <div class="control">
                             <input class="input" type="text" id="editUsername" name="username" required>
                         </div>
                     </div>
                     <div class="field">
-                        <label class="label" for="editEmail" data-translate="email">Email:</label>
+                        <label class="label" for="editEmail">Email:</label>
                         <div class="control">
                             <input class="input" type="email" id="editEmail" name="email" required>
                         </div>
                     </div>
                     <div class="field">
-                        <label class="label" for="editPhone" data-translate="phone">Phone:</label>
+                        <label class="label" for="editPhone">Phone:</label>
                         <div class="control">
                             <input class="input" type="tel" id="editPhone" name="phone" required>
                         </div>
                     </div>
                     <div class="field">
-                        <label class="label" for="editName" data-translate="name">Name:</label>
+                        <label class="label" for="editName">Name:</label>
                         <div class="control">
                             <input class="input" type="text" id="editName" name="name" required>
                         </div>
                     </div>
                     <div class="field">
-                        <label class="label" for="editLastName" data-translate="last-name">Last Name:</label>
+                        <label class="label" for="editLastName">Last Name:</label>
                         <div class="control">
                             <input class="input" type="text" id="editLastName" name="lastName" required>
                         </div>
                     </div>
                     <div class="field">
-                        <label class="label" for="editLocation" data-translate="location">Location:</label>
+                        <label class="label" for="editLocation">Location:</label>
                         <div class="control">
                             <input class="input" type="text" id="editLocation" name="location" required>
                         </div>
                     </div>
                     <div class="control">
-                        <button type="submit" class="button is-success" data-translate="save-changes">Save Changes</button>
+                        <button type="submit" class="button is-success">Save Changes</button>
                     </div>
                 </form>
             </section>
@@ -241,80 +237,136 @@ try {
     </div>
 
     <script>
-        function openEditModal(profileId) {
-            const profile = <?= json_encode($allAccounts) ?>.find(p => p.id == profileId);
-            document.getElementById('editProfileId').value = profileId;
-            document.getElementById('editUsername').value = profile.username;
-            document.getElementById('editEmail').value = profile.email;
-            document.getElementById('editPhone').value = profile.phone;
-            document.getElementById('editName').value = profile.name;
-            document.getElementById('editLastName').value = profile.lastName;
-            document.getElementById('editLocation').value = profile.location;
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("Document loaded, all event listeners are active.");
 
-            document.getElementById('editModal').classList.add('is-active');
-        }
+            // Filter the table based on the input fields
+            document.getElementById('searchButton').addEventListener('click', function() {
+                const userIdFilter = document.getElementById('userIdFilter').value.toLowerCase();
+                const usernameFilter = document.getElementById('usernameFilter').value.toLowerCase();
+                const emailFilter = document.getElementById('emailFilter').value.toLowerCase();
 
-        function closeEditModal() {
-            document.getElementById('editModal').classList.remove('is-active');
-        }
+                const table = document.getElementById('accountsTable').getElementsByTagName('tbody')[0];
+                const rows = table.getElementsByTagName('tr');
 
-        function confirmDeleteProfile(profileId) {
-            if (confirm('Are you sure you want to delete this profile?')) {
-                deleteProfile(profileId);
+                for (let i = 0; i < rows.length; i++) {
+                    const idCell = rows[i].getElementsByTagName('td')[0].innerText.toLowerCase();
+                    const usernameCell = rows[i].getElementsByTagName('td')[1].innerText.toLowerCase();
+                    const emailCell = rows[i].getElementsByTagName('td')[4].innerText.toLowerCase();
+
+                    // Check if the current row matches the search criteria
+                    if ((userIdFilter === "" || idCell.includes(userIdFilter)) &&
+                        (usernameFilter === "" || usernameCell.includes(usernameFilter)) &&
+                        (emailFilter === "" || emailCell.includes(emailFilter))) {
+                        rows[i].style.display = ""; // Show row
+                    } else {
+                        rows[i].style.display = "none"; // Hide row
+                    }
+                }
+            });
+
+            // Function to open the edit modal and populate it with data
+            window.openEditModal = function(profileId) {
+                console.log(`Opening edit modal for profile ID: ${profileId}`);
+                const profile = <?= json_encode($allAccounts) ?>.find(p => p.id == profileId);
+                if (profile) {
+                    document.getElementById('editProfileId').value = profileId;
+                    document.getElementById('editUsername').value = profile.username;
+                    document.getElementById('editEmail').value = profile.email;
+                    document.getElementById('editPhone').value = profile.phone;
+                    document.getElementById('editName').value = profile.name;
+                    document.getElementById('editLastName').value = profile.lastName;
+                    document.getElementById('editLocation').value = profile.location;
+
+                    document.getElementById('editModal').classList.add('is-active');
+                } else {
+                    console.error('Profile not found.');
+                }
             }
-        }
 
-        function deleteProfile(profileId) {
-            fetch('<?= $baseUrl ?>/account/' + profileId, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer <?= $_SESSION["accessToken"]; ?>'
-                },
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('Profile deleted successfully.');
-                    window.location.reload();
+            // Function to close the edit modal
+            window.closeEditModal = function() {
+                console.log("Closing edit modal.");
+                document.getElementById('editModal').classList.remove('is-active');
+            }
+
+            // Function to confirm deletion of a profile
+            window.confirmDeleteProfile = function(profileId) {
+                console.log(`Confirming deletion for profile ID: ${profileId}`);
+                if (confirm('Are you sure you want to delete this profile?')) {
+                    deleteProfile(profileId);
                 } else {
-                    console.error('Error deleting profile:', response.statusText);
+                    console.log(`Deletion canceled for profile ID: ${profileId}`);
                 }
-            })
-            .catch(error => console.error('Error deleting profile:', error));
-        }
+            }
 
-        document.getElementById('editProfileForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+            // Function to delete a profile
+            window.deleteProfile = function(profileId) {
+                console.log(`Sending DELETE request for profile ID: ${profileId}`);
+                fetch('<?= $baseUrl ?>/account/' + profileId, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer <?= $_SESSION["accessToken"]; ?>'
+                    },
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Profile deleted successfully.');
+                        document.getElementById('account-row-' + profileId).remove();
+                    } else {
+                        return response.json().then(data => {
+                            console.error('Error deleting profile:', data);
+                            alert('Error deleting profile: ' + data.message);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during fetch operation:', error);
+                    alert('Error deleting profile: ' + error.message);
+                });
+            }
 
-            const profileId = document.getElementById('editProfileId').value;
-            const updatedProfile = {
-                username: document.getElementById('editUsername').value,
-                email: document.getElementById('editEmail').value,
-                phone: document.getElementById('editPhone').value,
-                name: document.getElementById('editName').value,
-                lastName: document.getElementById('editLastName').value,
-                location: document.getElementById('editLocation').value,
-            };
+            // Handle form submission for editing a profile
+            document.getElementById('editProfileForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const profileId = document.getElementById('editProfileId').value;
+                const updatedProfile = {
+                    username: document.getElementById('editUsername').value,
+                    email: document.getElementById('editEmail').value,
+                    phone: document.getElementById('editPhone').value,
+                    name: document.getElementById('editName').value,
+                    lastName: document.getElementById('editLastName').value,
+                    location: document.getElementById('editLocation').value,
+                };
 
-            fetch('<?= $baseUrl ?>/account/' + profileId, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer <?= $_SESSION["accessToken"]; ?>'
-                },
-                body: JSON.stringify(updatedProfile),
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('Profile updated successfully.');
-                    window.location.reload();
-                } else {
-                    console.error('Error updating profile:', response.statusText);
-                }
-            })
-            .catch(error => console.error('Error updating profile:', error));
+                console.log(`Sending PUT request to update profile ID: ${profileId}`, updatedProfile);
+
+                fetch('<?= $baseUrl ?>/account/' + profileId, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer <?= $_SESSION["accessToken"]; ?>'
+                    },
+                    body: JSON.stringify(updatedProfile),
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Profile updated successfully.');
+                        window.location.reload();
+                    } else {
+                        return response.json().then(data => {
+                            console.error('Error updating profile:', data);
+                            alert('Error updating profile: ' + data.message);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during fetch operation:', error);
+                    alert('Error updating profile: ' + error.message);
+                });
+            });
         });
     </script>
 </body>
-
 </html>

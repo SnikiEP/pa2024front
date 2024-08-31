@@ -47,6 +47,28 @@ function escape($value) {
     return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
 }
 
+function getUsername($user_id) {
+    $apiUrl = "http://ddns.callidos-mtf.fr:8085/account/" . $user_id;
+    $accessToken = $_SESSION['accessToken'];
+
+    $options = [
+        "http" => [
+            "method" => "GET",
+            "header" => "Authorization: Bearer " . $accessToken
+        ]
+    ];
+
+    $context = stream_context_create($options);
+    $response = file_get_contents($apiUrl, false, $context);
+
+    if ($response === FALSE) {
+        return "Unknown"; 
+    }
+
+    $userData = json_decode($response, true);
+    return $userData['username'] ?? "Unknown"; 
+}
+
 function formatTimestamp($timestamp) {
     $date = new DateTime($timestamp);
     return $date->format('d/m/Y H:i');
@@ -139,12 +161,13 @@ function describeAction($action) {
                             </thead>
                             <tbody>
                                 <?php foreach ($logs as $log) : 
+                                    $username = getUsername($log['user_id']);
                                     $formattedTimestamp = formatTimestamp($log['timestamp']);
                                     $actionDescription = describeAction($log['action']);
                                 ?>
                                     <tr>
                                         <td><?= escape($log['user_id']) ?></td>
-                                        <td><?= escape("Unknown") ?></td>
+                                        <td><?= escape($username) ?></td>
                                         <td><?= escape($log['action']) ?></td>
                                         <td><?= escape($actionDescription) ?></td>
                                         <td><?= escape($log['request_method']) ?></td>
@@ -173,7 +196,7 @@ function describeAction($action) {
             </div>
         </main>
         <footer class="footer">
-            <p data-translate="footer_text">&copy; 2024-<?= date("Y") ?> HELIX</p>
+            <p data-translate="footer_text">&copy; 2024-<?= date("Y"), ($translations['footer_text']) ?></p>
         </footer>
     </div>
 </body>
