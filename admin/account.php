@@ -58,7 +58,7 @@ function formatDate($timestamp) {
 
 try {
     $url = $baseUrl . "/account/all";
-    $allAccounts = makeHttpRequest($url, "GET");  // Faire la requête API pour récupérer tous les comptes
+    $allAccounts = makeHttpRequest($url, "GET");  
 } catch (Exception $e) {
     $allAccounts = [];
     error_log("Error fetching accounts: " . $e->getMessage());
@@ -240,7 +240,6 @@ try {
         document.addEventListener('DOMContentLoaded', () => {
             console.log("Document loaded, all event listeners are active.");
 
-            // Filter the table based on the input fields
             document.getElementById('searchButton').addEventListener('click', function() {
                 const userIdFilter = document.getElementById('userIdFilter').value.toLowerCase();
                 const usernameFilter = document.getElementById('usernameFilter').value.toLowerCase();
@@ -254,18 +253,16 @@ try {
                     const usernameCell = rows[i].getElementsByTagName('td')[1].innerText.toLowerCase();
                     const emailCell = rows[i].getElementsByTagName('td')[4].innerText.toLowerCase();
 
-                    // Check if the current row matches the search criteria
                     if ((userIdFilter === "" || idCell.includes(userIdFilter)) &&
                         (usernameFilter === "" || usernameCell.includes(usernameFilter)) &&
                         (emailFilter === "" || emailCell.includes(emailFilter))) {
-                        rows[i].style.display = ""; // Show row
+                        rows[i].style.display = ""; 
                     } else {
-                        rows[i].style.display = "none"; // Hide row
+                        rows[i].style.display = "none";
                     }
                 }
             });
 
-            // Function to open the edit modal and populate it with data
             window.openEditModal = function(profileId) {
                 console.log(`Opening edit modal for profile ID: ${profileId}`);
                 const profile = <?= json_encode($allAccounts) ?>.find(p => p.id == profileId);
@@ -284,13 +281,11 @@ try {
                 }
             }
 
-            // Function to close the edit modal
             window.closeEditModal = function() {
                 console.log("Closing edit modal.");
                 document.getElementById('editModal').classList.remove('is-active');
             }
 
-            // Function to confirm deletion of a profile
             window.confirmDeleteProfile = function(profileId) {
                 console.log(`Confirming deletion for profile ID: ${profileId}`);
                 if (confirm('Are you sure you want to delete this profile?')) {
@@ -300,7 +295,6 @@ try {
                 }
             }
 
-            // Function to delete a profile
             window.deleteProfile = function(profileId) {
                 console.log(`Sending DELETE request for profile ID: ${profileId}`);
                 fetch('<?= $baseUrl ?>/account/' + profileId, {
@@ -327,7 +321,6 @@ try {
                 });
             }
 
-            // Handle form submission for editing a profile
             document.getElementById('editProfileForm').addEventListener('submit', function(event) {
                 event.preventDefault();
                 const profileId = document.getElementById('editProfileId').value;

@@ -1,5 +1,4 @@
 <?php 
-include_once('maintenance_check.php');
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
