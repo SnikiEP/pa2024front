@@ -11,13 +11,6 @@ if (!isset($_SESSION['role']) ||
     exit;
 }
 
-include_once('maintenance_check.php');
-
-if (!isset($_SESSION['accessToken'])) {
-    header("Location: login.php");
-    exit;
-}
-
 $dsn = 'mysql:host=db;dbname=helix_db;charset=utf8';
 $username = 'root';
 $password = 'root_password';
@@ -29,6 +22,10 @@ try {
     die("Database connection failed: " . $e->getMessage());
 }
 
+if (!isset($_SESSION['accessToken'])) {
+    header("Location: login.php");
+    exit;
+}
 $operationMessage = "";
 
 $warehousesStmt = $pdo->query("SELECT * FROM warehouses");
