@@ -1,4 +1,7 @@
-<?include_once('maintenance_check.php');?>
+<?php
+
+
+include_once('maintenance_check.php');?>
 <!DOCTYPE html>
 <html lang="en">
 

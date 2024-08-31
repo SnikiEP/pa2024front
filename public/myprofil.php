@@ -1,10 +1,15 @@
 <?php 
 include_once('maintenance_check.php');
 
-if (!isset($_SESSION['accessToken'])) {
-    header("Location: login.php");
-    exit();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
+
+if (!isset($_SESSION['role']) || !is_array($_SESSION['role']) ) {
+    header("Location: login.php");
+    exit;
+}
+
 
 $authHeader = "Authorization: Bearer " . $_SESSION['accessToken'];
 $options = [

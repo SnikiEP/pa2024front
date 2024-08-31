@@ -1,10 +1,15 @@
 <?php 
-include_once('maintenance_check.php');
 
-if (!isset($_SESSION['accessToken'])) {
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['role']) || !is_array($_SESSION['role']) ) {
     header("Location: login.php");
     exit;
 }
+
+include_once('maintenance_check.php');
 
 $baseUrl = "http://ddns.callidos-mtf.fr:8085/warehouse";
 $authHeader = "Authorization: Bearer " . $_SESSION['accessToken'];

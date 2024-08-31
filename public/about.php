@@ -1,3 +1,7 @@
+<?php
+
+include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/header.php') ?>
+
 <?include_once('maintenance_check.php');?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +15,6 @@
 </head>
 <body>
     <div class="wrapper">
-        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/header.php') ?>
         <main>
             <div class="content">
                 <h1 data-translate="about_us_title">About Us - Au Temps Donné</h1>

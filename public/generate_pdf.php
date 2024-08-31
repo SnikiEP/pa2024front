@@ -1,6 +1,15 @@
 <?php
 require('fpdf/fpdf.php');
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['role']) || !is_array($_SESSION['role']) ) {
+    header("Location: login.php");
+    exit;
+}
+
 if (!isset($_POST['distance']) || !isset($_POST['duration']) || !isset($_POST['routeInstructions'])) {
     die("Données manquantes pour générer le PDF.");
 }
