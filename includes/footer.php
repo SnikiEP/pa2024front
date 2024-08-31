@@ -10,7 +10,7 @@
     footer {
         background-color: #f8f9fa;
         padding: 1rem 0;
-        max-height: 600px;
+        max-height: 400px;
         font-size: 0.875rem;
         text-align: center;
         box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
@@ -45,7 +45,6 @@
 
     .footer a.navbar-item:hover {
         text-decoration: underline;
-        color: #0056b3;
     }
 
     @media (max-width: 768px) {
@@ -54,7 +53,6 @@
         }
 
         .footer .content {
-            padding: 0 1rem;
         }
     }
   </style>
