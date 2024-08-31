@@ -15,7 +15,6 @@
     "join_us": "Join Us",
     "log_in": "Log In",
     "main_title": "No More Waste",
-
     "main_subtitle": "France's largest food aid and educational support association.",
     "username": "Username",
     "password": "Password",
@@ -85,7 +84,6 @@
     "introduction": "Introduction",
     "intro_desc": "No More Waste is an organization committed to improving the quality of life for people in difficulty through various services and initiatives. Our missions are at the heart of our action, guiding each project and every act of solidarity. Discover below the main missions that animate our association.",
     "food_aid": "Food Aid",
-    
     "food_aid_desc": "We believe everyone has the right to healthy, balanced nutrition. Each week, we organize food distributions for families and individuals in precarious situations. Thanks to our partnerships with local businesses and producers, we are able to provide nutritious and varied meals.",
     "volunteer_efforts": "Our dedicated volunteers work tirelessly to collect, prepare, and distribute these meals, ensuring that no one goes without food. This mission is essential to combat hunger and malnutrition in our community.",
     "educational_support": "Educational Support",
@@ -160,8 +158,6 @@
     "add_warehouse_button": "Add Warehouse",
     "capacity_label": "Capacity",
     "current_stock_label": "Current Stock",
-
-
     "utilization_label": "Utilization",
     "view_details_link": "View Details",
     "no_warehouses_message": "No warehouses available.",
@@ -213,7 +209,6 @@
     "registered-date": "Registered Date",
     "edit": "Edit",
     "delete": "Delete",
-
     "no-accounts": "No accounts found or error fetching accounts.",
     "edit-account": "Edit Account",
     "save-changes": "Save Changes",
@@ -221,7 +216,7 @@
     "accounts": "Accounts",
     "account_not_validate": "Account not validated",
     "vehicles": "Vehicles",
-    "vehicle" : "Vehicle",
+    "vehicle": "Vehicle",
     "edit_profile_title": "Edit profile of ",
     "save_changes": "Save Changes",
     "vehicles_management": "Vehicles Management",
@@ -306,7 +301,6 @@
     "add_new_vehicle": "Add New Vehicle",
     "error_adding_vehicle": "Error adding vehicle:",
     "error_deleting_vehicle": "Error deleting vehicle:",
-    
     "select_language_file": "Select Language File:",
     "select_language": "-- Select Language --",
     "translations": "Translations (JSON):",
@@ -319,7 +313,6 @@
     "create_new_translation": "Create New Translation",
     "manage_existing_files": "Manage Existing Translation Files",
     "donnation": "Donation",
-
     "page_title_stock_ATD": "Warehouse Stock Management Dashboard - ATD",
     "page_title_stock": "Warehouse Stock Management Dashboard",
     "address_label": "Address:",
@@ -333,14 +326,11 @@
     "weight_label": "Weight",
     "price_per_unit_label": "Price per Unit",
     "barcode_label": "Barcode",
-
     "select_warehouse": "-- Select a Warehouse --",
     "select_collection_point_label": "Select a Collection Point:",
     "select_collection_point": "-- Select a Collection Point --",
-
     "placeholder_translations": "JSON content will appear here...",
-    "placeholder_Newtranslations" : "Enter JSON content here...",
-
+    "placeholder_Newtranslations": "Enter JSON content here...",
     "select_vehicle_option": "-- Select a vehicle --",
     "select_donation": "-- Select a donation point --",
     "add_stop": "Add a stop",
@@ -354,24 +344,18 @@
     "geocoding_start_warehouse_error": "Unable to geocode the start warehouse address.",
     "geocoding_end_warehouse_error": "Unable to geocode the end warehouse address.",
     "error_select_end_warehouse": "Error: The end warehouse has not been selected.",
-
-    
     "success_message": "Delivery completed, stocks have been updated and the truck has been moved to the destination warehouse.",
     "select_start_warehouse": "Select a start warehouse:",
     "select_donation_point": "Select a donation point:",
     "select_end_warehouse": "Select an end warehouse:",
     "select_vehicle": "Select a vehicle:",
-    "select_article_delivery" : "Select the items to be delivered: ",
-
+    "select_article_delivery": "Select the items to be delivered: ",
     "error_loading_stock": "Error loading stock.",
     "remove": "Remove",
     "geocode_start_warehouse_error": "Unable to geocode the starting warehouse address.",
     "geocode_end_warehouse_error": "Unable to geocode the destination warehouse address.",
-
     "success_delivery": "The delivery has been completed, stocks have been updated, and the truck has been moved to the destination warehouse.",
-
-    "title_delivery" : "Route Calculator with Multiple Stops and PDF",
-
+    "title_delivery": "Route Calculator with Multiple Stops and PDF",
     "event_management": "Event Management",
     "tabs": "Tabs",
     "available_events": "Available Events",
@@ -393,10 +377,9 @@
     "no_invitations": "You have no pending invitations.",
     "invited_by_label": "Invited by",
     "download_next_week": "Download Next Week",
-    "download_this_week" : "Download this week",
+    "download_this_week": "Download this week",
     "warehouse": "warehouse",
     "current_warehouse": "Current Warehouse",
-
     "manage_collection_donation_points": "Manage Collection and Donation Points",
     "collection_points": "Collection Points",
     "donation_points": "Donation Points",
@@ -407,8 +390,5 @@
     "save": "Save",
     "cancel": "Cancel",
     "add_point": "Add Point",
-
     "footer_text": "2024 HELIX. All Rights Reserved."
-
-
 }
