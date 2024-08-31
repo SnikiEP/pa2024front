@@ -375,6 +375,29 @@
 
     "success_delivery": "The delivery has been completed, stocks have been updated, and the truck has been moved to the destination warehouse.",
 
-    "title_delivery" : "Route Calculator with Multiple Stops and PDF"
+    "title_delivery" : "Route Calculator with Multiple Stops and PDF",
+
+    "event_management": "Event Management",
+    "tabs": "Tabs",
+    "available_events": "Available Events",
+    "my_events": "My Events",
+    "invitations": "Invitations",
+    "type_label": "Type",
+    "start_label": "Start",
+    "end_label": "End",
+    "vehicles_label": "Vehicles",
+    "join_event": "Join Event",
+    "already_joined": "You have already joined this event.",
+    "invite_user": "Invite User",
+    "select_user": "Select a user",
+    "send_invitation": "Send Invitation",
+    "auto_join": "Automatically join this event after creation",
+    "create_event": "Create Event",
+    "no_events": "You have not joined any events yet.",
+    "quit_event": "Quit Event",
+    "no_invitations": "You have no pending invitations.",
+    "invited_by_label": "Invited by"
+    
+      
 
 }

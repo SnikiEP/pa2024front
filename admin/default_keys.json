@@ -365,6 +365,26 @@
     "geocode_start_warehouse_error": "",
     "geocode_end_warehouse_error": "",
     "success_delivery": "",
-    "title_delivery" : ""
+    "title_delivery" : "",
+    "event_management": "",
+    "tabs": "",
+    "available_events": "",
+    "my_events": "",
+    "invitations": "",
+    "type_label": "",
+    "start_label": "",
+    "end_label": "",
+    "vehicles_label": "",
+    "join_event": "",
+    "already_joined": "",
+    "invite_user": "",
+    "select_user": "",
+    "send_invitation": "",
+    "auto_join": "",
+    "create_event": "",
+    "no_events": "",
+    "quit_event": "",
+    "no_invitations": "",
+    "invited_by_label": ""
     
 }

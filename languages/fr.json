@@ -370,6 +370,27 @@
 
     "success_delivery": "La livraison a été effectuée, les stocks ont été mis à jour et le camion a été déplacé à l'entrepôt d'arrivée.",
 
-    "title_delivery" : "Calculateur d'Itinéraire avec plusieurs arrêts et PDF"
+    "title_delivery" : "Calculateur d'Itinéraire avec plusieurs arrêts et PDF",
+
+    "event_management": "Gestion des Événements",
+    "tabs": "Onglets",
+    "available_events": "Événements Disponibles",
+    "my_events": "Mes Événements",
+    "invitations": "Invitations",
+    "type_label": "Type",
+    "start_label": "Début",
+    "end_label": "Fin",
+    "vehicles_label": "Véhicules",
+    "join_event": "Rejoindre l'Événement",
+    "already_joined": "Vous avez déjà rejoint cet événement.",
+    "invite_user": "Inviter un Utilisateur",
+    "select_user": "Sélectionner un utilisateur",
+    "send_invitation": "Envoyer l'Invitation",
+    "auto_join": "Rejoindre automatiquement cet événement après sa création",
+    "create_event": "Créer l'Événement",
+    "no_events": "Vous n'avez rejoint aucun événement pour le moment.",
+    "quit_event": "Quitter l'Événement",
+    "no_invitations": "Vous n'avez aucune invitation en attente.",
+    "invited_by_label": "Invité par"
 
 }
