@@ -35,33 +35,28 @@ function generateCsv($events, $startDate, $endDate, $filename) {
 
     $output = fopen('php://output', 'w');
 
-
     $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     fputcsv($output, $daysOfWeek);
 
+    $eventsByDay = array_fill(0, 7, []); 
 
-    $eventsByDay = [];
     foreach ($events as $event) {
         $eventStart = new DateTime($event['event_start']);
         $eventEnd = new DateTime($event['event_end']);
 
         if ($eventStart >= $startDate && $eventStart <= $endDate) {
-            $dayIndex = $eventStart->format('w'); 
+            $dayIndex = (int) $eventStart->format('w'); 
             $eventText = $event['event_name'] . "\n" . formatEventDate($event['event_start']) . " - " . formatEventDate($event['event_end']);
             $eventsByDay[$dayIndex][] = $eventText;
         }
     }
 
-
     $maxEventsPerDay = max(array_map('count', $eventsByDay));
+
     for ($i = 0; $i < $maxEventsPerDay; $i++) {
         $row = [];
         for ($j = 0; $j < 7; $j++) {
-            if (isset($eventsByDay[$j][$i])) {
-                $row[] = $eventsByDay[$j][$i];
-            } else {
-                $row[] = '';
-            }
+            $row[] = isset($eventsByDay[$j][$i]) ? $eventsByDay[$j][$i] : '';
         }
         fputcsv($output, $row);
     }
