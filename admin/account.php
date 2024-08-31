@@ -178,7 +178,7 @@ try {
             </div>
         </main>
         <footer class="footer">
-            <p>&copy; 2024-<?= date("Y") ?> Your Company</p>
+            <p data-translate="footer_text">&copy; 2024-<?= date("Y"), ($translations['footer_text']) ?></p>
         </footer>
     </div>
 
