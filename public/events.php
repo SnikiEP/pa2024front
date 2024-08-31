@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if (!isset($_SESSION['role']) || !is_array($_SESSION['role']) ) {
+if (!isset($_SESSION['role']) || !is_array($_SESSION['role'])) {
     header("Location: login.php");
     exit;
 }
@@ -302,17 +302,17 @@ $invitations = $invitationsStmt->fetchAll(PDO::FETCH_ASSOC);
                 <h1 class="title" data-translate="event_management"></h1>
 
                 <?php if (!empty($successMessage)): ?>
-                    <div class="notification is-success" data-translate="success_message">
+                    <div class="notification is-success">
                         <?= htmlspecialchars($successMessage) ?>
                     </div>
                 <?php endif; ?>
                 <?php if (!empty($errorMessage)): ?>
-                    <div class="notification is-danger" data-translate="error_message">
+                    <div class="notification is-danger">
                         <?= htmlspecialchars($errorMessage) ?>
                     </div>
                 <?php endif; ?>
 
-                <div class="tabs" >
+                <div class="tabs">
                     <ul>
                         <li class="is-active"><a data-tab="tab-events" data-translate="available_events"></a></li>
                         <li><a data-tab="tab-create" data-translate="create_edit_event"></a></li>
@@ -467,7 +467,6 @@ $invitations = $invitationsStmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
         </main>
-
 
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/footer.php'); ?>
     </div>
