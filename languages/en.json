@@ -221,6 +221,7 @@
     "accounts": "Accounts",
     "account_not_validate": "Account not validated",
     "vehicles": "Vehicles",
+    "vehicle" : "Vehicle",
     "edit_profile_title": "Edit profile of ",
     "save_changes": "Save Changes",
     "vehicles_management": "Vehicles Management",
@@ -305,7 +306,6 @@
     "add_new_vehicle": "Add New Vehicle",
     "error_adding_vehicle": "Error adding vehicle:",
     "error_deleting_vehicle": "Error deleting vehicle:",
-    "footer_text": "2024 HELIX. All Rights Reserved.",
     
     "select_language_file": "Select Language File:",
     "select_language": "-- Select Language --",
@@ -395,7 +395,20 @@
     "download_next_week": "Download Next Week",
     "download_this_week" : "Download this week",
     "warehouse": "warehouse",
-    "current_warehouse": "Current Warehouse"
-      
+    "current_warehouse": "Current Warehouse",
+
+    "manage_collection_donation_points": "Manage Collection and Donation Points",
+    "collection_points": "Collection Points",
+    "donation_points": "Donation Points",
+    "add_new_point": "Add a New Point",
+    "point_type": "Point Type",
+    "collection_point": "Collection Point",
+    "donation_point": "Donation Point",
+    "save": "Save",
+    "cancel": "Cancel",
+    "add_point": "Add Point",
+
+    "footer_text": "2024 HELIX. All Rights Reserved."
+
 
 }

@@ -30,7 +30,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gérer les Points de Collecte et de Don</title>
+    <title data-translate="manage_collection_donation_points">Gérer les Points de Collecte et de Don</title>
     <style>
         body {
             color: #fff;
@@ -130,12 +130,12 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
         tr.editing .action-buttons {
             display: none;
         }
+
         .display-field {
             color: #fff;
             font-weight: bold;
             font-size: 1.1em;
         }
-
     </style>
 </head>
 <body>
@@ -143,15 +143,15 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/header.php'); ?>
         <main>
             <div class="container">
-                <h1>Gérer les Points de Collecte et de Don</h1>
+                <h1 data-translate="manage_collection_donation_points">Gérer les Points de Collecte et de Don</h1>
 
-                <h2>Points de Collecte</h2>
+                <h2 data-translate="collection_points">Points de Collecte</h2>
                 <table>
                     <thead>
                         <tr>
-                            <th>Nom</th>
-                            <th>Adresse</th>
-                            <th>Actions</th>
+                            <th data-translate="name">Nom</th>
+                            <th data-translate="address">Adresse</th>
+                            <th data-translate="actions">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -170,12 +170,12 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                                   </td>";
                             echo "<td>
                                     <div class='action-buttons'>
-                                        <button class='edit-button'>Modifier</button>
-                                        <button class='delete-button'>Supprimer</button>
+                                        <button class='edit-button' data-translate='edit'>Modifier</button>
+                                        <button class='delete-button' data-translate='delete'>Supprimer</button>
                                     </div>
                                     <div class='edit-buttons'>
-                                        <button class='save-button'>Enregistrer</button>
-                                        <button class='cancel-button'>Annuler</button>
+                                        <button class='save-button' data-translate='save'>Enregistrer</button>
+                                        <button class='cancel-button' data-translate='cancel'>Annuler</button>
                                     </div>
                                   </td>";
                             echo "</tr>";
@@ -184,13 +184,13 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                     </tbody>
                 </table>
 
-                <h2>Points de Don</h2>
+                <h2 data-translate="donation_points">Points de Don</h2>
                 <table>
                     <thead>
                         <tr>
-                            <th>Nom</th>
-                            <th>Adresse</th>
-                            <th>Actions</th>
+                            <th data-translate="name">Nom</th>
+                            <th data-translate="address">Adresse</th>
+                            <th data-translate="actions">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -209,12 +209,12 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                                   </td>";
                             echo "<td>
                                     <div class='action-buttons'>
-                                        <button class='edit-button'>Modifier</button>
-                                        <button class='delete-button'>Supprimer</button>
+                                        <button class='edit-button' data-translate='edit'>Modifier</button>
+                                        <button class='delete-button' data-translate='delete'>Supprimer</button>
                                     </div>
                                     <div class='edit-buttons'>
-                                        <button class='save-button'>Enregistrer</button>
-                                        <button class='cancel-button'>Annuler</button>
+                                        <button class='save-button' data-translate='save'>Enregistrer</button>
+                                        <button class='cancel-button' data-translate='cancel'>Annuler</button>
                                     </div>
                                   </td>";
                             echo "</tr>";
@@ -223,24 +223,24 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                     </tbody>
                 </table>
 
-                <h2>Ajouter un nouveau Point</h2>
+                <h2 data-translate="add_new_point">Ajouter un nouveau Point</h2>
                 <form id="add-point-form">
                     <div class="form-group">
-                        <label for="point-type">Type de point :</label>
+                        <label for="point-type" data-translate="point_type">Type de point :</label>
                         <select id="point-type" name="point-type">
-                            <option value="collection">Point de Collecte</option>
-                            <option value="donation">Point de Don</option>
+                            <option value="collection" data-translate="collection_point">Point de Collecte</option>
+                            <option value="donation" data-translate="donation_point">Point de Don</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="point-name">Nom :</label>
+                        <label for="point-name" data-translate="name">Nom :</label>
                         <input type="text" id="point-name" name="point-name" required>
                     </div>
                     <div class="form-group">
-                        <label for="point-address">Adresse :</label>
+                        <label for="point-address" data-translate="address">Adresse :</label>
                         <input type="text" id="point-address" name="point-address" required>
                     </div>
-                    <button type="submit">Ajouter le Point</button>
+                    <button type="submit" data-translate="add_point">Ajouter le Point</button>
                 </form>
             </div>
         </main>

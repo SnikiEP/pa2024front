@@ -220,6 +220,7 @@
     "accounts": "",
     "account_not_validate": "",
     "vehicles": "",
+    "vehicle": "",
     "edit_profile_title": "",
     "save_changes": "",
     "vehicles_management": "",
@@ -384,6 +385,18 @@
     "invited_by_label": "",
     "download_next_week": "",
     "download_this_week" : "",
+
+    "manage_collection_donation_points": "",
+    "collection_points": "",
+    "donation_points": "",
+    "add_new_point": "",
+    "point_type": "",
+    "collection_point": "",
+    "donation_point": "",
+    "save": "",
+    "cancel": "",
+    "add_point": "",
+
     "footer_text": ""
 
 }

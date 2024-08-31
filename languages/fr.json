@@ -208,13 +208,13 @@
     "edit": "Modifier",
     "delete": "Supprimer",
     "no-accounts": "Aucun compte trouvé ou erreur lors de la récupération des comptes.",
-    "footer-copyright": "&copy; {{year}} HELIX. Tous droits réservés.",
     "edit-account": "Modifier le Compte",
     "save-changes": "Sauvegarder les Modifications",
     "logs": "Logs",
     "accounts": "Comptes",
     "account_not_validate": "Comptes non validés",
     "vehicles": "Vehicules",
+    "vehicle" : "Vehicule",
     "edit_profile_title": "Modifier le profil de ",
     "save_changes": "Sauvegarder les modifications",
     "vehicles_management": "Gestion des Véhicules",
@@ -299,7 +299,6 @@
     "add_new_vehicle": "Ajouter un nouveau véhicule",
     "error_adding_vehicle": "Erreur lors de l'ajout du véhicule :",
     "error_deleting_vehicle": "Erreur lors de la suppression du véhicule :",
-    "footer_text": "2024 HELIX. Tous droits réservés.",
 
     "select_language_file": "Sélectionner le fichier de langue:",
     "select_language": "-- Sélectionner la langue --",
@@ -390,7 +389,21 @@
     "download_next_week": "Telecharger la semaine prochaine",
     "download_this_week" : "Telecharger cette semaine",
     "warehouse": "Entrepôt",
-    "current_warehouse": "Entrepôt Actuel"
+    "current_warehouse": "Entrepôt Actuel",
+
+    "manage_collection_donation_points": "Gérer les Points de Collecte et de Don",
+    "collection_points": "Points de Collecte",
+    "donation_points": "Points de Don",
+    "add_new_point": "Ajouter un nouveau Point",
+    "point_type": "Type de point",
+    "collection_point": "Point de Collecte",
+    "donation_point": "Point de Don",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "add_point": "Ajouter le Point",
+
+    "footer_text": "2024 HELIX. Tous droits réservés."
+
     
 
 }
