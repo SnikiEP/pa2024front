@@ -1,7 +1,3 @@
-<?php
-
-
-include_once('maintenance_check.php');?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,6 +7,76 @@ include_once('maintenance_check.php');?>
         include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
     ?>
     <script src="/assets/js/translation.js"></script>
+    <style>
+        main {
+            padding: 20px;
+            background-color: #2c2c2c;
+            border-radius: 8px;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .content {
+            font-family: Arial, sans-serif;
+            color: #e0e0e0;
+        }
+
+        h1, h2 {
+            color: #f0f0f0;
+        }
+
+        section {
+            margin-bottom: 20px;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        form {
+            margin-top: 10px;
+        }
+
+        form div {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            color: #f0f0f0; 
+        }
+
+        input[type="text"], input[type="email"], textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #333; 
+            color: #e0e0e0;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #0056b3;
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #004494;
+        }
+
+        a {
+            color: #1e90ff; 
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <div class="wrapper">
