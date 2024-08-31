@@ -291,6 +291,9 @@ $invitations = $invitationsStmt->fetchAll(PDO::FETCH_ASSOC);
         .tab-content.is-active {
             display: block;
         }
+        input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
     </style>
 </head>
 <body>
@@ -409,10 +412,14 @@ $invitations = $invitationsStmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
 
                         <div class="field">
-                            <label class="checkbox" style="color: white;">
-                                <input type="checkbox" name="autoJoin" data-translate="auto_join"> 
-                            </label>
+                            <div class="control">
+                                <label class="checkbox" style="color: white !important;">
+                                    <input type="checkbox" name="autoJoin" data-translate="auto_join">
+                                    Auto Join
+                                </label>
+                            </div>
                         </div>
+
 
                         <div class="control">
                             <input type="hidden" name="eventAction" value="create">
