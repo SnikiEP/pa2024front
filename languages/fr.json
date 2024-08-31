@@ -387,6 +387,8 @@
     "quit_event": "Quitter l'Événement",
     "no_invitations": "Vous n'avez aucune invitation en attente.",
     "invited_by_label": "Invité par",
-    "download_next_week": "Telecharger cette semaine"
+    "download_next_week": "Telecharger cette semaine",
+    "warehouse": "Entrepôt",
+    "current_warehouse": "Entrepôt Actuel"
 
 }

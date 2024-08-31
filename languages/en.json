@@ -392,8 +392,9 @@
     "quit_event": "Quit Event",
     "no_invitations": "You have no pending invitations.",
     "invited_by_label": "Invited by",
-    "download_next_week": "Download Next Week"
-    
+    "download_next_week": "Download Next Week",
+    "warehouse": "Entrepôt",
+    "current_warehouse": "Entrepôt Actuel"
       
 
 }
