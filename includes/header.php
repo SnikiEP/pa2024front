@@ -26,7 +26,6 @@
                     <?php if (isset($_SESSION['username'])): ?>
                         <a class="navbar-item" data-translate="my_profile" href="/public/myprofil.php">My profile</a>
                         <a class="navbar-item" data-translate="calendar" href="../public/calendar.php">Calendar</a>
-                        <a class="navbar-item" data-translate="tickets" href="/public/tickets.php">Tickets</a>
                         <a class="navbar-item" href="/public/collecte.php">Collecte</a>
                         <a class="navbar-item" data-translate="donnation" href="/public/donnationdelivery.php">Donnation</a>
                         <a class="navbar-item" href="/public/stock.php">Stock</a>

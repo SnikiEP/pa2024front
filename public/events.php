@@ -409,7 +409,7 @@ $invitations = $invitationsStmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
 
                         <div class="field">
-                            <label class="checkbox">
+                            <label class="checkbox" style="color: white;">
                                 <input type="checkbox" name="autoJoin" data-translate="auto_join"> 
                             </label>
                         </div>

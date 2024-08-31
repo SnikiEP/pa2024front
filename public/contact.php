@@ -86,7 +86,6 @@
                 <h1 data-translate="contact_title">Contact Us - Au Temps Donné</h1>
                 
                 <section>
-                    <h2 data-translate="contact_us">Nous Contacter</h2>
                     <p data-translate="contact_intro">Nous serions ravis de vous entendre. Que vous ayez des questions sur nos services, que vous souhaitiez devenir bénévole, ou que vous ayez besoin d'assistance, n'hésitez pas à nous contacter par l'un des moyens ci-dessous.</p>
                 </section>
 
