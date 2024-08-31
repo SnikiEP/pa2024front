@@ -1,5 +1,13 @@
 <?php
-session_start();
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['role']) || !is_array($_SESSION['role']) ) {
+    header("Location: login.php");
+    exit;
+}
 
 $baseUrl = "http://ddns.callidos-mtf.fr:8085";
 $authHeader = "Authorization: Bearer " . $_SESSION['accessToken'];

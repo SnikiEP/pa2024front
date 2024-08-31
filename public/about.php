@@ -1,4 +1,7 @@
-<?include_once('maintenance_check.php');?>
+<?php
+
+include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/header.php') ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,10 +11,36 @@
         include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
     ?>
     <script src="/assets/js/translation.js"></script>
+    <style>
+        main {
+            padding: 20px;
+            background-color: #2c2c2c; 
+            border-radius: 8px;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .content {
+            font-family: Arial, sans-serif;
+            color: #e0e0e0;
+        }
+
+        h1, h2 {
+            color: #f0f0f0;
+        }
+
+        section {
+            margin-bottom: 20px;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+    </style>
 </head>
 <body>
     <div class="wrapper">
-        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/header.php') ?>
         <main>
             <div class="content">
                 <h1 data-translate="about_us_title">About Us - Au Temps Donné</h1>

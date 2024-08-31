@@ -1,5 +1,16 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['role']) || 
+    !is_array($_SESSION['role']) || 
+    !(in_array('ROLE_ADMIN', $_SESSION['role']) || in_array('ROLE_BENEV', $_SESSION['role']))) {
+    
+    header("Location: login.php");
+    exit;
+}
+
 include_once('maintenance_check.php');
 
 if (!isset($_SESSION['accessToken'])) {

@@ -1,4 +1,13 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['role']) || !is_array($_SESSION['role']) ) {
+    header("Location: login.php");
+    exit;
+}
+
 $dsn = 'mysql:host=db;dbname=helix_db;charset=utf8';
 $username = 'root';
 $password = 'root_password';
