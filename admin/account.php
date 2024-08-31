@@ -151,7 +151,7 @@ try {
                             </thead>
                             <tbody>
                                 <?php foreach ($allAccounts as $account): ?>
-                                <tr>
+                                <tr id="account-row-<?= escape($account['id']) ?>">
                                     <td><?= escape($account['id']) ?></td>
                                     <td><?= escape($account['username']) ?></td>
                                     <td><?= escape($account['name']) ?></td>
@@ -178,7 +178,7 @@ try {
             </div>
         </main>
         <footer class="footer">
-            <p data-translate="footer_text">&copy; 2024-<?= date("Y"), ($translations['footer_text']) ?></p>
+            <p>&copy; 2024-<?= date("Y") ?> Your Company</p>
         </footer>
     </div>
 
@@ -228,6 +228,18 @@ try {
                             <input class="input" type="text" id="editLocation" name="location" required>
                         </div>
                     </div>
+                    <div class="field">
+                        <label class="label" for="editRole">Role:</label>
+                        <div class="control">
+                            <div class="select">
+                                <select id="editRole" name="role" required>
+                                    <option value="ROLE_BENEF">ROLE_BENEF</option>
+                                    <option value="ROLE_BENEV">ROLE_BENEV</option>
+                                    <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="control">
                         <button type="submit" class="button is-success">Save Changes</button>
                     </div>
@@ -274,6 +286,7 @@ try {
                     document.getElementById('editName').value = profile.name;
                     document.getElementById('editLastName').value = profile.lastName;
                     document.getElementById('editLocation').value = profile.location;
+                    document.getElementById('editRole').value = profile.role;
 
                     document.getElementById('editModal').classList.add('is-active');
                 } else {
@@ -331,6 +344,7 @@ try {
                     name: document.getElementById('editName').value,
                     lastName: document.getElementById('editLastName').value,
                     location: document.getElementById('editLocation').value,
+                    role: document.getElementById('editRole').value,
                 };
 
                 console.log(`Sending PUT request to update profile ID: ${profileId}`, updatedProfile);
