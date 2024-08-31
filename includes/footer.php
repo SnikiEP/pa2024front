@@ -9,7 +9,6 @@
   <style>
     footer {
         background-color: #f8f9fa;
-        border-top: 1px solid #ddd;
         padding: 1rem 0;
         max-height: 600px;
         font-size: 0.875rem;
