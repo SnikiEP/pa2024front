@@ -291,57 +291,57 @@ $invitations = $invitationsStmt->fetchAll(PDO::FETCH_ASSOC);
         
         <main>
             <div class="container">
-                <h1 class="title">Event Management</h1>
+                <h1 class="title" data-translate="event_management"></h1>
 
                 <?php if (!empty($successMessage)): ?>
-                    <div class="notification is-success">
+                    <div class="notification is-success" data-translate="success_message">
                         <?= htmlspecialchars($successMessage) ?>
                     </div>
                 <?php endif; ?>
                 <?php if (!empty($errorMessage)): ?>
-                    <div class="notification is-danger">
+                    <div class="notification is-danger" data-translate="error_message">
                         <?= htmlspecialchars($errorMessage) ?>
                     </div>
                 <?php endif; ?>
 
-                <div class="tabs">
+                <div class="tabs" >
                     <ul>
-                        <li class="is-active"><a data-tab="tab-events">Available Events</a></li>
-                        <li><a data-tab="tab-create">Create/Edit Event</a></li>
-                        <li><a data-tab="tab-my-events">My Events</a></li>
-                        <li><a data-tab="tab-invitations">Invitations</a></li>
+                        <li class="is-active"><a data-tab="tab-events" data-translate="available_events"></a></li>
+                        <li><a data-tab="tab-create" data-translate="create_edit_event"></a></li>
+                        <li><a data-tab="tab-my-events" data-translate="my_events"></a></li>
+                        <li><a data-tab="tab-invitations" data-translate="invitations"></a></li>
                     </ul>
                 </div>
 
                 <div id="tab-events" class="tab-content is-active">
-                    <h2 class="subtitle">Available Events</h2>
+                    <h2 class="subtitle" data-translate="available_events"></h2>
                     <?php foreach ($allEvents as $event): ?>
                         <div class="box">
                             <h3 class="title"><?= escape($event['event_name']) ?></h3>
-                            <p><strong>Type:</strong> <?= escape($event['event_type']) ?></p>
-                            <p><strong>Start:</strong> <?= escape($event['event_start']) ?></p>
-                            <p><strong>End:</strong> <?= escape($event['event_end']) ?></p>
-                            <p><strong>Location:</strong> <?= escape($event['location']) ?></p>
-                            <p><strong>Vehicles:</strong> <?= escape($event['vehicles'] ?? 'None') ?></p>
+                            <p><strong data-translate="type_label"></strong> <?= escape($event['event_type']) ?></p>
+                            <p><strong data-translate="start_label"></strong> <?= escape($event['event_start']) ?></p>
+                            <p><strong data-translate="end_label"></strong> <?= escape($event['event_end']) ?></p>
+                            <p><strong data-translate="location_label"></strong> <?= escape($event['location']) ?></p>
+                            <p><strong data-translate="vehicles_label"></strong> <?= escape($event['vehicles'] ?? 'None') ?></p>
                             <?php if ($event['is_participant'] == 0): ?>
                                 <form method="POST">
                                     <input type="hidden" name="event_id" value="<?= $event['id'] ?>">
                                     <input type="hidden" name="eventAction" value="join">
-                                    <button class="button is-primary" type="submit">Join Event</button>
+                                    <button class="button is-primary" type="submit" data-translate="join_event"></button>
                                 </form>
                             <?php else: ?>
-                                <p>You have already joined this event.</p>
+                                <p data-translate="already_joined"></p>
                             <?php endif; ?>
 
                             <form method="POST" style="margin-top: 10px;">
                                 <input type="hidden" name="event_id" value="<?= $event['id'] ?>">
                                 <input type="hidden" name="eventAction" value="invite">
                                 <div class="field">
-                                    <label class="label">Invite User</label>
+                                    <label class="label" data-translate="invite_user"></label>
                                     <div class="control">
                                         <div class="select">
                                             <select name="invitee_id" required>
-                                                <option value="">Select a user</option>
+                                                <option value="" data-translate="select_user"></option>
                                                 <?php foreach ($allUsers as $user): ?>
                                                     <option value="<?= $user['id'] ?>"><?= escape($user['username']) ?> (<?= escape($user['email']) ?>)</option>
                                                 <?php endforeach; ?>
@@ -349,52 +349,52 @@ $invitations = $invitationsStmt->fetchAll(PDO::FETCH_ASSOC);
                                         </div>
                                     </div>
                                 </div>
-                                <button class="button is-info" type="submit">Send Invitation</button>
+                                <button class="button is-info" type="submit" data-translate="send_invitation"></button>
                             </form>
                         </div>
                     <?php endforeach; ?>
                 </div>
 
                 <div id="tab-create" class="tab-content">
-                    <h2 class="subtitle">Create/Edit Event</h2>
+                    <h2 class="subtitle" data-translate="create_edit_event"></h2>
                     <form method="POST">
                         <div class="field">
-                            <label class="label" for="eventName">Event Name</label>
+                            <label class="label" for="eventName" data-translate="event_name"></label>
                             <div class="control">
                                 <input class="input" type="text" id="eventName" name="eventName" required>
                             </div>
                         </div>
 
                         <div class="field">
-                            <label class="label" for="eventType">Event Type</label>
+                            <label class="label" for="eventType" data-translate="event_type"></label>
                             <div class="control">
                                 <input class="input" type="text" id="eventType" name="eventType" required>
                             </div>
                         </div>
 
                         <div class="field">
-                            <label class="label" for="eventStart">Event Start</label>
+                            <label class="label" for="eventStart" data-translate="event_start"></label>
                             <div class="control">
                                 <input class="input" type="datetime-local" id="eventStart" name="eventStart" required>
                             </div>
                         </div>
 
                         <div class="field">
-                            <label class="label" for="eventEnd">Event End</label>
+                            <label class="label" for="eventEnd" data-translate="event_end"></label>
                             <div class="control">
                                 <input class="input" type="datetime-local" id="eventEnd" name="eventEnd" required>
                             </div>
                         </div>
 
                         <div class="field">
-                            <label class="label" for="location">Location</label>
+                            <label class="label" for="location" data-translate="location"></label>
                             <div class="control">
                                 <input class="input" type="text" id="location" name="location" required>
                             </div>
                         </div>
 
                         <div class="field">
-                            <label class="label" for="description">Description</label>
+                            <label class="label" for="description" data-translate="description"></label>
                             <div class="control">
                                 <textarea class="textarea" id="description" name="description" required></textarea>
                             </div>
@@ -402,33 +402,33 @@ $invitations = $invitationsStmt->fetchAll(PDO::FETCH_ASSOC);
 
                         <div class="field">
                             <label class="checkbox">
-                                <input type="checkbox" name="autoJoin"> Automatically join this event after creation
+                                <input type="checkbox" name="autoJoin" data-translate="auto_join"> 
                             </label>
                         </div>
 
                         <div class="control">
                             <input type="hidden" name="eventAction" value="create">
-                            <button class="button is-success" type="submit">Create Event</button>
+                            <button class="button is-success" type="submit" data-translate="create_event"></button>
                         </div>
                     </form>
                 </div>
 
                 <div id="tab-my-events" class="tab-content">
-                    <h2 class="subtitle">My Events</h2>
+                    <h2 class="subtitle" data-translate="my_events"></h2>
                     <?php if (empty($myEvents)): ?>
-                        <p>You have not joined any events yet.</p>
+                        <p data-translate="no_events"></p>
                     <?php else: ?>
                         <?php foreach ($myEvents as $event): ?>
                             <div class="box">
                                 <h3 class="title"><?= escape($event['event_name']) ?></h3>
-                                <p><strong>Type:</strong> <?= escape($event['event_type']) ?></p>
-                                <p><strong>Start:</strong> <?= escape($event['event_start']) ?></p>
-                                <p><strong>End:</strong> <?= escape($event['event_end']) ?></p>
-                                <p><strong>Location:</strong> <?= escape($event['location']) ?></p>
+                                <p><strong data-translate="type_label"></strong> <?= escape($event['event_type']) ?></p>
+                                <p><strong data-translate="start_label"></strong> <?= escape($event['event_start']) ?></p>
+                                <p><strong data-translate="end_label"></strong> <?= escape($event['event_end']) ?></p>
+                                <p><strong data-translate="location_label"></strong> <?= escape($event['location']) ?></p>
                                 <form method="POST">
                                     <input type="hidden" name="event_id" value="<?= $event['id'] ?>">
                                     <input type="hidden" name="eventAction" value="quit">
-                                    <button class="button is-danger" type="submit">Quit Event</button>
+                                    <button class="button is-danger" type="submit" data-translate="quit_event"></button>
                                 </form>
                             </div>
                         <?php endforeach; ?>
@@ -436,22 +436,22 @@ $invitations = $invitationsStmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
 
                 <div id="tab-invitations" class="tab-content">
-                    <h2 class="subtitle">Event Invitations</h2>
+                    <h2 class="subtitle" data-translate="invitations"></h2>
                     <?php if (empty($invitations)): ?>
-                        <p>You have no pending invitations.</p>
+                        <p data-translate="no_invitations"></p>
                     <?php else: ?>
                         <?php foreach ($invitations as $invitation): ?>
                             <div class="box">
                                 <h3 class="title"><?= escape($invitation['event_name']) ?></h3>
-                                <p><strong>Type:</strong> <?= escape($invitation['event_type']) ?></p>
-                                <p><strong>Start:</strong> <?= escape($invitation['event_start']) ?></p>
-                                <p><strong>End:</strong> <?= escape($invitation['event_end']) ?></p>
-                                <p><strong>Location:</strong> <?= escape($invitation['location']) ?></p>
-                                <p><strong>Invited by:</strong> <?= escape($invitation['inviter_name']) ?></p>
+                                <p><strong data-translate="type_label"></strong> <?= escape($invitation['event_type']) ?></p>
+                                <p><strong data-translate="start_label"></strong> <?= escape($invitation['event_start']) ?></p>
+                                <p><strong data-translate="end_label"></strong> <?= escape($invitation['event_end']) ?></p>
+                                <p><strong data-translate="location_label"></strong> <?= escape($invitation['location']) ?></p>
+                                <p><strong data-translate="invited_by_label"></strong> <?= escape($invitation['inviter_name']) ?></p>
                                 <form method="POST">
                                     <input type="hidden" name="invitation_id" value="<?= $invitation['invitation_id'] ?>">
                                     <input type="hidden" name="eventAction" value="join_from_invitation">
-                                    <button class="button is-success" type="submit">Join Event</button>
+                                    <button class="button is-success" type="submit" data-translate="join_event"></button>
                                 </form>
                             </div>
                         <?php endforeach; ?>
@@ -459,6 +459,7 @@ $invitations = $invitationsStmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
         </main>
+
 
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/footer.php'); ?>
     </div>
