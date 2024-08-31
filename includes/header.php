@@ -31,6 +31,7 @@
                             <a class="navbar-item" href="/public/collecte.php">Collecte</a>
                             <a class="navbar-item" data-translate="donnation" href="/public/donnationdelivery.php">Donnation</a>
                             <a class="navbar-item" href="/public/stock.php">Stock</a>
+                            <a class="navbar-item" href="/public/manage_points.php">Point</a>
                             <a class="navbar-item" data-translate="vehicles" href="/public/vehicles.php">Vehicles</a>
                         <?php endif; ?>
                         

@@ -89,6 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $location = $_POST['location'];
             $description = $_POST['description'];
             $autoJoin = isset($_POST['autoJoin']) ? true : false;
+            $vehicleId = $_POST['vehicle'] ?? null;
 
             $currentDateTime = new DateTime();
             $eventStartDateTime = new DateTime($eventStart);
@@ -104,8 +105,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         $pdo->beginTransaction();
 
                         $stmt = $pdo->prepare("
-                            INSERT INTO events (event_name, event_type, event_start, event_end, location, description)
-                            VALUES (:eventName, :eventType, :eventStart, :eventEnd, :location, :description)
+                            INSERT INTO events (event_name, event_type, event_start, event_end, location, description, vehicle_id)
+                            VALUES (:eventName, :eventType, :eventStart, :eventEnd, :location, :description, :vehicleId)
                         ");
                         $stmt->execute([
                             ':eventName' => $eventName,
@@ -113,7 +114,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             ':eventStart' => $eventStart,
                             ':eventEnd' => $eventEnd,
                             ':location' => $location,
-                            ':description' => $description
+                            ':description' => $description,
+                            ':vehicleId' => $vehicleId
                         ]);
 
                         if ($autoJoin) {
@@ -133,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     try {
                         $stmt = $pdo->prepare("
                             UPDATE events SET event_name = :eventName, event_type = :eventType, event_start = :eventStart,
-                            event_end = :eventEnd, location = :location, description = :description
+                            event_end = :eventEnd, location = :location, description = :description, vehicle_id = :vehicleId
                             WHERE id = :eventId
                         ");
                         $stmt->execute([
@@ -143,6 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             ':eventEnd' => $eventEnd,
                             ':location' => $location,
                             ':description' => $description,
+                            ':vehicleId' => $vehicleId,
                             ':eventId' => $eventId
                         ]);
                         $successMessage = "Event updated successfully!";
@@ -340,6 +343,14 @@ $invitations = $invitationsStmt->fetchAll(PDO::FETCH_ASSOC);
                             <p><strong data-translate="end_label"></strong> <?= escape($event['event_end']) ?></p>
                             <p><strong data-translate="location_label"></strong> <?= escape($event['location']) ?></p>
                             <p><strong data-translate="vehicles_label"></strong> <?= escape($event['vehicles'] ?? 'None') ?></p>
+                            <?php if (!empty($event['vehicle_id'])): ?>
+                                <?php
+                                $vehicleStmt = $pdo->prepare("SELECT model, human_capacity FROM vehicles WHERE id = :vehicleId");
+                                $vehicleStmt->execute([':vehicleId' => $event['vehicle_id']]);
+                                $vehicle = $vehicleStmt->fetch(PDO::FETCH_ASSOC);
+                                ?>
+                                <p><strong data-translate="vehicle"></strong> <?= escape($vehicle['model']) ?> (<?= escape($vehicle['human_capacity']) ?> people)</p>
+                            <?php endif; ?>
                             <?php if ($event['is_participant'] == 0): ?>
                                 <form method="POST">
                                     <input type="hidden" name="event_id" value="<?= $event['id'] ?>">
@@ -416,6 +427,40 @@ $invitations = $invitationsStmt->fetchAll(PDO::FETCH_ASSOC);
                                 <textarea class="textarea" id="description" name="description" required></textarea>
                             </div>
                         </div>
+
+                        <div class="field">
+                            <label class="label" for="vehicle" data-translate="vehicle"></label>
+                            <div class="control">
+                                <div class="select">
+                                    <select id="vehicle" name="vehicle">
+                                        <option value="" data-translate="select_vehicle"></option>
+                                        <?php
+                                        $vehiclesStmt = $pdo->query("SELECT id, model, human_capacity FROM vehicles");
+                                        $vehicles = $vehiclesStmt->fetchAll(PDO::FETCH_ASSOC);
+                                        foreach ($vehicles as $vehicle): ?>
+                                            <option value="<?= $vehicle['id'] ?>" data-human-capacity="<?= $vehicle['human_capacity'] ?>">
+                                                <?= escape($vehicle['model']) ?> (<?= escape($vehicle['human_capacity']) ?> people)
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', () => {
+                                const vehicleSelect = document.getElementById('vehicle');
+                                const humanCapacityDisplay = document.getElementById('humanCapacityDisplay');
+
+                                vehicleSelect.addEventListener('change', function() {
+                                    const selectedOption = this.options[this.selectedIndex];
+                                    const humanCapacity = selectedOption.dataset.humanCapacity || '';
+                                    humanCapacityDisplay.textContent = humanCapacity ? `Human Capacity: ${humanCapacity}` : '';
+                                });
+                            });
+                        </script>
+
+                        <p id="humanCapacityDisplay"></p>
 
                         <div class="field">
                             <div class="control">

@@ -64,7 +64,7 @@ function generateCalendar($month, $year, $events) {
     foreach ($daysOfWeek as $day) {
         $calendarHtml .= "<th data-translate='$day'></th>";
     }
-    $calendarHtml += '</tr></thead><tbody><tr>';
+    $calendarHtml .= '</tr></thead><tbody><tr>';
     
     if ($firstDayOfWeek > 0) {
         $calendarHtml .= str_repeat('<td class="empty"></td>', $firstDayOfWeek);
@@ -119,7 +119,6 @@ function generateCalendar($month, $year, $events) {
     return $calendarHtml;
 }
 
-
 $prevMonth = $month - 1;
 $prevYear = $year;
 if ($prevMonth < 1) {
@@ -145,19 +144,35 @@ if ($nextMonth > 12) {
     <link rel="stylesheet" href="/assets/css/calendar.css">
     <script src="/assets/js/translation.js"></script>
     <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+        }
+
         .modal-content {
             background-color: black;
             color: white;
             padding: 20px;
             border-radius: 5px;
             max-width: 500px;
-            margin: auto;
+            width: 90%;
             position: relative;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            animation: animatetop 0.4s;
         }
 
-        .modal-content h2,
-        .modal-content p {
-            color: white;
+        @keyframes animatetop {
+            from {top: -300px; opacity: 0} 
+            to {top: 0; opacity: 1}
         }
 
         .modal .close {
@@ -222,7 +237,7 @@ if ($nextMonth > 12) {
             document.getElementById('modalEventStart').textContent = event.event_start;
             document.getElementById('modalEventEnd').textContent = event.event_end;
             document.getElementById('modalEventDescription').textContent = event.description;
-            document.getElementById('eventModal').style.display = 'block';
+            document.getElementById('eventModal').style.display = 'flex';  // 'flex' to enable centering with flexbox
         }
 
         function closeModal() {

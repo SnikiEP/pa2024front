@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS stock_movements (
     FOREIGN KEY (stock_item_id) REFERENCES stock_items(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE collection_points (
+CREATE TABLE IF NOT EXISTS collection_points (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL
@@ -81,7 +81,9 @@ CREATE TABLE IF NOT EXISTS events (
     event_start DATETIME NOT NULL,
     event_end DATETIME NOT NULL,
     location VARCHAR(255) NOT NULL,
-    description TEXT NOT NULL
+    description TEXT NOT NULL,
+    vehicle_id INT DEFAULT NULL,
+    FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS event_vehicle (
