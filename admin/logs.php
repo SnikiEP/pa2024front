@@ -181,12 +181,24 @@ function describeAction($action) {
                 </div>
 
                 <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-                    <a class="pagination-previous" <?= $current_page <= 1 ? 'disabled' : 'href="?page=' . ($current_page - 1) . '&' . http_build_query($_GET) . '"' ?> data-translate="previous">Previous</a>
-                    <a class="pagination-next" <?= $current_page >= $totalPages ? 'disabled' : 'href="?page=' . ($current_page + 1) . '&' . http_build_query($_GET) . '"' ?> data-translate="next">Next</a>
+                    <?php
+                    $queryParams = $_GET;
+                    unset($queryParams['page']);
+                    $queryString = http_build_query($queryParams);
+                    ?>
+                    <a class="pagination-previous" 
+                       <?= $current_page <= 1 ? 'disabled' : 'href="?page=' . ($current_page - 1) . '&' . $queryString . '"' ?> 
+                       data-translate="previous">Previous</a>
+
+                    <a class="pagination-next" 
+                       <?= $current_page >= $totalPages ? 'disabled' : 'href="?page=' . ($current_page + 1) . '&' . $queryString . '"' ?> 
+                       data-translate="next">Next</a>
+
                     <ul class="pagination-list">
                         <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
                             <li>
-                                <a class="pagination-link <?= $i == $current_page ? 'is-current' : '' ?>" href="?page=<?= $i ?>&<?= http_build_query($_GET) ?>">
+                                <a class="pagination-link <?= $i == $current_page ? 'is-current' : '' ?>" 
+                                   href="?page=<?= $i ?>&<?= $queryString ?>">
                                     <?= $i ?>
                                 </a>
                             </li>

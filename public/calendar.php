@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if (!isset($_SESSION['role']) || !is_array($_SESSION['role']) ) {
+if (!isset($_SESSION['role']) || !is_array($_SESSION['role'])) {
     header("Location: login.php");
     exit;
 }
@@ -64,7 +64,7 @@ function generateCalendar($month, $year, $events) {
     foreach ($daysOfWeek as $day) {
         $calendarHtml .= "<th data-translate='$day'></th>";
     }
-    $calendarHtml .= '</tr></thead><tbody><tr>';
+    $calendarHtml += '</tr></thead><tbody><tr>';
     
     if ($firstDayOfWeek > 0) {
         $calendarHtml .= str_repeat('<td class="empty"></td>', $firstDayOfWeek);
@@ -144,6 +144,35 @@ if ($nextMonth > 12) {
     ?>
     <link rel="stylesheet" href="/assets/css/calendar.css">
     <script src="/assets/js/translation.js"></script>
+    <style>
+        .modal-content {
+            background-color: black;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 500px;
+            margin: auto;
+            position: relative;
+        }
+
+        .modal-content h2,
+        .modal-content p {
+            color: white;
+        }
+
+        .modal .close {
+            color: white;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal-content strong {
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <div class="wrapper">

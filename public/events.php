@@ -90,8 +90,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $description = $_POST['description'];
             $autoJoin = isset($_POST['autoJoin']) ? true : false;
 
-            if (new DateTime($eventStart) < new DateTime()) {
+            $currentDateTime = new DateTime();
+            $eventStartDateTime = new DateTime($eventStart);
+            $eventEndDateTime = new DateTime($eventEnd);
+
+            if ($eventStartDateTime < $currentDateTime) {
                 $errorMessage = "Event start time cannot be in the past.";
+            } elseif ($eventEndDateTime < $eventStartDateTime) {
+                $errorMessage = "Event end time cannot be earlier than the start time.";
             } else {
                 if ($eventAction === 'create') {
                     try {
