@@ -4,7 +4,7 @@
 
 <head>
 <?php
-    $title = "Home - ATD";
+    $title = "Home - NMW";
     include_once('includes/head.php');
 ?>    
 <link rel="stylesheet" href="<?='assets/css/index.css'?>">
