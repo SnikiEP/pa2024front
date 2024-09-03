@@ -54,6 +54,8 @@ try {
     die("Database connection failed: " . $e->getMessage());
 }
 
+$message = ''; 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $updatedData = [
         "username" => $_POST['username'],
@@ -75,15 +77,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $putUrl = "http://ddns.callidos-mtf.fr:8085/account/" . $profileData['id'];
 
     $putResponse = file_get_contents($putUrl, false, $putContext);
-    
+
     if ($putResponse === FALSE) {
         logAction($pdo, $profileData['id'], 'update_profile', 'PUT', $putUrl, 500, json_encode($updatedData), 'Failed to update profile information.');
-        echo "Failed to update profile information.";
+        $message = "Failed to update profile information.";
     } else {
         $response = file_get_contents($url, false, $context);
         $profileData = json_decode($response, true);
         logAction($pdo, $profileData['id'], 'update_profile', 'PUT', $putUrl, 200, json_encode($updatedData), $putResponse);
-        echo "Profile updated successfully!";
+        $message = "Profile updated successfully!";
     }
 }
 
@@ -144,6 +146,10 @@ $imagePath = '../assets/img/default.jpg';
             color: #ffffff; 
         }
 
+        .notification {
+            margin-bottom: 20px;
+        }
+
     </style>
 </head>
 <body>
@@ -168,6 +174,11 @@ $imagePath = '../assets/img/default.jpg';
                         <span data-no-translate="true"><?= htmlspecialchars($profileData['username']); ?></span>
                     </h1>
                     <form id="profileForm" method="POST">
+                        <?php if (!empty($message)): ?>
+                            <div class="notification is-info">
+                                <?= htmlspecialchars($message) ?>
+                            </div>
+                        <?php endif; ?>
                         <div class="field">
                             <label class="label" for="username" data-translate="username_label">Username</label>
                             <div class="control">
