@@ -37,7 +37,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
         body {
             color: #fff;
             font-family: Arial, sans-serif;
-            background-color: #121212;
         }
 
         table {
@@ -278,8 +277,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                 var row = this.closest('tr');
                 var id = row.getAttribute('data-id');
                 var type = row.getAttribute('data-type');
-                var newName = row.querySelector('input.edit-field').value;
-                var newAddress = row.querySelector('input.edit-field:nth-of-type(2)').value;
+                var newName = row.querySelector('td:nth-child(1) input.edit-field').value;
+                var newAddress = row.querySelector('td:nth-child(2) input.edit-field').value;
 
                 var formData = new FormData();
                 formData.append('id', id);
@@ -292,8 +291,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                     body: formData
                 }).then(response => response.json()).then(data => {
                     if (data.success) {
-                        row.querySelector('.display-field:nth-child(1)').textContent = newName;
-                        row.querySelector('.display-field:nth-child(2)').textContent = newAddress;
+                        row.querySelector('td:nth-child(1) .display-field').textContent = newName;
+                        row.querySelector('td:nth-child(2) .display-field').textContent = newAddress;
                         row.classList.remove('editing');
                         row.querySelectorAll('.edit-field').forEach(field => field.style.display = 'none');
                         row.querySelectorAll('.display-field').forEach(field => field.style.display = 'block');

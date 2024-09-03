@@ -4,11 +4,10 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if (!isset($_SESSION['role']) || !is_array($_SESSION['role']) ) {
+if (!isset($_SESSION['role']) || !is_array($_SESSION['role'])) {
     header("Location: login.php");
     exit;
 }
-
 
 $authHeader = "Authorization: Bearer " . $_SESSION['accessToken'];
 $options = [
@@ -87,6 +86,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Profile updated successfully!";
     }
 }
+
+$imagePath = '../assets/img/default.jpg'; 
+
 ?>
 
 <!DOCTYPE html>
@@ -95,7 +97,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php
         $title = "My Profile - ATD";
         include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
-    ?>    
+    ?>
+    <style>
+        .profile-id-card {
+            background-color: #333; 
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #444; 
+        }
+
+        .profile-id-card img {
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            margin-right: 30px;
+            border: 3px solid #777; 
+        }
+
+        .profile-id-card .info {
+            flex-grow: 1;
+            color: #f0f0f0; 
+        }
+
+        .profile-id-card .info h2 {
+            margin-bottom: 10px;
+            font-size: 28px;
+            color: #ffffff; 
+            font-weight: bold;
+        }
+
+        .profile-id-card .info p {
+            margin: 8px 0;
+            font-size: 16px;
+            color: #dcdcdc; 
+        }
+
+        .profile-id-card .info p span {
+            font-weight: bold;
+            color: #ffffff; 
+        }
+
+    </style>
 </head>
 <body>
     <div class="wrapper">
@@ -103,8 +152,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <main>
             <div class="content">
                 <div class="container is-max-desktop">
+                    <div class="profile-id-card">
+                        <img src="<?= $imagePath ?>" alt="User Photo">
+                        <div class="info">
+                            <h2><?= htmlspecialchars($profileData['name']) . ' ' . htmlspecialchars($profileData['lastName']); ?></h2>
+                            <p><span>Username:</span> <?= htmlspecialchars($profileData['username']); ?></p>
+                            <p><span>Email:</span> <?= htmlspecialchars($profileData['email']); ?></p>
+                            <p><span>Location:</span> <?= htmlspecialchars($profileData['location']); ?></p>
+                            <p><span>Phone:</span> <?= htmlspecialchars($profileData['phone']); ?></p>
+                            <p><span>Role:</span> <?= htmlspecialchars($_SESSION['role'][0]); ?></p>
+                        </div>
+                    </div>
                     <h1 class="title has-text-centered">
-                        <span data-no-translate="true">Welcome, </span>
+                        <span data-translate="welcome">Welcome, </span>
                         <span data-no-translate="true"><?= htmlspecialchars($profileData['username']); ?></span>
                     </h1>
                     <form id="profileForm" method="POST">

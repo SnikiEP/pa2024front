@@ -11,7 +11,6 @@ if (!isset($_SESSION['role']) ||
     exit;
 }
 
-
 $dsn = 'mysql:host=db;dbname=helix_db;charset=utf8';
 $username = 'root';
 $password = 'root_password';
@@ -28,19 +27,39 @@ function escape($value) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_plate'])) {
-    $stmt = $pdo->prepare("INSERT INTO vehicles (id_plate, fret_capacity, human_capacity, model, current_warehouse_id) VALUES (:id_plate, :fret_capacity, :human_capacity, :model, :current_warehouse_id)");
-    try {
-        $stmt->execute([
-            ':id_plate' => $_POST['id_plate'],
-            ':fret_capacity' => $_POST['fret_capacity'],
-            ':human_capacity' => $_POST['human_capacity'],
-            ':model' => $_POST['model'],
-            ':current_warehouse_id' => $_POST['current_warehouse_id']
-        ]);
-        header('Location: vehicles.php');
-        exit;
-    } catch (PDOException $e) {
-        $error = "error_adding_vehicle: " . $e->getMessage();
+    if (isset($_POST['id'])) {
+        // Update vehicle
+        $stmt = $pdo->prepare("UPDATE vehicles SET id_plate = :id_plate, fret_capacity = :fret_capacity, human_capacity = :human_capacity, model = :model, current_warehouse_id = :current_warehouse_id WHERE id = :id");
+        try {
+            $stmt->execute([
+                ':id' => $_POST['id'],
+                ':id_plate' => $_POST['id_plate'],
+                ':fret_capacity' => $_POST['fret_capacity'],
+                ':human_capacity' => $_POST['human_capacity'],
+                ':model' => $_POST['model'],
+                ':current_warehouse_id' => $_POST['current_warehouse_id']
+            ]);
+            header('Location: vehicles.php');
+            exit;
+        } catch (PDOException $e) {
+            $error = "error_updating_vehicle: " . $e->getMessage();
+        }
+    } else {
+        // Add new vehicle
+        $stmt = $pdo->prepare("INSERT INTO vehicles (id_plate, fret_capacity, human_capacity, model, current_warehouse_id) VALUES (:id_plate, :fret_capacity, :human_capacity, :model, :current_warehouse_id)");
+        try {
+            $stmt->execute([
+                ':id_plate' => $_POST['id_plate'],
+                ':fret_capacity' => $_POST['fret_capacity'],
+                ':human_capacity' => $_POST['human_capacity'],
+                ':model' => $_POST['model'],
+                ':current_warehouse_id' => $_POST['current_warehouse_id']
+            ]);
+            header('Location: vehicles.php');
+            exit;
+        } catch (PDOException $e) {
+            $error = "error_adding_vehicle: " . $e->getMessage();
+        }
     }
 }
 
@@ -115,10 +134,14 @@ if (!$allVehicles) {
                                             <td><?= escape($vehicle['model']) ?></td>
                                             <td><?= escape($vehicle['location'] ?? 'Unknown') ?></td>
                                             <td>
-                                                <form action="edit_vehicle.php" method="GET" style="display:inline;">
-                                                    <input type="hidden" name="id" value="<?= escape($vehicle['id']) ?>">
-                                                    <button class="button is-info is-small" type="submit" data-translate="edit">Edit</button>
-                                                </form>
+                                                <button class="button is-info is-small edit-vehicle-button"
+                                                        data-id="<?= escape($vehicle['id']) ?>"
+                                                        data-id_plate="<?= escape($vehicle['id_plate']) ?>"
+                                                        data-fret_capacity="<?= escape($vehicle['fret_capacity']) ?>"
+                                                        data-human_capacity="<?= escape($vehicle['human_capacity']) ?>"
+                                                        data-model="<?= escape($vehicle['model']) ?>"
+                                                        data-current_warehouse_id="<?= escape($vehicle['current_warehouse_id']) ?>"
+                                                        data-translate="edit">Edit</button>
                                                 <form action="" method="POST" style="display:inline;">
                                                     <input type="hidden" name="delete_vehicle_id" value="<?= escape($vehicle['id']) ?>">
                                                     <button class="button is-danger is-small" type="submit" data-translate="delete" onclick="return confirm(translations.are_you_sure_delete);">Delete</button>
@@ -187,10 +210,115 @@ if (!$allVehicles) {
                 </div>
             </div>
         </main>
+
+        <!-- Edit Vehicle Modal -->
+        <div id="editVehicleModal" class="modal">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title" data-translate="edit_vehicle">Edit Vehicle</p>
+                    <button class="delete" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <form id="editVehicleForm" method="POST">
+                        <input type="hidden" name="id" id="edit_vehicle_id">
+                        <div class="field">
+                            <label class="label" for="edit_id_plate" data-translate="id_plate">ID Plate</label>
+                            <div class="control">
+                                <input class="input" type="text" name="id_plate" id="edit_id_plate" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="edit_fret_capacity" data-translate="fret_capacity">Fret Capacity</label>
+                            <div class="control">
+                                <input class="input" type="number" name="fret_capacity" id="edit_fret_capacity" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="edit_human_capacity" data-translate="human_capacity">Human Capacity</label>
+                            <div class="control">
+                                <input class="input" type="number" name="human_capacity" id="edit_human_capacity" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="edit_model" data-translate="model">Model</label>
+                            <div class="control">
+                                <input class="input" type="text" name="model" id="edit_model" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="edit_current_warehouse_id" data-translate="current_warehouse">Warehouse</label>
+                            <div class="control">
+                                <div class="select">
+                                    <select name="current_warehouse_id" id="edit_current_warehouse_id" required>
+                                        <?php
+                                        foreach ($warehouses as $warehouse) {
+                                            echo '<option value="' . escape($warehouse['id']) . '">' . escape($warehouse['location']) . '</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button is-success" onclick="submitEditForm()" data-translate="save_changes">Save changes</button>
+                    <button class="button" onclick="closeModal()">Cancel</button>
+                </footer>
+            </div>
+        </div>
+
         <footer class="footer">
             <p data-translate="footer_text">&copy; 2024-<?= date("Y"), ($translations['footer_text']) ?></p>
         </footer>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('editVehicleModal');
+            const closeButton = modal.querySelector('.delete');
+            const background = modal.querySelector('.modal-background');
+
+            closeButton.addEventListener('click', closeModal);
+            background.addEventListener('click', closeModal);
+
+            const editButtons = document.querySelectorAll('.edit-vehicle-button');
+            editButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const vehicleId = button.getAttribute('data-id');
+                    const vehicleData = {
+                        id: vehicleId,
+                        id_plate: button.getAttribute('data-id_plate'),
+                        fret_capacity: button.getAttribute('data-fret_capacity'),
+                        human_capacity: button.getAttribute('data-human_capacity'),
+                        model: button.getAttribute('data-model'),
+                        current_warehouse_id: button.getAttribute('data-current_warehouse_id')
+                    };
+
+                    populateModal(vehicleData);
+                    modal.classList.add('is-active');
+                });
+            });
+        });
+
+        function closeModal() {
+            document.getElementById('editVehicleModal').classList.remove('is-active');
+        }
+
+        function populateModal(data) {
+            document.getElementById('edit_vehicle_id').value = data.id;
+            document.getElementById('edit_id_plate').value = data.id_plate;
+            document.getElementById('edit_fret_capacity').value = data.fret_capacity;
+            document.getElementById('edit_human_capacity').value = data.human_capacity;
+            document.getElementById('edit_model').value = data.model;
+            document.getElementById('edit_current_warehouse_id').value = data.current_warehouse_id;
+        }
+
+        function submitEditForm() {
+            document.getElementById('editVehicleForm').submit();
+        }
+    </script>
 </body>
 
 </html>
