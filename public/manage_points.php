@@ -23,6 +23,9 @@ try {
     exit;
 }
 
+$queryCollectionPoints = "SELECT id, name, address FROM collection_points";
+$queryDonationPoints = "SELECT id, name, address FROM donation_points";
+
 $title = "Gérer les Points de Collecte et de Don - NMW";
 include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
 ?>
@@ -32,7 +35,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gérer les Points de Collecte et de Don</title>
+    <title><?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></title>
     <style>
         body {
             color: #fff;
@@ -145,23 +148,22 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/header.php'); ?>
         <main>
             <div class="container">
-                <h1>Gérer les Points de Collecte et de Don</h1>
+                <h1 data-translate="manage_collection_and_donation_points">Gérer les Points de Collecte et de Don</h1>
 
-                <h2>Points de Collecte</h2>
+                <h2 data-translate="collection_points">Points de Collecte</h2>
                 <table>
                     <thead>
                         <tr>
-                            <th>Nom</th>
-                            <th>Adresse</th>
-                            <th>Actions</th>
+                            <th data-translate="name">Nom</th>
+                            <th data-translate="address">Adresse</th>
+                            <th data-translate="actions">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $query = "SELECT id, name, address FROM collection_points";
-                        $stmt = $pdo->query($query);
-                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                            echo "<tr data-id='" . $row['id'] . "' data-type='collection'>";
+                        $stmtCollection = $pdo->query($queryCollectionPoints);
+                        while ($row = $stmtCollection->fetch(PDO::FETCH_ASSOC)) {
+                            echo "<tr data-id='" . htmlspecialchars($row['id'], ENT_QUOTES, 'UTF-8') . "' data-type='collection'>";
                             echo "<td>
                                     <span class='display-field'>" . htmlspecialchars($row['name'], ENT_QUOTES, 'UTF-8') . "</span>
                                     <input type='text' class='edit-field' value='" . htmlspecialchars($row['name'], ENT_QUOTES, 'UTF-8') . "' style='display:none;'>
@@ -172,12 +174,12 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                                   </td>";
                             echo "<td>
                                     <div class='action-buttons'>
-                                        <button class='edit-button'>Modifier</button>
-                                        <button class='delete-button'>Supprimer</button>
+                                        <button class='edit-button' data-translate='edit'>Modifier</button>
+                                        <button class='delete-button' data-translate='delete'>Supprimer</button>
                                     </div>
                                     <div class='edit-buttons'>
-                                        <button class='save-button'>Enregistrer</button>
-                                        <button class='cancel-button'>Annuler</button>
+                                        <button class='save-button' data-translate='save'>Enregistrer</button>
+                                        <button class='cancel-button' data-translate='cancel'>Annuler</button>
                                     </div>
                                   </td>";
                             echo "</tr>";
@@ -186,21 +188,20 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                     </tbody>
                 </table>
 
-                <h2>Points de Don</h2>
+                <h2 data-translate="donation_points">Points de Don</h2>
                 <table>
                     <thead>
                         <tr>
-                            <th>Nom</th>
-                            <th>Adresse</th>
-                            <th>Actions</th>
+                            <th data-translate="name">Nom</th>
+                            <th data-translate="address">Adresse</th>
+                            <th data-translate="actions">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $query = "SELECT id, name, address FROM donation_points";
-                        $stmt = $pdo->query($query);
-                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                            echo "<tr data-id='" . $row['id'] . "' data-type='donation'>";
+                        $stmtDonation = $pdo->query($queryDonationPoints);
+                        while ($row = $stmtDonation->fetch(PDO::FETCH_ASSOC)) {
+                            echo "<tr data-id='" . htmlspecialchars($row['id'], ENT_QUOTES, 'UTF-8') . "' data-type='donation'>";
                             echo "<td>
                                     <span class='display-field'>" . htmlspecialchars($row['name'], ENT_QUOTES, 'UTF-8') . "</span>
                                     <input type='text' class='edit-field' value='" . htmlspecialchars($row['name'], ENT_QUOTES, 'UTF-8') . "' style='display:none;'>
@@ -211,12 +212,12 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                                   </td>";
                             echo "<td>
                                     <div class='action-buttons'>
-                                        <button class='edit-button'>Modifier</button>
-                                        <button class='delete-button'>Supprimer</button>
+                                        <button class='edit-button' data-translate='edit'>Modifier</button>
+                                        <button class='delete-button' data-translate='delete'>Supprimer</button>
                                     </div>
                                     <div class='edit-buttons'>
-                                        <button class='save-button'>Enregistrer</button>
-                                        <button class='cancel-button'>Annuler</button>
+                                        <button class='save-button' data-translate='save'>Enregistrer</button>
+                                        <button class='cancel-button' data-translate='cancel'>Annuler</button>
                                     </div>
                                   </td>";
                             echo "</tr>";
@@ -225,24 +226,24 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                     </tbody>
                 </table>
 
-                <h2>Ajouter un nouveau Point</h2>
+                <h2 data-translate="add_new_point">Ajouter un nouveau Point</h2>
                 <form id="add-point-form">
                     <div class="form-group">
-                        <label for="point-type">Type de point :</label>
+                        <label for="point-type" data-translate="point_type">Type de point :</label>
                         <select id="point-type" name="point-type">
-                            <option value="collection">Point de Collecte</option>
-                            <option value="donation">Point de Don</option>
+                            <option value="collection" data-translate="collection_point">Point de Collecte</option>
+                            <option value="donation" data-translate="donation_point">Point de Don</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="point-name">Nom :</label>
+                        <label for="point-name" data-translate="point_name">Nom :</label>
                         <input type="text" id="point-name" name="point-name" required>
                     </div>
                     <div class="form-group">
-                        <label for="point-address">Adresse :</label>
+                        <label for="point-address" data-translate="point_address">Adresse :</label>
                         <input type="text" id="point-address" name="point-address" required>
                     </div>
-                    <button type="submit">Ajouter le Point</button>
+                    <button type="submit" data-translate="add_point">Ajouter le Point</button>
                 </form>
             </div>
         </main>

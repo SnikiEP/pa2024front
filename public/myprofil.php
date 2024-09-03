@@ -156,11 +156,11 @@ $imagePath = '../assets/img/default.jpg';
                         <img src="<?= $imagePath ?>" alt="User Photo">
                         <div class="info">
                             <h2><?= htmlspecialchars($profileData['name']) . ' ' . htmlspecialchars($profileData['lastName']); ?></h2>
-                            <p><span>Username:</span> <?= htmlspecialchars($profileData['username']); ?></p>
-                            <p><span>Email:</span> <?= htmlspecialchars($profileData['email']); ?></p>
-                            <p><span>Location:</span> <?= htmlspecialchars($profileData['location']); ?></p>
-                            <p><span>Phone:</span> <?= htmlspecialchars($profileData['phone']); ?></p>
-                            <p><span>Role:</span> <?= htmlspecialchars($_SESSION['role'][0]); ?></p>
+                            <p><span data-translate="username_label">Username:</span> <?= htmlspecialchars($profileData['username']); ?></p>
+                            <p><span data-translate="email_label">Email:</span> <?= htmlspecialchars($profileData['email']); ?></p>
+                            <p><span data-translate="location_label">Location:</span> <?= htmlspecialchars($profileData['location']); ?></p>
+                            <p><span data-translate="phone_label">Phone:</span> <?= htmlspecialchars($profileData['phone']); ?></p>
+                            <p><span data-translate="role_label">Role:</span> <?= htmlspecialchars($_SESSION['role'][0]); ?></p>
                         </div>
                     </div>
                     <h1 class="title has-text-centered">

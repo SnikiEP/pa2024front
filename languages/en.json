@@ -154,6 +154,7 @@
     "email_label": "Email",
     "location_label": "Location",
     "phone_label": "Phone",
+    "role_label" : "Role",
     "password_label": "New Password (leave blank to keep current password)",
     "edit_button": "Edit",
     "save_button": "Save",
@@ -405,5 +406,8 @@
     "save": "Save",
     "cancel": "Cancel",
     "add_point": "Add Point",
+    "manage_collection_and_donation_points": "Manage Collection and Donation Points",
+    "point_name": "Name",
+    "point_address": "Address",
     "footer_text": "2024 HELIX. All Rights Reserved."
 }
