@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="en">
 <head>
     <?php
-    $title = "Join us - ATD";
+    $title = "Join us - NMW";
     include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
     ?>    
     <script src="/assets/js/translation.js"></script>

@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="en">
 <head>
     <?php
-    $title = "Login - ATD";
+    $title = "Login - NMW";
     include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
     ?>    
     <script src="/assets/js/translation.js"></script>
