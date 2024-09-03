@@ -15,7 +15,7 @@
         <?php include_once('includes/header.php') ?>
         <main>
             <div class="content">
-                <h1 class="title is-1" style="text-align: center;" data-translate="main_title">Au Temps Donne</h1>
+                <h1 class="title is-1" style="text-align: center;" data-translate="main_title">No More Waste</h1>
                 <h2 class="subtitle is-5" style="text-align: center;" data-translate="main_subtitle">France's largest food aid and educational support association.</h2>
                 <img src="<?='/assets/img/atd_logo.png'?>" alt="ATD principal logo" id="principal_logo" class="image is-1by1">
             </div>
