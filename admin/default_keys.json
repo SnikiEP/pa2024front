@@ -84,7 +84,6 @@
     "introduction": "",
     "intro_desc": "",
     "food_aid": "",
-    
     "food_aid_desc": "",
     "volunteer_efforts": "",
     "educational_support": "",
@@ -108,6 +107,18 @@
     "day_Thu": "",
     "day_Fri": "",
     "day_Sat": "",
+    "months.January": "",
+    "months.February": "",
+    "months.March": "",
+    "months.April": "",
+    "months.May": "",
+    "months.June": "",
+    "months.July": "",
+    "months.August": "",
+    "months.September": "",
+    "months.October": "",
+    "months.November": "",
+    "months.December": "",
     "database_connection_failed": "",
     "your_event_calendar": "",
     "no_events_participation": "",
@@ -305,7 +316,6 @@
     "add_new_vehicle": "",
     "error_adding_vehicle": "",
     "error_deleting_vehicle": "",
-
     "select_language_file": "",
     "select_language": "-",
     "translations": "",
@@ -318,7 +328,6 @@
     "create_new_translation": "",
     "manage_existing_files": "",
     "donnation": "",
-
     "page_title_stock_ATD": "",
     "address_label": "",
     "modify_button": "",
@@ -331,11 +340,9 @@
     "weight_label": "",
     "price_per_unit_label": "",
     "barcode_label": "",
-
     "select_warehouse": "",
     "select_collection_point_label": "",
     "select_collection_point": "",
-
     "placeholder_translations": "",
     "placeholder_Newtranslations" :"",
     "select_vehicle_option": "",
@@ -385,7 +392,6 @@
     "invited_by_label": "",
     "download_next_week": "",
     "download_this_week" : "",
-
     "manage_collection_donation_points": "",
     "collection_points": "",
     "donation_points": "",
