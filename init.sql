@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS log (
 
 INSERT INTO food_categories (name) VALUES
 ('Fruits'),
-('Légumes'),
+('Legumes'),
 ('Produits laitiers'),
 ('Autres'),
 ('Boulangerie');
@@ -134,7 +134,7 @@ INSERT INTO food_categories (name) VALUES
 INSERT INTO food_items (category_id, name, unit, weight, price_per_unit, barcode) VALUES
 ((SELECT id FROM food_categories WHERE name = 'Fruits'), 'Pommes', 'kg', 1.0, 2.5, '1234567890123'),
 ((SELECT id FROM food_categories WHERE name = 'Fruits'), 'Bananes', 'kg', 1.0, 1.8, '1234567890124'),
-((SELECT id FROM food_categories WHERE name = 'Légumes'), 'Courgettes', 'kg', 1.0, 2.0, '1234567890125'),
+((SELECT id FROM food_categories WHERE name = 'Legumes'), 'Courgettes', 'kg', 1.0, 2.0, '1234567890125'),
 ((SELECT id FROM food_categories WHERE name = 'Produits laitiers'), 'Lait', 'unit', 1.0, 0.9, '1234567890126'),
 ((SELECT id FROM food_categories WHERE name = 'Boulangerie'), 'Pain', 'unit', 0.5, 1.2, '1234567890127');
 
