@@ -1,11 +1,9 @@
-version: '3.8'
-
 services:
   website:
     container_name: helix_website
     build: .
     ports:
-      - "8086:80"
+      - "8080:80"
     depends_on:
       - db
     volumes:
