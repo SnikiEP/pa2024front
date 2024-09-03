@@ -100,6 +100,7 @@
     "eco_goals": "Our goal is to reduce our carbon footprint and educate our community about the importance of preserving our planet. This ecological mission is integrated into all our actions to ensure a long-term positive impact.",
     "join_our_cause": "If you share our vision and wish to contribute to our missions, we invite you to join our community of volunteers. Every gesture counts, and together, we can achieve great things.",
     "get_involved": "For more information about our missions or to get involved, please do not hesitate to contact us. We would be delighted to welcome you to our No More Waste family.",
+    
     "day_Sun": "Sun",
     "day_Mon": "Mon",
     "day_Tue": "Tue",
@@ -107,6 +108,20 @@
     "day_Thu": "Thu",
     "day_Fri": "Fri",
     "day_Sat": "Sat",
+
+    "months.January": "January",
+    "months.February": "February",
+    "months.March": "March",
+    "months.April": "April",
+    "months.May": "May",
+    "months.June": "June",
+    "months.July": "July",
+    "months.August": "August",
+    "months.September": "September",
+    "months.October": "October",
+    "months.November": "November",
+    "months.December": "December",
+
     "database_connection_failed": "Database connection failed",
     "your_event_calendar": "Your Event Calendar",
     "no_events_participation": "You are not participating in any events.",

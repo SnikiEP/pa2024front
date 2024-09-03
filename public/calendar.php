@@ -28,6 +28,13 @@ $year = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');
 $month = max(1, min(12, $month));
 $year = max(1970, min(2100, $year));
 
+$translationsJson = file_get_contents('../assets/js/translation.js');
+$translations = json_decode($translationsJson, true);
+
+function translate($key, $translations) {
+    return $translations[$key] ?? $key;
+}
+
 $stmt = $pdo->prepare("
     SELECT events.* 
     FROM events 
@@ -44,11 +51,11 @@ function formatEventDate($date) {
     return $datetime->format('Y-m-d H:i');
 }
 
-function generateCalendar($month, $year, $events) {
+function generateCalendar($month, $year, $events, $translations) {
     $firstDayOfMonth = new DateTime("$year-$month-01");
     $totalDays = (int)$firstDayOfMonth->format('t');
     $firstDayOfWeek = (int)$firstDayOfMonth->format('w');
-    
+
     $daysOfWeek = [
         'day_Sun',
         'day_Mon',
@@ -58,14 +65,14 @@ function generateCalendar($month, $year, $events) {
         'day_Fri',
         'day_Sat' 
     ];
-    
+
     $calendarHtml = '<table class="calendar-table"><thead><tr>';
-    
+
     foreach ($daysOfWeek as $day) {
-        $calendarHtml .= "<th data-translate='$day'></th>";
+        $calendarHtml .= "<th data-translate='$day'>" . translate($day, $translations['days']) . "</th>";
     }
     $calendarHtml .= '</tr></thead><tbody><tr>';
-    
+
     if ($firstDayOfWeek > 0) {
         $calendarHtml .= str_repeat('<td class="empty"></td>', $firstDayOfWeek);
     }
@@ -78,7 +85,7 @@ function generateCalendar($month, $year, $events) {
         if ($startDate->format('m') == $month || $endDate->format('m') == $month) {
             $eventStartDay = (int)$startDate->format('d');
             $eventEndDay = (int)$endDate->format('d');
-            
+
             for ($day = $eventStartDay; $day <= $eventEndDay && $day <= $totalDays; $day++) {
                 $eventDate = "$year-$month-" . str_pad($day, 2, '0', STR_PAD_LEFT);
                 $eventsByDay[$eventDate][] = $event;
@@ -89,10 +96,10 @@ function generateCalendar($month, $year, $events) {
     $currentDay = 1;
     while ($currentDay <= $totalDays) {
         $currentDate = "$year-$month-" . str_pad($currentDay, 2, '0', STR_PAD_LEFT);
-        
+
         $calendarHtml .= "<td class='day'>";
         $calendarHtml .= "<div class='day-number'>$currentDay</div>";
-        
+
         if (isset($eventsByDay[$currentDate])) {
             foreach ($eventsByDay[$currentDate] as $event) {
                 $calendarHtml .= "<div class='event' onclick='showEventDetails(" . json_encode($event) . ")'>";
@@ -100,24 +107,30 @@ function generateCalendar($month, $year, $events) {
                 $calendarHtml .= "</div>";
             }
         }
-        
+
         $calendarHtml .= "</td>";
         $currentDay++;
-        
+
         if (($firstDayOfWeek + $currentDay - 1) % 7 == 0) {
             $calendarHtml .= '</tr><tr>';
         }
     }
-    
+
     $remainingCells = 7 - (($firstDayOfWeek + $totalDays) % 7);
     if ($remainingCells < 7) {
         $calendarHtml .= str_repeat('<td class="empty"></td>', $remainingCells);
     }
-    
+
     $calendarHtml .= '</tr></tbody></table>';
-    
+
     return $calendarHtml;
 }
+
+$monthName = DateTime::createFromFormat('!m', $month)->format('F');
+$translatedMonthName = translate('months.' . $monthName, $translations);
+
+//echo "<h2 data-translate='months." . $monthName . "'>" . $translatedMonthName . " " . $year . "</h2>";
+
 
 $prevMonth = $month - 1;
 $prevYear = $year;
@@ -132,7 +145,9 @@ if ($nextMonth > 12) {
     $nextMonth = 1;
     $nextYear++;
 }
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -196,18 +211,36 @@ if ($nextMonth > 12) {
             <div class="content">
                 <div class="container is-max-desktop">
                     <h1 class="title has-text-centered" data-translate="your_event_calendar">Your Event Calendar</h1>
-                    <div class="navigation">
-                        <a href="?month=<?= $prevMonth ?>&year=<?= $prevYear ?>">&lt; <?= date('F Y', mktime(0, 0, 0, $prevMonth, 1, $prevYear)) ?></a>
-                        <span><?= date('F Y', mktime(0, 0, 0, $month, 1, $year)) ?></span>
-                        <a href="?month=<?= $nextMonth ?>&year=<?= $nextYear ?>"><?= date('F Y', mktime(0, 0, 0, $nextMonth, 1, $nextYear)) ?> &gt;</a>
+                    
+                    <div class="navigation has-text-centered">
+                        <a href="?month=<?= $prevMonth ?>&year=<?= $prevYear ?>">&lt; 
+                            <span data-translate="months.<?= date('F', mktime(0, 0, 0, $prevMonth, 1, $prevYear)) ?>">
+                                <?= translate('months.' . date('F', mktime(0, 0, 0, $prevMonth, 1, $prevYear)), $translations) ?>
+                            </span> 
+                            <?= $prevYear ?>
+                        </a>
+                        
+                        <span data-translate="months.<?= date('F', mktime(0, 0, 0, $month, 1, $year)) ?>">
+                            <?= translate('months.' . date('F', mktime(0, 0, 0, $month, 1, $year)), $translations) ?> 
+                        </span> <?= $year ?>
+                        
+                        <a href="?month=<?= $nextMonth ?>&year=<?= $nextYear ?>">
+                            <span data-translate="months.<?= date('F', mktime(0, 0, 0, $nextMonth, 1, $nextYear)) ?>">
+                                <?= translate('months.' . date('F', mktime(0, 0, 0, $nextMonth, 1, $nextYear)), $translations) ?>
+                            </span> 
+                            <?= $nextYear ?> &gt;
+                        </a>
                     </div>
-                    <div class="buttons">
+                    
+                    <div class="buttons has-text-centered">
                         <a href="generate_csv.php?download=this-week" data-translate="download_this_week">Download This Week</a>
                         <a href="generate_csv.php?download=next-week" data-translate="download_next_week">Download Next Week</a>
                     </div>
+                    
                     <div class="calendar-container">
-                        <?= generateCalendar($month, $year, $events); ?>
+                        <?= generateCalendar($month, $year, $events, $translations); ?>
                     </div>
+                    
                     <?php if (empty($events)): ?>
                         <p class="has-text-centered" data-translate="no_events_participation">You are not participating in any events this month.</p>
                     <?php endif; ?>
@@ -237,7 +270,7 @@ if ($nextMonth > 12) {
             document.getElementById('modalEventStart').textContent = event.event_start;
             document.getElementById('modalEventEnd').textContent = event.event_end;
             document.getElementById('modalEventDescription').textContent = event.description;
-            document.getElementById('eventModal').style.display = 'flex';  // 'flex' to enable centering with flexbox
+            document.getElementById('eventModal').style.display = 'flex'; 
         }
 
         function closeModal() {
