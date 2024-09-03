@@ -13,7 +13,7 @@ services:
     user: www-data
 
   db:
-    image: mysql:5.7
+    image: mysql:latest
     container_name: helix_db
     environment:
       MYSQL_ROOT_PASSWORD: root_password
