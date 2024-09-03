@@ -120,10 +120,10 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                         </div>
                         <div id="stops-container">
                             <div class="field stop">
-                                <label class="label" for="collection-point-1">Sélectionner un point de collecte :</label>
+                                <label class="label" for="collection-point-1" data-translate="select_collection_point_label">Sélectionner un point de collecte :</label>
                                 <div class="control">
                                     <select class="input" name="collection-points[]" id="collection-point-1">
-                                        <option value="" data-translate="select_collection_point">-- Sélectionnez un point de collecte --</option>
+                                        <option value="" data-translate="select_collection_point_label">-- Sélectionnez un point de collecte --</option>
 
 
                                         <?php

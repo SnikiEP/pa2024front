@@ -144,7 +144,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                         <?php endif; ?>
 
                         <div class="field">
-                            <label class="label" for="start-warehouse">Sélectionner un entrepôt de départ :</label>
+                            <label class="label" for="start-warehouse" data-translate="select_start_warehouse">Sélectionner un entrepôt de départ :</label>
                             <div class="control">
                                 <select class="input" name="start-warehouse" id="start-warehouse" required>
                                     <option value="" data-translate="select_warehouse">-- Sélectionnez un entrepôt --</option>
@@ -165,7 +165,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
                         </div>
 
                         <div class="field">
-                            <label class="label" for="select-vehicle">Sélectionner un camion :</label>
+                            <label class="label" for="select-vehicle" data-translate="select_vehicle_option">Sélectionner un camion :</label>
 
                             <div class="control">
                                 <select class="input" name="selected-vehicle" id="select-vehicle" required>
@@ -184,7 +184,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/includes/head.php');
 
                         <div id="stops-container">
                             <div class="field stop">
-                                <label class="label" for="donation-point-1">Sélectionner un point de don :</label>
+                                <label class="label" for="donation-point-1" data-translate="select_donation">Sélectionner un point de don :</label>
                                 <div class="control">
                                     <select class="input" name="donation-points[]" id="donation-point-1">
                                         <option value="" data-translate="select_donation">-- Sélectionnez un point de don --</option>
